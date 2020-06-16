@@ -3,7 +3,7 @@
 #Define these variables in the same shell
 DEPLOY_NAMESPACE=${deploy_namespace}
 CONTROL_PLANE_NAMESPACE=${control_plane_namespace}
-CONTROL_PLANE_NAME=${control_plane_name}
+CONTROL_PLANE_NAME=${control_plane_name} 
 CONTROL_PLANE_ROUTE_NAME=${control_plane_route_name}
 
 oc new-project ${DEPLOY_NAMESPACE}

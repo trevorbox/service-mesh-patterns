@@ -1,0 +1,4 @@
+deploy_namespace=bookinfo
+control_plane_namespace=istio-system
+control_plane_name=basic-install
+control_plane_route_name=api

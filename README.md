@@ -22,7 +22,7 @@ export control_plane_route_name=api
 ./deploy-basic-gateway-configuration.sh
 ```
 
-Test the application
+Test the bookinfo application
 
 ```sh
 #Open the following url in a web browser

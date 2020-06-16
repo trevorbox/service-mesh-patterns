@@ -1,0 +1,3 @@
+control_plane_namespace: istio-system
+control_plane_name: basic-install
+route_hostname: example.com

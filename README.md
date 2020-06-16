@@ -12,10 +12,19 @@ This example demonstrates a basic confiuration using:
 - A single Gateway deployed in the *"<control_plane_namespace>"*.
 - A VirtualService deployed in the member namespace referencing the Gateway in *"<control_plane_namespace>/<gateway_name>"*.
 
+Deploy
+
 ```sh
 export deploy_namespace=bookinfo
 export control_plane_namespace=istio-system
 export control_plane_name=basic-install
 export control_plane_route_name=api
 ./deploy-basic-gateway-configuration.sh
+```
+
+Test the application
+
+```sh
+#Open the following url in a web browser
+echo "https://$(oc get route ${control_plane_route_name} -n ${control_plane_namespace} -o jsonpath={'.spec.host'})/productpage"
 ```

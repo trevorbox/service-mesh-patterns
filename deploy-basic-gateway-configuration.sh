@@ -1,12 +1,12 @@
 #!/bin/bash
 
-DEPLOY_NAMESPACE=bookinfo
-CONTROL_PLANE_NAMESPACE=istio-system
-CONTROL_PLANE_NAME=basic-install
-CONTROL_PLANE_ROUTE_NAME=api
+#Define these variables in the same shell
+DEPLOY_NAMESPACE=${deploy_namespace}
+CONTROL_PLANE_NAMESPACE=${control_plane_namespace}
+CONTROL_PLANE_NAME=${control_plane_name}
+CONTROL_PLANE_ROUTE_NAME=${control_plane_route_name}
 
 oc new-project ${DEPLOY_NAMESPACE}
-
 
 echo -e "\nDeploy VirtualService & App in namespace \"${DEPLOY_NAMESPACE}\" and Gateway in namespace \"${CONTROL_PLANE_NAMESPACE}\"...\n"
 

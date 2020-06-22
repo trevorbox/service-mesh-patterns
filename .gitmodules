@@ -1,0 +1,3 @@
+[submodule "service-mesh"]
+	path = service-mesh
+	url = https://github.com/trevorbox/service-mesh

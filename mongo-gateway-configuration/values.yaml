@@ -1,0 +1,9 @@
+control_plane_namespace: istio-system
+control_plane_name: basic-install
+mongo_ingressgateway_name: mongo-ingressgateway
+ingressgateway_name: ingressgateway
+bookinfo_namespace: bookinfo
+mongodb:
+  host: "<loadBalancer_ingress_hostname>a522d9fa3e81a4746b7ff4383f78e2df-62286390.us-east-2.elb.amazonaws.com"
+  port: 27018
+route_hostname: "<api_route>"

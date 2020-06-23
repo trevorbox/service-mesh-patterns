@@ -41,3 +41,56 @@ Test the bookinfo application
 # Open the following url in a web browser
 echo "https://$(oc get route ${control_plane_route_name} -n ${control_plane_namespace} -o jsonpath={'.spec.host'})/productpage"
 ```
+
+## Multiple Ingress Gateways with MongoDB
+
+This example shows how to deploy MongoDB behind Service Mesh on Openshift and open a NodePort on the mongo ingress gateway for external communication. With this configuration we can present a certificate in the mongo-ingressgateway proxy and test TLS connections from outside the mesh to MongoDB. A normal Openshift route does not support the mongo protocol.
+
+### Install the Service Mesh
+
+Follow the README.md within the service-mesh folder to deploy the control-plane-mongodb
+
+### Install mongodb app
+
+```sh
+export deploy_namespace=mongodb
+
+oc new-project ${deploy_namespace}
+
+helm install mongodb -n ${deploy_namespace} mongodb/
+```
+
+### Install Mongo Gateway Configuration
+
+> TODO: refactor bookinfo + mongo into the same chart since there is a new reviews-v2 deployment
+
+```sh
+export deploy_namespace=mongodb
+
+helm install mongo-gateway-configuration -n ${deploy_namespace} mongo-gateway-configuration/
+```
+
+1. Login
+
+   ```sh
+   oc login <mycluster>
+   ```
+
+2. Update playbook with appropriate k8s_namespace variable
+3. Run playbook on cluster
+
+   ```sh
+   ansible-playbook playbook.yml
+   ```
+
+4. Test normal connectivity to LoadBalancer
+
+   ```sh
+   ./scripts/ingress-mongodb-setup.sh
+   ```
+
+5. Test TLS connectivity to LoadBalancer
+
+   ```sh
+   ./scripts/ingress-mongodb-setup-tls.sh
+   ```

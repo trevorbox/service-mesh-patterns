@@ -1,4 +1,5 @@
-deploy_namespace=bookinfo
+bookinfo_namespace=bookinfo
+mongodb_namespace=mongodb
 control_plane_namespace=istio-system
 control_plane_name=basic-install
 control_plane_route_name=api

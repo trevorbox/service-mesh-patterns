@@ -14,8 +14,8 @@ metadata:
 stringData:
   database-admin-password: redhat
   database-name: test
-  database-password: redhat
-  database-user: bookinfo
+  database-password: {{ .Values.mongodb.password }}
+  database-user: {{ .Values.mongodb.user }}
 type: Opaque
 ...
 ---

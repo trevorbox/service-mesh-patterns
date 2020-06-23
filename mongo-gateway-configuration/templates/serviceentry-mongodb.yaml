@@ -1,7 +1,8 @@
+---
 apiVersion: networking.istio.io/v1alpha3
 kind: ServiceEntry
 metadata:
-  name: mongo
+  name: mongodb
   namespace: {{ .Values.bookinfo_namespace }}
 spec:
   hosts:
@@ -11,3 +12,4 @@ spec:
     name: tls
     protocol: TLS
   resolution: DNS
+...

@@ -7,7 +7,7 @@ oc new-project ${DEPLOY_NAMESPACE}
 
 echo "Install control plane..."
 
-helm install control-plane -n ${DEPLOY_NAMESPACE} service-mesh/control-plane/
+helm install control-plane-mongodb -n ${DEPLOY_NAMESPACE} service-mesh/control-plane-mongodb/
 
 echo "Wait for control plane to finish deployment..."
 

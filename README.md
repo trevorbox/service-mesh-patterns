@@ -2,14 +2,16 @@
 
 This project provides examples for widely practiced Service Mesh configurations.
 
-> To update service-mesh submodule to latest use `git submodule update --init --recursive`
+> To update the service-mesh submodule to latest commit use `git submodule foreach git pull origin master`
 
 ## Setup
 
 ### Install service mesh operators
 
-```sh
+> Note: you need to manually approve the InstallPlans as the script describes.
 
+```sh
+./install-service-mesh-operators.sh
 ```
 
 ### Export Default vars

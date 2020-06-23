@@ -6,13 +6,13 @@ This project provides examples for widely practiced Service Mesh configurations.
 
 ## Setup
 
-Install service mesh operators
+### Install service mesh operators
 
 ```sh
 
 ```
 
-Export Default vars
+### Export Default vars
 
 ```sh
 source default-vars.txt && export $(cut -d= -f1 default-vars.txt)
@@ -34,13 +34,13 @@ This example demonstrates a basic confiuration using:
 - A single Gateway deployed in the *"<control_plane_namespace>"*.
 - A VirtualService deployed in the member namespace referencing the Gateway in *"<control_plane_namespace>/<gateway_name>"*.
 
-Install control-plane
+### Install control plane
 
 ```sh
 ./install-service-mesh-control-plane.sh
 ```
 
-Install basic gateway configuration
+### Install basic gateway configuration
 
 ```sh
 ./install-basic-gateway-configuration.sh
@@ -53,10 +53,16 @@ Test the bookinfo application
 echo "https://$(oc get route ${control_plane_route_name} -n ${control_plane_namespace} -o jsonpath={'.spec.host'})/productpage"
 ```
 
-### Cleanup
+### Cleanup basic gateway configuration
 
 ```sh
-./cleanup-
+./cleanup-basic-gateway-configuration.sh
+```
+
+### Cleanup control plane
+
+```sh
+./cleanup-service-mesh-control-plane.sh
 ```
 
 ## Multiple Ingress Gateways with MongoDB

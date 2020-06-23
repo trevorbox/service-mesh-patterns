@@ -62,7 +62,7 @@ helm install mongodb -n ${deploy_namespace} mongodb/
 
 ### Install Mongo Gateway Configuration
 
-> TODO: refactor bookinfo + mongo into the same chart since there is a new reviews-v2 deployment
+> TODO: refactor bookinfo + mongo into the same chart since there is a new reviews-v2 deployment and other dependencies
 
 ```sh
 export deploy_namespace=mongodb
@@ -70,27 +70,14 @@ export deploy_namespace=mongodb
 helm install mongo-gateway-configuration -n ${deploy_namespace} mongo-gateway-configuration/
 ```
 
-1. Login
+Test normal connectivity to LoadBalancer
 
-   ```sh
-   oc login <mycluster>
-   ```
+```sh
+./scripts/ingress-mongodb-setup.sh
+```
 
-2. Update playbook with appropriate k8s_namespace variable
-3. Run playbook on cluster
+Test TLS connectivity to LoadBalancer
 
-   ```sh
-   ansible-playbook playbook.yml
-   ```
-
-4. Test normal connectivity to LoadBalancer
-
-   ```sh
-   ./scripts/ingress-mongodb-setup.sh
-   ```
-
-5. Test TLS connectivity to LoadBalancer
-
-   ```sh
-   ./scripts/ingress-mongodb-setup-tls.sh
-   ```
+```sh
+./scripts/ingress-mongodb-setup-tls.sh
+```

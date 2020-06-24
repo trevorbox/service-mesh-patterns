@@ -1,0 +1,6 @@
+bookinfo_namespace: bookinfo
+mongodb:
+  host: <set from helm install command>
+  port: 27018
+  user: bookinfo
+  password: redhat

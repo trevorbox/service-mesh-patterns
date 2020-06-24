@@ -123,3 +123,8 @@ You won't see traffic in kiali for mongodb requests since it is not using http o
 ```sh
 ./cleanup-service-mesh-control-plane-mongodb.sh
 ```
+
+## Egress Traffic Control
+This example demonstrates controlling outgoing traffic from the service mesh to external services.  Priorities are applied based on the header that is provided with the request.  In a real scenario this will most likely be injected based on some form of authentication and authorization.  The example also provides samples to demonstrate the limits that are applied to the different service levels based on Istio destination rules using subsets for the external service.
+
+Follow the guide located [here](egress-traffic-control/README.md)

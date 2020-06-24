@@ -112,7 +112,7 @@ Open the following url in a web browser.
 echo "https://$(oc get route ${control_plane_route_name} -n ${control_plane_namespace} -o jsonpath={'.spec.host'})/productpage"
 ```
 
-Refresh the product info page multiple times. If all was successful, you should see Reviewer 1 with a one star review under Book Reviews.
+Refresh the product info page multiple times. If all was successful, you should see Reviewer 1 with a one star rating under Book Reviews.
 
 > TODO: figure out why some requests fail to mongodb intermittently. Perhaps there is a connection setting or timeout within the database that needs to be configured.
 

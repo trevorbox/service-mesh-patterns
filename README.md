@@ -2,7 +2,11 @@
 
 This project provides examples for widely practiced Service Mesh configurations.
 
-> To update the service-mesh submodule to latest commit use `git submodule foreach git pull origin master`
+> To update git submodules to latest commit use:
+>
+> `git submodule update --init --recursive`
+>
+> `git submodule foreach git pull origin master`
 
 ## Setup
 
@@ -70,9 +74,13 @@ echo "https://$(oc get route ${control_plane_route_name} -n ${control_plane_name
 
 ## Multiple Ingress Gateways with MongoDB
 
-This example shows how to deploy MongoDB behind Service Mesh on Openshift and open a NodePort on the mongo ingress gateway for external communication. With this configuration we can present a certificate in the mongo-ingressgateway proxy and test TLS connections from outside the mesh to MongoDB. A normal Openshift route does not support the mongo protocol.
+This example is based on the blog post [Consuming External MongoDB Services](https://istio.io/latest/blog/2018/egress-mongo/) but takes it a step further to show how to deploy a MongoDB instance behind the same Service Mesh on Openshift and expose it via a NodePort on the mongo ingress gateway for external communication. With this configuration we can present a certificate in the mongo-ingressgateway proxy and test TLS connections from outside the mesh to MongoDB. A normal Openshift route does not support the mongo protocol.
 
-The bookinfo application is also deployed with an additional ratings-v2 service that connects to MongoDB via a ServiceEntry with TLS.
+The bookinfo application is also deployed with an additional ratings-v2 service that connects to MongoDB via a ServiceEntry to the NodePort with TLS.
+
+The updated architecture of the bookinfo app appears below:
+
+![Updated Bookinfo architecture](https://istio.io/latest/blog/2018/egress-mongo/bookinfo-ratings-v2-mongodb-external.svg)
 
 ### Install control plane mongodb
 
@@ -125,6 +133,7 @@ You won't see traffic in kiali for mongodb requests since it is not using http o
 ```
 
 ## Egress Traffic Control
+
 This example demonstrates controlling outgoing traffic from the service mesh to external services.  Priorities are applied based on the header that is provided with the request.  In a real scenario this will most likely be injected based on some form of authentication and authorization.  The example also provides samples to demonstrate the limits that are applied to the different service levels based on Istio destination rules using subsets for the external service.
 
-Follow the guide located [here](egress-traffic-control/README.md)
+Follow the guide located [here](./egress-traffic-control/README.md)

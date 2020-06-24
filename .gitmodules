@@ -1,3 +1,6 @@
 [submodule "service-mesh"]
 	path = service-mesh
 	url = https://github.com/trevorbox/service-mesh
+[submodule "egress-traffic-control"]
+	path = egress-traffic-control
+	url = https://github.com/cloudfirst-dev/istio-egress-traffic-control

@@ -9,7 +9,7 @@ helm delete mongo-gateway-configuration -n ${DEPLOY_NAMESPACE}
 
 echo "Delete apps..."
 
-helm delete mongodb -n ${DEPLOY_NAMESPACE} mongodb
+helm delete mongodb -n ${DEPLOY_NAMESPACE}
 
 echo "Done."
 

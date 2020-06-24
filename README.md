@@ -52,7 +52,7 @@ This example demonstrates a basic confiuration using:
 
 Open the following url in a web browser.
 
-```sh 
+```sh
 echo "https://$(oc get route ${control_plane_route_name} -n ${control_plane_namespace} -o jsonpath={'.spec.host'})/productpage"
 ```
 
@@ -72,6 +72,8 @@ echo "https://$(oc get route ${control_plane_route_name} -n ${control_plane_name
 
 This example shows how to deploy MongoDB behind Service Mesh on Openshift and open a NodePort on the mongo ingress gateway for external communication. With this configuration we can present a certificate in the mongo-ingressgateway proxy and test TLS connections from outside the mesh to MongoDB. A normal Openshift route does not support the mongo protocol.
 
+The bookinfo application is also deployed with an additional ratings-v2 service that connects to MongoDB via a ServiceEntry with TLS.
+
 ### Install control plane mongodb
 
 ```sh
@@ -86,9 +88,9 @@ This example shows how to deploy MongoDB behind Service Mesh on Openshift and op
 
 ### Setup mongodb
 
-Wait for the mongodb-v1 pod run before running the setup script.
+Wait for the mongodb-v1 pod to run before running the setup script.
 
-This will create the test database bookinfo-rating-v2 will connect to.
+This will create the test database bookinfo rating-v2 service will connect to.
 
 ```sh
 ./ingress-mongodb-setup-tls.sh
@@ -107,6 +109,8 @@ Refresh the product info page multiple times. If all was successful, you should 
 > TODO: figure out why some requests fail to mongodb intermittently. Perhaps there is a connection setting or timeout within the database that needs to be configured.
 
 Within Kiali, all reviews requests should be directed to the rating-v2 service and then to the mongodb ServiceEntry.
+
+You won't see traffic in kiali for mongodb requests since it is not using http or grcp, just tcp.
 
 ### Cleanup mongo gateway configuration
 

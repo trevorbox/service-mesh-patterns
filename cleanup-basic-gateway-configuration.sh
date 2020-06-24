@@ -9,7 +9,7 @@ helm delete basic-gateway-configuration -n ${DEPLOY_NAMESPACE}
 
 echo "Delete bookinfo App..."
 
-helm delete bookinfo -n ${DEPLOY_NAMESPACE} bookinfo
+helm delete bookinfo -n ${DEPLOY_NAMESPACE}
 
 echo "Done."
 

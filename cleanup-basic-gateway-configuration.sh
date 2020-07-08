@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #Define these variables in the same shell
-DEPLOY_NAMESPACE=${deploy_namespace}
+DEPLOY_NAMESPACE=${bookinfo_namespace}
 
 echo "Delete basic-gateway-configuration..."
 

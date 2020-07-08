@@ -1,0 +1,16 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: mongodb-example
+  namespace: {{ .Values.bookinfo_namespace }}
+spec:
+  hosts:
+  - mongodb-example
+  tcp:
+  - match:
+    - port: {{ .Values.mongodb.port }}
+    route:
+    - destination:
+        host: {{ .Values.mongodb.host }}
+        port:
+          number: {{ .Values.mongodb.port }}

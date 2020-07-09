@@ -1,4 +1,5 @@
 bookinfo_namespace: bookinfo
+bookinfo_mongodb_host: bookinfo-mongodb-service # arbitrary service name that get translated to the nodeport by a virtualservice route destination.
 mongodb:
   host: <set from helm install command>
   port: 27018

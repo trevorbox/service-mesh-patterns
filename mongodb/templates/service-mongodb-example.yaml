@@ -1,16 +1,13 @@
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: mongodb-example
-  namespace: {{ .Values.bookinfo_namespace }}
-  labels:
-    app: mongodb-example
-    service: mongodb-example
-spec:
-  ports:
-  - name: mongo
-    port: {{ .Values.mongodb.port }}
-  selector:
-    app: mongodb-example
-...
+#---
+#apiVersion: v1
+#kind: Service
+#metadata:
+#  name: {{ .Values.bookinfo_mongodb_host }}
+#  namespace: {{ .Values.bookinfo_namespace }}
+#  labels:
+#    app: {{ .Values.bookinfo_mongodb_host }}
+#    service: {{ .Values.bookinfo_mongodb_host }}
+#spec:
+#  type: ExternalName
+#  externalName: {{ .Values.mongodb.host }}
+#...

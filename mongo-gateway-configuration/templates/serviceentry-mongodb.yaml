@@ -6,15 +6,13 @@ metadata:
   namespace: {{ .Values.bookinfo_namespace }}
 spec:
   hosts:
-  - {{ .Values.mongodb.host }}
-  addresses:
-  - {{ .Values.mongodb.host }}
+  - {{ .Values.bookinfo_mongodb_host }}
   ports:
   - number: {{ .Values.mongodb.port }}
     name: tcp
     protocol: TCP
   location: MESH_EXTERNAL
-  resolution: STATIC
+  resolution: DNS
   endpoints:
   - address: {{ .Values.mongodb.host }}
 ...

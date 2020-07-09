@@ -80,7 +80,7 @@ The bookinfo application is also deployed with an additional ratings-v2 service 
 
 The updated architecture of the bookinfo app appears below:
 
-![Updated Bookinfo architecture](https://istio.io/latest/blog/2018/egress-mongo/bookinfo-ratings-v2-mongodb-external.svg)
+![Updated Bookinfo architecture with mongodb in mesh](./documentation/pictures/bookinfo-mongo.png)
 
 ### Install control plane mongodb
 

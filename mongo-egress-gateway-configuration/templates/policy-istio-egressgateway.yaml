@@ -3,7 +3,7 @@ apiVersion: authentication.istio.io/v1alpha1
 kind: Policy
 metadata:
   name: istio-egressgateway
-  namespace: istio-system
+  namespace: {{ .Values.control_plane_namespace }}
 spec:
   targets:
   - name: istio-egressgateway

@@ -11,4 +11,4 @@ mongodb:
 route_hostname: <set from helm install command>
 arbitrary_mongodb_host: my-mongo.tcp.svc
 mongodb_ip: 3.23.233.251
-egressgateway_port: 15443
+egressgateway_port: 15666

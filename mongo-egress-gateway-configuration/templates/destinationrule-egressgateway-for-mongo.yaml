@@ -3,6 +3,7 @@ apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:
   name: egressgateway-for-mongo
+  namespace: {{ .Values.control_plane_namespace }}
 spec:
   host: istio-egressgateway.{{ .Values.control_plane_namespace }}.svc.cluster.local
   subsets:

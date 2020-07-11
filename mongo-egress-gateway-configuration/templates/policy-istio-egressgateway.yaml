@@ -1,0 +1,10 @@
+---
+apiVersion: authentication.istio.io/v1alpha1
+kind: Policy
+metadata:
+  name: istio-egressgateway
+  namespace: istio-system
+spec:
+  targets:
+  - name: istio-egressgateway
+...

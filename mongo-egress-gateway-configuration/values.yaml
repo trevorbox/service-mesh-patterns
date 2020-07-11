@@ -1,0 +1,14 @@
+control_plane_namespace: istio-system
+control_plane_name: basic-install
+mongo_ingressgateway_name: mongo-ingressgateway
+ingressgateway_name: ingressgateway
+bookinfo_namespace: bookinfo
+mongodb:
+  host: <set from helm install command>
+  port: 27018
+  user: bookinfo
+  password: redhat
+route_hostname: <set from helm install command>
+arbitrary_mongodb_host: my-mongo.tcp.svc
+mongodb_ip: 3.23.233.251
+egressgateway_port: 15443

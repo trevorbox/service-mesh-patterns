@@ -1,0 +1,27 @@
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: mongodb
+  namespace: {{ .Values.control_plane_namespace }}
+spec:
+  selector:
+    istio: {{ .Values.mongo_ingressgateway_name }}
+  servers:
+  - hosts:
+    - {{ .Values.mongodb.host }}
+    port:
+      name: mongo
+      number: 27017
+      protocol: MONGO
+  - hosts:
+    - {{ .Values.mongodb.host }}
+    port:
+      name: mongo-tls
+      number: 27018
+      protocol: TLS
+    tls:
+      mode: SIMPLE
+      serverCertificate: /etc/mongo-proxy/certs/tls.crt
+      privateKey: /etc/mongo-proxy/certs/tls.key
+...

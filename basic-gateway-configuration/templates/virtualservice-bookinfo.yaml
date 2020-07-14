@@ -10,18 +10,31 @@ spec:
   hosts:
   - {{ .Values.route_hostname }}
   http:
-  - match:
-    - uri:
-        exact: /productpage
-    - uri:
-        exact: /login
-    - uri:
-        exact: /logout
-    - uri:
-        prefix: /api/v1/products
-    route:
-    - destination:
-        host: productpage
-        port:
-          number: 9080
+    - corsPolicy:
+        allowCredentials: false
+        allowHeaders:
+          - X-Foo-Bar
+        allowMethods:
+          - GET
+        allowOrigin:
+          - example.com
+        maxAge: 24h
+      headers:
+        response:
+          add:
+            name: test
+      match:
+      - uri:
+          exact: /productpage
+      - uri:
+          exact: /login
+      - uri:
+          exact: /logout
+      - uri:
+          prefix: /api/v1/products
+      route:
+      - destination:
+          host: productpage
+          port:
+            number: 9080
 ...

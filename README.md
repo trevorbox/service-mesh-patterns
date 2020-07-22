@@ -138,7 +138,7 @@ The mongo service still exists in the same location as the previous example's ar
 
 Direct mongo traffic through an egress gateway:
 
-![Updated Bookinfo architecture with mongodb to egressgateway](./documentation/pictures/bookinfo-mongo-egressgateway.png)
+![Kiali mongodb traffic through an egressgateway](./documentation/pictures/bookinfo-mongo-egressgateway.png)
 
 ### Install control plane mongodb via egressgateway
 

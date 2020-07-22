@@ -1,0 +1,20 @@
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: mongodb
+  namespace: {{ .Values.bookinfo_namespace }}
+spec:
+  addresses:
+    - {{ .Values.mongodb_ip }}/32
+  endpoints:
+    - address: {{ .Values.mongodb_ip }}
+  hosts:
+    - {{ .Values.arbitrary_mongodb_host }}
+  location: MESH_EXTERNAL
+  ports:
+    - name: tcp
+      number: {{ .Values.mongodb.port }}
+      protocol: TCP
+  resolution: STATIC
+...

@@ -1,0 +1,36 @@
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: direct-mongo-through-egress-gateway
+  namespace: {{ .Values.control_plane_namespace }}
+spec:
+  hosts:
+  - {{ .Values.arbitrary_mongodb_host }}
+  gateways:
+  - mesh
+  - istio-egressgateway
+  tcp:
+  - match:
+    - gateways:
+      - mesh
+      destinationSubnets:
+      - {{ .Values.mongodb_ip }}/32
+      port: {{ .Values.mongodb.port }}
+    route:
+    - destination:
+        host: istio-egressgateway.{{ .Values.control_plane_namespace }}.svc.cluster.local
+        subset: mongo
+        port:
+          number: {{ .Values.egressgateway_port }}
+  - match:
+    - gateways:
+      - istio-egressgateway
+      port: {{ .Values.egressgateway_port }}
+    route:
+    - destination:
+        host: {{ .Values.arbitrary_mongodb_host }}
+        port:
+          number: {{ .Values.mongodb.port }}
+      weight: 100
+...

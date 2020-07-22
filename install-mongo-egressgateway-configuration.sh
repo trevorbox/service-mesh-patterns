@@ -14,20 +14,20 @@ echo "Install mongo gateway configuration..."
 
 MONGODB_HOST=$(oc get service mongo-ingressgateway -n ${CONTROL_PLANE_NAMESPACE} -o jsonpath={.status.loadBalancer.ingress[0].hostname})
 MONGODB_IP=$(host $MONGODB_HOST | grep " has address " | cut -d" " -f4 | head -n 1)
-EGRESSGATEWAY_PORT=$(oc get svc istio-egressgateway -n ${CONTROL_PLANE_NAMESPACE} -o jsonpath={.spec.ports[3].port})
+EGRESSGATEWAY_PORT=$(oc get svc istio-egressgateway -n ${CONTROL_PLANE_NAMESPACE} -o jsonpath={.spec.ports[0].port})
 
-echo ${MONGODB_HOST}
-echo ${MONGODB_IP}
-echo ${EGRESSGATEWAY_PORT}
+echo "MONGODB_HOST: ${MONGODB_HOST}"
+echo "MONGODB_IP: ${MONGODB_IP}"
+echo "EGRESSGATEWAY_PORT: ${EGRESSGATEWAY_PORT}"
 
-helm install mongo-egress-gateway-configuration -n ${MONGODB_NAMESPACE} \
+helm install mongo-egressgateway-configuration -n ${MONGODB_NAMESPACE} \
   --set control_plane_namespace=${CONTROL_PLANE_NAMESPACE} \
   --set control_plane_name=${CONTROL_PLANE_NAME} \
   --set mongodb.host=$(oc get service mongo-ingressgateway -n ${CONTROL_PLANE_NAMESPACE} -o jsonpath={.status.loadBalancer.ingress[0].hostname}) \
   --set route_hostname=$(oc get route ${CONTROL_PLANE_ROUTE_NAME} -n ${CONTROL_PLANE_NAMESPACE} -o jsonpath={'.spec.host'}) \
   --set mongodb_ip=${MONGODB_IP} \
   --set egressgateway_port=${EGRESSGATEWAY_PORT} \
-  mongo-egress-gateway-configuration
+  mongo-egressgateway-configuration
 
 echo "Install mongodb apps..."
 

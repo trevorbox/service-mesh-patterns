@@ -5,7 +5,7 @@ DEPLOY_NAMESPACE=${mongodb_namespace}
 
 echo "Delete gateway configuration..."
 
-helm delete mongo-egress-gateway-configuration -n ${DEPLOY_NAMESPACE}
+helm delete mongo-egressgateway-configuration -n ${DEPLOY_NAMESPACE}
 
 echo "Delete apps..."
 

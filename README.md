@@ -27,7 +27,7 @@ source default-vars.txt && export $(cut -d= -f1 default-vars.txt)
 *Or*, Export Custom vars
 
 ```sh
-export deploy_namespace=bookinfo
+export bookinfo_namespace=bookinfo
 export control_plane_namespace=istio-system
 export control_plane_name=basic-install
 export control_plane_route_name=api
@@ -114,8 +114,6 @@ echo "https://$(oc get route ${control_plane_route_name} -n ${control_plane_name
 
 Refresh the product info page multiple times. If all was successful, you should see Reviewer 1 with a one star rating under Book Reviews.
 
-> TODO: figure out why some requests fail to mongodb intermittently. Perhaps there is a connection setting or timeout within the database that needs to be configured.
-
 Within Kiali, all reviews requests should be directed to the rating-v2 service and then to the mongodb ServiceEntry.
 
 You won't see traffic in kiali for mongodb requests since it is not using http or grcp, just tcp.
@@ -130,6 +128,60 @@ You won't see traffic in kiali for mongodb requests since it is not using http o
 
 ```sh
 ./cleanup-service-mesh-control-plane-mongodb.sh
+```
+
+## Multiple Ingress Gateways and Egress Gateway to MongoDB
+
+This example is also based on the blog post [Consuming External MongoDB Services](https://istio.io/latest/blog/2018/egress-mongo/#configure-tcp-traffic-from-sidecars-to-the-egress-gateway)
+
+### Install control plane mongodb via egressgateway
+
+```sh
+./install-service-mesh-control-plane-mongodb-egressgateway.sh
+```
+
+### Install mongo egressgateway configuration
+
+```sh
+./install-mongo-egressgateway-configuration.sh
+```
+
+### Configure mongodb
+
+Wait for the mongodb-v1 pod to run before running the setup script.
+
+This will create the test database bookinfo rating-v2 service will connect to.
+
+```sh
+./ingress-mongodb-setup-tls.sh
+```
+
+### Verify traffic flows through the egressgateway
+
+Open the following url in a web browser.
+
+```sh
+echo "https://$(oc get route ${control_plane_route_name} -n ${control_plane_namespace} -o jsonpath={'.spec.host'})/productpage"
+```
+
+Refresh the product info page multiple times. If all was successful, you should see Reviewer 1 with a one star rating under Book Reviews.
+
+The istio-proxy access logs within the istio-egrassgateway pod should show outbound traffic from it. This logging was enabled by the servicemeshcontrolplane's `global.proxy.accessLogFile` configuration.
+
+```sh
+[2020-07-22T00:38:16.510Z] "- - -" 0 - "-" "-" 1536 3960 24 - "-" "-" "-" "-" "13.58.124.191:27018" outbound|27018||my-mongo.tcp.svc 10.130.0.166:43250 10.130.0.166:15666 10.130.0.170:54548 - -
+```
+
+### Cleanup mongo egressgateway configuration
+
+```sh
+./cleanup-mongo-egressgateway-configuration.sh
+```
+
+### Cleanup control plane mongodb egressgateway
+
+```sh
+./cleanup-service-mesh-control-plane-mongodb-egressgateway.sh
 ```
 
 ## Egress Traffic Control

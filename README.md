@@ -134,6 +134,10 @@ You won't see traffic in kiali for mongodb requests since it is not using http o
 
 This example is also based on the blog post [Consuming External MongoDB Services](https://istio.io/latest/blog/2018/egress-mongo/#configure-tcp-traffic-from-sidecars-to-the-egress-gateway)
 
+Direct mongo traffic through an egress gateway:
+
+![Updated Bookinfo architecture with mongodb to egressgateway](./documentation/pictures/bookinfo-mongo-egressgateway.png)
+
 ### Install control plane mongodb via egressgateway
 
 ```sh

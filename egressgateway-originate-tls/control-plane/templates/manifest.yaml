@@ -1,0 +1,112 @@
+---
+# Source: control-plane/templates/route-api.yaml
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: api
+spec:
+  port:
+    targetPort: http2
+  tls:
+    termination: edge
+  to:
+    kind: Service
+    name: custom-ingressgateway
+    weight: 100
+  wildcardPolicy: None
+---
+# Source: control-plane/templates/servicemeshcontrolplane-basic-install.yaml
+apiVersion: maistra.io/v1
+kind: ServiceMeshControlPlane
+metadata:
+  name: basic-install
+spec:
+  version: v1.1
+  istio:
+    gateways:
+      istio-egressgateway:
+        enabled: true
+      istio-ingressgateway:
+        enabled: false        
+      custom-ingressgateway:
+        enabled: true
+        autoscaleEnabled: false
+        ior_enabled: false
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+        sds:
+          enabled: false
+        labels:
+          app: custom-ingressgateway
+          istio: ingressgateway
+        type: ClusterIP
+        ports:
+          - name: status-port
+            protocol: TCP
+            port: 15020
+            targetPort: 15020
+          - name: http2
+            protocol: TCP
+            port: 80
+            targetPort: 8080
+          - name: https
+            protocol: TCP
+            port: 443
+            targetPort: 8443
+          - name: tls
+            protocol: TCP
+            port: 15443
+            targetPort: 15443
+    global:
+      controlPlaneSecurityEnabled: true
+      disablePolicyChecks: false
+      mtls:
+        enabled: true
+      proxy:
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+    grafana:
+      enabled: true
+      resources:
+        requests:
+          cpu: 10m
+          memory: 128Mi
+    kiali:
+      enabled: true
+      resources:
+        requests:
+          cpu: 100m
+          memory: 128Mi
+    mixer:
+      policy:
+        autoscaleEnabled: false
+        resources:
+          requests:
+            cpu: 10m
+            memory: 128Mi
+      telemetry:
+        autoscaleEnabled: false
+        resources:
+          requests:
+            cpu: 100m
+            memory: 1G
+    pilot:
+      autoscaleEnabled: false
+      traceSampling: 100
+      resources:
+        requests:
+          cpu: 10m
+          memory: 128Mi
+    tracing:
+      enabled: true
+      jaeger:
+        template: all-in-one
+        resources:
+          requests:
+            cpu: 10m
+            memory: 128Mi
+

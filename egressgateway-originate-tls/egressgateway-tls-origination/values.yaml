@@ -1,0 +1,2 @@
+nginx:
+  host: nginx-mesh-external.apps.cluster-3dad.3dad.sandbox719.opentlc.com

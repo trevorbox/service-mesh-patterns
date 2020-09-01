@@ -1,6 +1,6 @@
 # mtls investigation
 
-Deploy the operators and bookinfo app
+Deploy the operators, control plane, and bookinfo app
 
 ```sh
 ./install-service-mesh-operators.sh

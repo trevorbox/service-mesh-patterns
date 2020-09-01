@@ -3,8 +3,11 @@ apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:
   name: originate-tls-for-nginx-mesh-external
+  namespace: istio-system
 spec:
   host: {{ .Values.nginx.host }}
+  #exportTo:
+  #  - "."
   trafficPolicy:
     loadBalancer:
       simple: ROUND_ROBIN
@@ -13,4 +16,5 @@ spec:
         number: 443
       tls:
         mode: SIMPLE # initiates HTTPS for connections to nginx
+        #caCertificates: /etc/configmaps/ca-bundle.crt
 ...

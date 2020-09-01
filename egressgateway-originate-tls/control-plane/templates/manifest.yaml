@@ -26,6 +26,10 @@ spec:
     gateways:
       istio-egressgateway:
         enabled: true
+        configVolumes:
+          - name: ca-bundle
+            configMapName: trusted-ca-bundle
+            mountPath: /etc/configmaps
       istio-ingressgateway:
         enabled: false        
       custom-ingressgateway:

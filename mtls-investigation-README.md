@@ -20,7 +20,7 @@ oc new-project mesh-external
 oc new-app centos/nginx-112-centos7~https://github.com/sclorg/nginx-ex -n mesh-external
 ```
 
-Test connectivity to mesh-external service from bookinfo ratings pod is OK
+Test connectivity to mesh-external service from bookinfo ratings container is OK
 
 ```sh
 oc rsh -n bookinfo -c ratings deployment/ratings-v1
@@ -44,7 +44,7 @@ spec:
 EOF
 ```
 
-Test connectivity to mesh-external service from bookinfo ratings pod is 503 Service Unavailable due to mtls
+Test connectivity to mesh-external service from bookinfo ratings container is 503 Service Unavailable due to mtls
 
 ```sh
 oc rsh -n bookinfo -c ratings deployment/ratings-v1
@@ -52,12 +52,4 @@ curl -I http://nginx-ex.mesh-external.svc:8080
 exit
 ```
 
-Test connectivity to mesh-external service from bookinfo istio-proxy pod is OK
-
-```sh
-oc rsh -n bookinfo -c istio-proxy deployment/ratings-v1
-curl -I http://nginx-ex.mesh-external.svc:8080
-exit
-```
-
-Why do outbound connections from the istio-proxy containers not require mtls?
+Should the connectivity between a pod in a mesh with global mtls enabled and a pod outside of the mesh but in a member namespace work?

@@ -28,7 +28,7 @@ spec:
         enabled: true
         configVolumes:
           - name: ca-bundle
-            configMapName: trusted-ca-bundle
+            configMapName: ocp-ca-bundle
             mountPath: /etc/configmaps
       istio-ingressgateway:
         enabled: false        
@@ -65,10 +65,11 @@ spec:
             targetPort: 15443
     global:
       controlPlaneSecurityEnabled: true
-      disablePolicyChecks: false
+      disablePolicyChecks: false      
       mtls:
         enabled: true
       proxy:
+        accessLogFile: "/dev/stdout"
         resources:
           requests:
             cpu: 100m

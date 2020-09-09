@@ -27,9 +27,9 @@ spec:
       istio-egressgateway:
         enabled: true
         configVolumes:
-          - name: ca-bundle
+          - name: ocp-ca-bundle
             configMapName: ocp-ca-bundle
-            mountPath: /etc/configmaps
+            mountPath: /etc/configmaps/ocp-ca-bundle
       istio-ingressgateway:
         enabled: false        
       custom-ingressgateway:

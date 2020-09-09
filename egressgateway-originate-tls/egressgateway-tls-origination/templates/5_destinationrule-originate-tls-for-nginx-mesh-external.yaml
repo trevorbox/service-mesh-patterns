@@ -6,8 +6,8 @@ metadata:
   namespace: istio-system
 spec:
   host: {{ .Values.nginx.host }}
-  exportTo:
-    - "."
+  #exportTo:
+  #  - "."
   trafficPolicy:
     loadBalancer:
       simple: ROUND_ROBIN
@@ -16,6 +16,6 @@ spec:
         number: 443
       tls:
         mode: SIMPLE # initiates HTTPS for connections to nginx
-        caCertificates: /etc/configmaps/ca.crt
-        sni: {{ .Values.nginx.host }}
+        #caCertificates: /etc/configmaps//etc/configmaps/ocp-ca-bundle/ca.crt
+        #sni: {{ .Values.nginx.host }}
 ...

@@ -1,6 +1,6 @@
 # TLS origination
 
-In attempting to originate TLS through an egress gateway and trust a ca certificate I found a strange behavior with the DestinationRule's exportTo functionality. Since the certificate needs to be mounted on on the egress gateway pod only I believe we need to explicity use "exportTo: '.'" for the DestinationRule that originates tls located in the control plane namespace. This causes the request to fail however from an application within the mesh. The egressgateway log simply says "upstream_reset_before_response_started{connection termination}" and fials with a 503 error.
+In attempting to originate TLS through an egress gateway and trust a ca certificate I found a strange behavior with the DestinationRule's exportTo functionality. Since the certificate needs to be mounted on the egress gateway pod only I believe we need to use exportTo: '.' for the DestinationRule that originates tls in the control plane namespace. This causes the request to fail however - even without any ca certificate defined and TLS mode SIMPLE. The egress gateway envoy log simply says "upstream_reset_before_response_started{connection termination}" and fails with a 503 error.
 
 How should the DestinationRule be configured for this use case? Is there any example available?
 

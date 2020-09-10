@@ -1,0 +1,44 @@
+[Envoy (Epoch 0)] [2020-09-10 20:54:37.603][35][debug][filter] [src/istio/mixerclient/client_impl.cc:271] CheckResult transport=OK, policy=OK, quota=NA, attempt=0
+[Envoy (Epoch 0)] [2020-09-10 20:54:37.603][35][debug][filter] [src/envoy/http/mixer/filter.cc:156] Called Mixer::Filter : check complete OK
+[Envoy (Epoch 0)] [2020-09-10 20:54:37.603][35][debug][router] [external/envoy/source/common/router/router.cc:434] [C98][S15792951860125980154] cluster 'outbound|443||nginx-mesh-external.apps.cluster-3dad.3dad.sandbox719.opentlc.com' match for URL '/'
+[Envoy (Epoch 0)] [2020-09-10 20:54:37.603][35][debug][router] [external/envoy/source/common/router/router.cc:549] [C98][S15792951860125980154] router decoding headers:
+':authority', 'nginx-mesh-external.apps.cluster-3dad.3dad.sandbox719.opentlc.com'
+':path', '/'
+':method', 'GET'
+':scheme', 'http'
+'user-agent', 'curl/7.38.0'
+'accept', '*/*'
+'x-forwarded-proto', 'http'
+'x-request-id', '83a7448c-aada-9565-a1a7-0f69e65cee3c'
+'x-envoy-decorator-operation', 'nginx-mesh-external.apps.cluster-3dad.3dad.sandbox719.opentlc.com:443/*'
+'x-forwarded-for', '10.130.0.33'
+'x-envoy-internal', 'true'
+'x-istio-attributes', 'Cl8KGGRlc3RpbmF0aW9uLnNlcnZpY2UuaG9zdBJDEkFuZ2lueC1tZXNoLWV4dGVybmFsLmFwcHMuY2x1c3Rlci0zZGFkLjNkYWQuc2FuZGJveDcxOS5vcGVudGxjLmNvbQpfChhkZXN0aW5hdGlvbi5zZXJ2aWNlLm5hbWUSQxJBbmdpbngtbWVzaC1leHRlcm5hbC5hcHBzLmNsdXN0ZXItM2RhZC4zZGFkLnNhbmRib3g3MTkub3BlbnRsYy5jb20KLwodZGVzdGluYXRpb24uc2VydmljZS5uYW1lc3BhY2USDhIMaXN0aW8tc3lzdGVtCk4KCnNvdXJjZS51aWQSQBI+a3ViZXJuZXRlczovL2lzdGlvLWVncmVzc2dhdGV3YXktNWJiOWRiNWM2Ny1ucGt0OC5pc3Rpby1zeXN0ZW0='
+'x-b3-traceid', 'f5f22b4a1cd9d727386fe159d4169a8b'
+'x-b3-spanid', '12774d94d13f44bb'
+'x-b3-parentspanid', '386fe159d4169a8b'
+'x-b3-sampled', '1'
+
+[Envoy (Epoch 0)] [2020-09-10 20:54:37.603][35][debug][pool] [external/envoy/source/common/http/http1/conn_pool.cc:95] creating a new connection
+[Envoy (Epoch 0)] [2020-09-10 20:54:37.603][35][debug][client] [external/envoy/source/common/http/codec_client.cc:31] [C152] connecting
+[Envoy (Epoch 0)] [2020-09-10 20:54:37.603][35][debug][connection] [external/envoy/source/common/network/connection_impl.cc:732] [C152] connecting to 18.190.34.175:443
+[Envoy (Epoch 0)] [2020-09-10 20:54:37.603][35][debug][connection] [external/envoy/source/common/network/connection_impl.cc:741] [C152] connection in progress
+[Envoy (Epoch 0)] [2020-09-10 20:54:37.603][35][debug][pool] [external/envoy/source/common/http/conn_pool_base.cc:20] queueing request due to no available connections
+[Envoy (Epoch 0)] [2020-09-10 20:54:37.603][35][debug][http2] [external/envoy/source/common/http/http2/codec_impl.cc:784] [C94] stream closed: 0
+[Envoy (Epoch 0)] [2020-09-10 20:54:37.604][35][debug][connection] [external/envoy/source/common/network/connection_impl.cc:580] [C152] connected
+[Envoy (Epoch 0)] [2020-09-10 20:54:37.604][35][debug][client] [external/envoy/source/common/http/codec_client.cc:69] [C152] connected
+[Envoy (Epoch 0)] [2020-09-10 20:54:37.604][35][debug][pool] [external/envoy/source/common/http/http1/conn_pool.cc:249] [C152] attaching to next request
+[Envoy (Epoch 0)] [2020-09-10 20:54:37.604][35][debug][router] [external/envoy/source/common/router/router.cc:1618] [C98][S15792951860125980154] pool ready
+[Envoy (Epoch 0)] [2020-09-10 20:54:37.606][35][debug][connection] [external/envoy/source/common/network/connection_impl.cc:548] [C152] remote close
+[Envoy (Epoch 0)] [2020-09-10 20:54:37.606][35][debug][connection] [external/envoy/source/common/network/connection_impl.cc:193] [C152] closing socket: 0
+[Envoy (Epoch 0)] [2020-09-10 20:54:37.606][35][debug][client] [external/envoy/source/common/http/codec_client.cc:88] [C152] disconnect. resetting 1 pending requests
+[Envoy (Epoch 0)] [2020-09-10 20:54:37.606][35][debug][client] [external/envoy/source/common/http/codec_client.cc:111] [C152] request reset
+[Envoy (Epoch 0)] [2020-09-10 20:54:37.606][35][debug][router] [external/envoy/source/common/router/router.cc:911] [C98][S15792951860125980154] upstream reset: reset reason connection termination
+[Envoy (Epoch 0)] [2020-09-10 20:54:37.606][35][debug][http] [external/envoy/source/common/http/conn_manager_impl.cc:1358] [C98][S15792951860125980154] Sending local reply with details upstream_reset_before_response_started{connection termination}
+[Envoy (Epoch 0)] [2020-09-10 20:54:37.606][35][debug][filter] [src/envoy/http/mixer/filter.cc:135] Called Mixer::Filter : encodeHeaders 2
+[Envoy (Epoch 0)] [2020-09-10 20:54:37.606][35][debug][http] [external/envoy/source/common/http/conn_manager_impl.cc:1556] [C98][S15792951860125980154] encoding headers via codec (end_stream=false):
+':status', '503'
+'content-length', '95'
+'content-type', 'text/plain'
+'date', 'Thu, 10 Sep 2020 20:54:37 GMT'
+'server', 'istio-envoy'

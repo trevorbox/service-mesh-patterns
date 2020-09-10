@@ -1,5 +1,11 @@
 # TLS origination
 
+In attempting to originate TLS through an egress gateway and trust a ca certificate I found a strange behavior with the DestinationRule's exportTo functionality. Since the certificate needs to be mounted on on the egress gateway pod only I believe we need to explicity use "exportTo: '.'" for the DestinationRule that originates tls located in the control plane namespace. This causes the request to fail however from an application within the mesh. The egressgateway log simply says "upstream_reset_before_response_started{connection termination}".
+
+How should the DestinationRule be configured? Is there any example for this use case?
+
+Example service mesh, application and egressgateway deployment can be found here to replicate the issue: <https://github.com/trevorbox/service-mesh-patterns/tree/destinationrule-tls-origination/egressgateway-originate-tls>
+
 ## Create root ca configmap
 
 ```sh

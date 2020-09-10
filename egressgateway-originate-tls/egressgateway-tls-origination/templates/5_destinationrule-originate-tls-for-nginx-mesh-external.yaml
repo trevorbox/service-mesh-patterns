@@ -6,8 +6,11 @@ metadata:
   namespace: istio-system
 spec:
   host: {{ .Values.nginx.host }}
-  #exportTo:
-  #  - "."
+  # <TODO 1>
+  # Why does the request from application pod fail if this destinationrule is exported to only the istio-system namespace?
+  exportTo:
+    - "."
+  # <END TODO 1>
   trafficPolicy:
     loadBalancer:
       simple: ROUND_ROBIN
@@ -16,6 +19,9 @@ spec:
         number: 443
       tls:
         mode: SIMPLE # initiates HTTPS for connections to nginx
+        # <TODO 2>
+        # We want the destinationrule applied to just the istio-system namespace only so that we can trust our own ca-cert
         #caCertificates: /etc/configmaps//etc/configmaps/ocp-ca-bundle/ca.crt
-        #sni: {{ .Values.nginx.host }}
+        # <END TODO 2>
+        sni: {{ .Values.nginx.host }}
 ...

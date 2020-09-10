@@ -46,4 +46,12 @@ oc rsh -n bookinfo -c ratings deployment/ratings-v1 curl -v http://$(oc get rout
 
 # Test from egressgateway
 oc rsh -n istio-system -c istio-proxy deployment/istio-egressgateway curl -v https://$(oc get route nginx -n mesh-external -o jsonpath={.spec.host}) --cacert /etc/configmaps/ocp-ca-bundle/ca.crt
+
+# show routes
+istioctl pc route $(oc get pod -l app=ratings -n bookinfo -o jsonpath='{.items[0].metadata.name}') -n bookinfo --name 80 -o json
+
+istioctl pc route $(oc get pod -l app=istio-egressgateway -n istio-system -o jsonpath='{.items[0].metadata.name}') -n istio-system --name http.80 -o json
+
+# change log level
+istioctl pc log $(oc get pod -l app=istio-egressgateway -n istio-system -o jsonpath='{.items[0].metadata.name}') --level debug -n istio-system
 ```

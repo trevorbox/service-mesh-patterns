@@ -4,7 +4,7 @@ In attempting to originate TLS through an egress gateway and trust a ca certific
 
 How should the DestinationRule be configured for this use case? Is there any example available?
 
-Example service mesh, application and egressgateway deployment can be found here to replicate the issue: <https://github.com/trevorbox/service-mesh-patterns/tree/destinationrule-tls-origination/egressgateway-originate-tls>
+Example service mesh, application and egressgateway deployment can be found here to replicate the issue.
 
 ## Create root ca configmap
 

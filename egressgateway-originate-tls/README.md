@@ -24,6 +24,7 @@ helm upgrade -i control-plane -n istio-system control-plane
 
 ```sh
 cd ..
+source default-vars.txt && export $(cut -d= -f1 default-vars.txt)
 ./install-basic-gateway-configuration.sh
 ```
 

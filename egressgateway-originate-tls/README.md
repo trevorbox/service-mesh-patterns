@@ -36,6 +36,8 @@ source default-vars.txt && export $(cut -d= -f1 default-vars.txt)
 oc new-project mesh-external
 
 oc new-app centos/nginx-112-centos7~https://github.com/sclorg/nginx-ex -n mesh-external
+
+oc create route edge nginx --service=nginx-ex --port 8080 -n mesh-external
 ```
 
 ## Install the egressgateway configurations

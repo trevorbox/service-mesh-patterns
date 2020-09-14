@@ -41,7 +41,7 @@ oc new-app centos/nginx-112-centos7~https://github.com/sclorg/nginx-ex -n mesh-e
 ## Install the egressgateway configurations
 
 ```sh
-helm upgrade -i egress -n bookinfo egressgateway-tls-origination
+helm upgrade -i egress -n bookinfo egressgateway-tls-origination --set nginx.host=$(oc get route nginx -n mesh-external -o jsonpath={.spec.host})
 ```
 
 ## Helpful test commands

@@ -25,11 +25,15 @@ spec:
   istio:
     gateways:
       istio-egressgateway:
+        namespace: istio-system-egress
         enabled: true
         configVolumes:
           - name: ocp-ca-bundle
             configMapName: ocp-ca-bundle
             mountPath: /etc/configmaps/ocp-ca-bundle
+          - name: trusted-ca-bundle
+            configMapName: trusted-ca-bundle
+            mountPath: /etc/configmaps/trusted-ca-bundle
       istio-ingressgateway:
         enabled: false        
       custom-ingressgateway:
@@ -65,7 +69,8 @@ spec:
             targetPort: 15443
     global:
       controlPlaneSecurityEnabled: false
-      disablePolicyChecks: false      
+      disablePolicyChecks: false
+      istioNamespace: istio-system    
       mtls:
         enabled: false
       proxy:

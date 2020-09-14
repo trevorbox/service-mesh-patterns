@@ -5,13 +5,13 @@ How should the DestinationRule be configured for this use case? Is there any exa
 
 Example service mesh, application and egress gateway deployment can be found here to replicate the use case.
 
-## Create root ca configmap
+## Create root ca configmap within egress gateway namespace
 
 ```sh
-oc new-project istio-system
+oc new-project istio-system-egress
 
 oc get secrets -n openshift-ingress-operator router-ca -o jsonpath='{.data.tls\.crt}' | base64 -d > /tmp/ca.crt
-oc -n istio-system create configmap ocp-ca-bundle --from-file=/tmp/ca.crt
+oc -n istio-system-egress create configmap ocp-ca-bundle --from-file=/tmp/ca.crt
 ```
 
 ## Install the control plane
@@ -36,6 +36,8 @@ source default-vars.txt && export $(cut -d= -f1 default-vars.txt)
 oc new-project mesh-external
 
 oc new-app centos/nginx-112-centos7~https://github.com/sclorg/nginx-ex -n mesh-external
+
+oc create route edge nginx --service=nginx-ex --port 8080 -n mesh-external
 ```
 
 ## Install the egressgateway configurations
@@ -60,4 +62,6 @@ istioctl pc route $(oc get pod -l app=istio-egressgateway -n istio-system -o jso
 
 # change log level
 istioctl pc log $(oc get pod -l app=istio-egressgateway -n istio-system -o jsonpath='{.items[0].metadata.name}') --level debug -n istio-system
+
+istioctl pc cluster $(oc get pod -l app=istio-egressgateway -n istio-system-egress -o jsonpath='{.items[0].metadata.name}') -n istio-system-egress --fqdn nginx-mesh-external.apps.cluster-a57a.a57a.sandbox1041.opentlc.com -o json
 ```

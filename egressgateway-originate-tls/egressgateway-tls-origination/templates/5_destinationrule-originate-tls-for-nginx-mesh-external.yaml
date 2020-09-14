@@ -3,7 +3,7 @@ apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:
   name: originate-tls-for-nginx-mesh-external
-  namespace: istio-system
+  namespace: istio-system-egress
 spec:
   host: {{ .Values.nginx.host }}
   # <TODO 1>
@@ -21,7 +21,8 @@ spec:
         mode: SIMPLE # initiates HTTPS for connections to nginx
         # <TODO 2>
         # We want the destinationrule applied to just the istio-system namespace only so that we can trust our own ca-cert
-        #caCertificates: /etc/configmaps//etc/configmaps/ocp-ca-bundle/ca.crt
+        caCertificates: /etc/configmaps/ocp-ca-bundle/ca.crt
+        #caCertificates: /etc/configmaps/trusted-ca-bundle/ca-bundle.crt
         # <END TODO 2>
         sni: {{ .Values.nginx.host }}
 ...

@@ -11,7 +11,7 @@ Example service mesh, application and egress gateway deployment can be found her
 oc new-project istio-system-egress
 
 oc get secrets -n openshift-ingress-operator router-ca -o jsonpath='{.data.tls\.crt}' | base64 -d > /tmp/ca.crt
-oc -n istio-system-egress create configmap ocp-ca-bundle --from-file=/tmp/ca.crt
+oc create secret generic ocp-ca-bundle --from-file=/tmp/ca.crt -n istio-system-egress
 ```
 
 ## Install the control plane

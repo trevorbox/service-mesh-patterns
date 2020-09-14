@@ -27,13 +27,17 @@ spec:
       istio-egressgateway:
         namespace: istio-system-egress
         enabled: true
-        configVolumes:
+        secretVolumes:
           - name: ocp-ca-bundle
-            configMapName: ocp-ca-bundle
-            mountPath: /etc/configmaps/ocp-ca-bundle
-          - name: trusted-ca-bundle
-            configMapName: trusted-ca-bundle
-            mountPath: /etc/configmaps/trusted-ca-bundle
+            secretName: ocp-ca-bundle
+            mountPath: /etc/secrets/ocp-ca-bundle
+        #configVolumes:
+        #  - name: ocp-ca-bundle
+        #    configMapName: ocp-ca-bundle
+        #    mountPath: /etc/configmaps/ocp-ca-bundle
+        #  - name: trusted-ca-bundle
+        #    configMapName: trusted-ca-bundle
+        #    mountPath: /etc/configmaps/trusted-ca-bundle
       istio-ingressgateway:
         enabled: false        
       custom-ingressgateway:
@@ -68,11 +72,11 @@ spec:
             port: 15443
             targetPort: 15443
     global:
-      controlPlaneSecurityEnabled: false
+      controlPlaneSecurityEnabled: true
       disablePolicyChecks: false
       istioNamespace: istio-system    
       mtls:
-        enabled: false
+        enabled: true
       proxy:
         accessLogFile: "/dev/stdout"
         resources:

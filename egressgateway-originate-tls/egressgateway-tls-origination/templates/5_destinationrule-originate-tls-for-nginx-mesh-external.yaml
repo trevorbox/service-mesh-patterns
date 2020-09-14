@@ -6,11 +6,9 @@ metadata:
   namespace: istio-system-egress
 spec:
   host: {{ .Values.nginx.host }}
-  # <TODO 1>
-  # Why does the request from application pod fail if this destinationrule is exported to only the istio-system namespace?
+  # Export to the istio-system-egress namespace since the secret is mounted to the egress gateway only
   exportTo:
     - "."
-  # <END TODO 1>
   trafficPolicy:
     loadBalancer:
       simple: ROUND_ROBIN
@@ -19,10 +17,6 @@ spec:
         number: 443
       tls:
         mode: SIMPLE # initiates HTTPS for connections to nginx
-        # <TODO 2>
-        # We want the destinationrule applied to just the istio-system namespace only so that we can trust our own ca-cert
-        caCertificates: /etc/configmaps/ocp-ca-bundle/ca.crt
-        #caCertificates: /etc/configmaps/trusted-ca-bundle/ca-bundle.crt
-        # <END TODO 2>
+        caCertificates: /etc/secrets/ocp-ca-bundle/ca.crt
         sni: {{ .Values.nginx.host }}
 ...

@@ -17,6 +17,7 @@ oc -n istio-system-egress create configmap ocp-ca-bundle --from-file=/tmp/ca.crt
 ## Install the control plane
 
 ```sh
+oc new-project istio-system
 helm upgrade -i control-plane -n istio-system control-plane
 ```
 
@@ -53,15 +54,15 @@ helm upgrade -i egress -n bookinfo egressgateway-tls-origination --set nginx.hos
 oc rsh -n bookinfo -c ratings deployment/ratings-v1 curl -v http://$(oc get route nginx -n mesh-external -o jsonpath={.spec.host})
 
 # Test from egressgateway
-oc rsh -n istio-system -c istio-proxy deployment/istio-egressgateway curl -v https://$(oc get route nginx -n mesh-external -o jsonpath={.spec.host}) --cacert /etc/configmaps/ocp-ca-bundle/ca.crt
+oc rsh -n istio-system-egress -c istio-proxy deployment/istio-egressgateway curl -v https://$(oc get route nginx -n mesh-external -o jsonpath={.spec.host}) --cacert /etc/configmaps/ocp-ca-bundle/ca.crt
 
 # show routes
 istioctl pc route $(oc get pod -l app=ratings -n bookinfo -o jsonpath='{.items[0].metadata.name}') -n bookinfo --name 80 -o json
 
-istioctl pc route $(oc get pod -l app=istio-egressgateway -n istio-system -o jsonpath='{.items[0].metadata.name}') -n istio-system --name http.80 -o json
+istioctl pc route $(oc get pod -l app=istio-egressgateway -n istio-system-egress -o jsonpath='{.items[0].metadata.name}') -n istio-system-egress --name http.80 -o json
 
 # change log level
-istioctl pc log $(oc get pod -l app=istio-egressgateway -n istio-system -o jsonpath='{.items[0].metadata.name}') --level debug -n istio-system
+istioctl pc log $(oc get pod -l app=istio-egressgateway -n istio-system-egress -o jsonpath='{.items[0].metadata.name}') --level debug -n istio-system-egress
 
-istioctl pc cluster $(oc get pod -l app=istio-egressgateway -n istio-system-egress -o jsonpath='{.items[0].metadata.name}') -n istio-system-egress --fqdn nginx-mesh-external.apps.cluster-a57a.a57a.sandbox1041.opentlc.com -o json
+istioctl pc cluster $(oc get pod -l app=istio-egressgateway -n istio-system-egress-egress -o jsonpath='{.items[0].metadata.name}') -n istio-system-egress-egress --fqdn nginx-mesh-external.apps.cluster-a57a.a57a.sandbox1041.opentlc.com -o json
 ```

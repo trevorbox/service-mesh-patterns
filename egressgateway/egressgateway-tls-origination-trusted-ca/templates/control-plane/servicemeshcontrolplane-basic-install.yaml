@@ -1,31 +1,15 @@
 ---
-# Source: control-plane/templates/route-api.yaml
-apiVersion: route.openshift.io/v1
-kind: Route
-metadata:
-  name: api
-spec:
-  port:
-    targetPort: http2
-  tls:
-    termination: edge
-  to:
-    kind: Service
-    name: custom-ingressgateway
-    weight: 100
-  wildcardPolicy: None
----
-# Source: control-plane/templates/servicemeshcontrolplane-basic-install.yaml
 apiVersion: maistra.io/v1
 kind: ServiceMeshControlPlane
 metadata:
   name: basic-install
+  namespace: {{ .Values.control_plane.namespace }}
 spec:
   version: v1.1
   istio:
     gateways:
       istio-egressgateway:
-        namespace: istio-system-egress
+        namespace: {{ .Values.egress.namespace }}
         enabled: true
         secretVolumes:
           - name: ocp-ca-bundle
@@ -67,7 +51,7 @@ spec:
     global:
       controlPlaneSecurityEnabled: true
       disablePolicyChecks: false
-      istioNamespace: istio-system    
+      istioNamespace: {{ .Values.control_plane.namespace }}
       mtls:
         enabled: true
       proxy:
@@ -116,4 +100,4 @@ spec:
           requests:
             cpu: 10m
             memory: 128Mi
-
+...

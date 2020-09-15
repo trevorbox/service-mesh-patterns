@@ -3,7 +3,7 @@ apiVersion: networking.istio.io/v1alpha3
 kind: ServiceEntry
 metadata:
   name: nginx
-  namespace: istio-system-egress
+  namespace: {{ .Values.egress.namespace }}
 spec:
   hosts:
     - {{ .Values.nginx.host }}

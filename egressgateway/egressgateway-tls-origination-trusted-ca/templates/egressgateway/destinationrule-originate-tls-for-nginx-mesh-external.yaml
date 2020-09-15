@@ -3,10 +3,10 @@ apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:
   name: originate-tls-for-nginx-mesh-external
-  namespace: istio-system-egress
+  namespace: {{ .Values.egress.namespace }}
 spec:
   host: {{ .Values.nginx.host }}
-  # Export to the istio-system-egress namespace since the secret is mounted to the egress gateway only
+  # Export to the egress namespace since the secret is mounted to the egress gateway only
   exportTo:
     - "."
   trafficPolicy:

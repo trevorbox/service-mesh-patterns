@@ -1,0 +1,22 @@
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: originate-tls-for-nginx-mesh-external
+  namespace: {{ .Values.egress.namespace }}
+spec:
+  host: {{ .Values.nginx.host }}
+  # Export to the egress namespace since the secret is mounted to the egress gateway only
+  exportTo:
+    - "."
+  trafficPolicy:
+    loadBalancer:
+      simple: ROUND_ROBIN
+    portLevelSettings:
+    - port:
+        number: 443
+      tls:
+        mode: SIMPLE # initiates HTTPS for connections to nginx
+        caCertificates: /etc/secrets/ocp-ca-bundle/ca.crt
+        sni: {{ .Values.nginx.host }}
+...

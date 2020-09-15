@@ -195,3 +195,7 @@ The istio-proxy access logs within the istio-egrassgateway pod should show outbo
 This example demonstrates controlling outgoing traffic from the service mesh to external services.  Priorities are applied based on the header that is provided with the request.  In a real scenario this will most likely be injected based on some form of authentication and authorization.  The example also provides samples to demonstrate the limits that are applied to the different service levels based on Istio destination rules using subsets for the external service.
 
 This [guide](https://github.com/cloudfirst-dev/istio-egress-traffic-control) will walk through running the examples.
+
+## Originate TLS through an Egress Gateway with a trusted CA Certificate
+
+Follow the instructions from the [README.md](egressgateway/README.md) within the egressgateway folder.

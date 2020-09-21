@@ -1,0 +1,19 @@
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: google
+  namespace: {{ .Values.egress.namespace }}
+spec:
+  hosts:
+    - {{ .Values.google.host }}
+  http:
+  - match:
+    - port: 80
+    route:
+    - destination:
+        host: {{ .Values.google.host }}
+        subset: tls-origination
+        port:
+          number: 443
+...

@@ -29,6 +29,7 @@ spec:
     route:
     - destination:
         host: {{ .Values.nginx.host }}
+        subset: nginx-https
         port:
           number: 443
       weight: 100

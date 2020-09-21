@@ -9,8 +9,8 @@ spec:
   istio:
     gateways:
       istio-egressgateway:
-        namespace: {{ .Values.egress.namespace }}
-        enabled: true
+        #namespace: {{ .Values.egress.namespace }}
+        enabled: false
         secretVolumes:
           - name: ocp-ca-bundle
             secretName: ocp-ca-bundle
@@ -95,9 +95,22 @@ spec:
     tracing:
       enabled: true
       jaeger:
-        template: all-in-one
-        resources:
-          requests:
-            cpu: 10m
-            memory: 128Mi
+        template: production-elasticsearch
+        elasticsearch:
+          nodeCount: 3
+          redundancyPolicy: "MultipleRedundancy"
+          resources:
+            requests:
+              cpu: "1"
+              memory: "4Gi"
+            limits:
+              cpu: "1"
+              memory: "4Gi"
+          storage:
+            storageClassName: gp2
+            size: 50Gi
+          esIndexCleaner:
+            enabled: true            # turn the cron job deployment on and off
+            numberOfDays: 60         # number of days to wait before deleting a record
+            schedule: "55 23 * * *"  # cron expression for it to run
 ...

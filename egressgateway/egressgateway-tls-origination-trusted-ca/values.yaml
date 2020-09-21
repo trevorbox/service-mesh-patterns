@@ -5,3 +5,5 @@ egress:
 control_plane:
   namespace: istio-system
   name: basic-install
+google:
+  host: www.google.com

@@ -5,6 +5,13 @@ How should the DestinationRule be configured for this use case? Is there any exa
 
 Example service mesh, application and egress gateway deployment can be found here to replicate the use case.
 
+## Install Service Mesh Operators
+
+```sh
+cd ..
+helm install service-mesh-operators -n openshift-operators service-mesh/service-mesh-operators/
+```
+
 ## Create root ca configmap
 
 ```sh

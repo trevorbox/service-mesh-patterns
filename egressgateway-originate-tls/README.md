@@ -12,6 +12,12 @@ cd ..
 helm install service-mesh-operators -n openshift-operators service-mesh/service-mesh-operators/
 ```
 
+OR
+
+```sh
+oc apply -f yaml/service-mesh-operators.yaml
+```
+
 ## Create root ca configmap
 
 ```sh
@@ -27,12 +33,27 @@ oc -n istio-system create configmap ocp-ca-bundle --from-file=/tmp/ca.crt
 helm upgrade -i control-plane -n istio-system control-plane
 ```
 
+OR
+
+```sh
+oc apply -f yaml/control-plane.yaml
+```
+
 ## Install the bookinfo application to test tls origination from
 
 ```sh
 cd ..
 source default-vars.txt && export $(cut -d= -f1 default-vars.txt)
 ./install-basic-gateway-configuration.sh
+```
+
+OR
+
+> Note: you will need to manually change the api gateway host throughout the basic-gateway-configuration.yaml file.
+
+```sh
+oc apply -f yaml/basic-gateway-configuration.yaml
+oc apply -f yaml/bookinfo.yaml
 ```
 
 > TODO figure out how to add the configmap volumemount - doing that manually right now since the istio operator does not seem to mount the volume to the proxy, though it does create the volume
@@ -51,6 +72,14 @@ oc create route edge nginx --service=nginx-ex --port 8080 -n mesh-external
 
 ```sh
 helm upgrade -i egress -n bookinfo egressgateway-tls-origination --set nginx.host=$(oc get route nginx -n mesh-external -o jsonpath={.spec.host})
+```
+
+OR
+
+> Note: you will need to manually change the nginx host throughout the egressgateway-tls-origination.yaml file.
+
+```sh
+oc apply -f yaml/egressgateway-tls-origination.yaml
 ```
 
 ## Helpful test commands

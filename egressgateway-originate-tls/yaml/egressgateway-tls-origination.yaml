@@ -1,0 +1,130 @@
+---
+# Source: egressgateway-tls-origination/templates/3_destinationrule-for-nginx-mesh-external.yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: egressgateway-for-nginx-mesh-external
+  namespace: istio-system
+spec:
+  host: istio-egressgateway.istio-system.svc.cluster.local
+  subsets:
+  - name: nginx
+    #trafficPolicy:
+    #  loadBalancer:
+    #    simple: ROUND_ROBIN
+    #  portLevelSettings:
+    #  - port:
+    #      number: 80
+    #    tls:
+    #      mode: ISTIO_MUTUAL
+    #      sni: nginx-mesh-external.apps.cluster-a57a.a57a.sandbox1041.opentlc.com
+...
+---
+# Source: egressgateway-tls-origination/templates/5_destinationrule-originate-tls-for-nginx-mesh-external.yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: originate-tls-for-nginx-mesh-external
+  namespace: istio-system
+spec:
+  host: nginx-mesh-external.apps.cluster-a57a.a57a.sandbox1041.opentlc.com
+  # <TODO 1>
+  # Why does the request from application pod fail if this destinationrule is exported to only the istio-system namespace?
+  exportTo:
+    - "."
+  # <END TODO 1>
+  trafficPolicy:
+    loadBalancer:
+      simple: ROUND_ROBIN
+    portLevelSettings:
+    - port:
+        number: 443
+      tls:
+        mode: SIMPLE # initiates HTTPS for connections to nginx
+        # <TODO 2>
+        # We want the destinationrule applied to just the istio-system namespace only so that we can trust our own ca-cert
+        #caCertificates: /etc/configmaps//etc/configmaps/ocp-ca-bundle/ca.crt
+        # <END TODO 2>
+        sni: nginx-mesh-external.apps.cluster-a57a.a57a.sandbox1041.opentlc.com
+...
+---
+# Source: egressgateway-tls-origination/templates/2_gateway-istio-egressgateway.yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: istio-egressgateway
+  namespace: istio-system
+spec:
+  selector:
+    istio: egressgateway
+  servers:
+  - port:
+      number: 80
+      #name: https
+      #protocol: HTTPS
+      name: http-port-for-tls-origination
+      protocol: HTTP
+    hosts:
+    - nginx-mesh-external.apps.cluster-a57a.a57a.sandbox1041.opentlc.com
+    #tls:
+    #  mode: MUTUAL
+    #  serverCertificate: /etc/certs/cert-chain.pem
+    #  privateKey: /etc/certs/key.pem
+    #  caCertificates: /etc/certs/root-cert.pem
+...
+---
+# Source: egressgateway-tls-origination/templates/1_serviceentry-nginx.yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: nginx
+  namespace: istio-system
+spec:
+  hosts:
+    - nginx-mesh-external.apps.cluster-a57a.a57a.sandbox1041.opentlc.com
+  ports:
+  - number: 80
+    name: http
+    protocol: HTTP
+  - number: 443
+    name: https
+    protocol: HTTPS
+  resolution: DNS
+  location: MESH_EXTERNAL
+...
+---
+# Source: egressgateway-tls-origination/templates/4_virtualservice-direct-nginx-mesh-external-through-egressgateway.yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: direct-nginx-mesh-external-through-egressgateway
+  namespace: istio-system
+spec:
+  hosts:
+  - nginx-mesh-external.apps.cluster-a57a.a57a.sandbox1041.opentlc.com
+  gateways:
+  - istio-system/istio-egressgateway
+  - mesh
+  http:
+  - match:
+    - gateways:
+      - mesh
+      port: 80
+    route:
+    - destination:
+        host: istio-egressgateway.istio-system.svc.cluster.local
+        subset: nginx
+        port:
+          number: 80
+      weight: 100
+  - match:
+    - gateways:
+      - istio-system/istio-egressgateway
+      port: 80
+    route:
+    - destination:
+        host: nginx-mesh-external.apps.cluster-a57a.a57a.sandbox1041.opentlc.com
+        port:
+          number: 443
+      weight: 100
+...

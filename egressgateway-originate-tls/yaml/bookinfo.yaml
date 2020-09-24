@@ -1,0 +1,261 @@
+---
+# Source: app/templates/bookinfo.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: bookinfo-reviews
+  namespace: bookinfo
+...
+---
+# Source: app/templates/bookinfo.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: bookinfo-productpage
+  namespace: bookinfo
+...
+---
+# Source: app/templates/bookinfo.yaml
+##################################################################################################
+# Details service
+##################################################################################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: details
+  namespace: bookinfo
+  labels:
+    app: details
+    service: details
+spec:
+  ports:
+  - port: 9080
+    name: http
+  selector:
+    app: details
+...
+---
+# Source: app/templates/bookinfo.yaml
+##################################################################################################
+# Ratings service
+##################################################################################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: ratings
+  namespace: bookinfo
+  labels:
+    app: ratings
+    service: ratings
+spec:
+  ports:
+  - port: 9080
+    name: http
+  selector:
+    app: ratings
+...
+---
+# Source: app/templates/bookinfo.yaml
+##################################################################################################
+# Reviews service
+##################################################################################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: reviews
+  namespace: bookinfo
+  labels:
+    app: reviews
+    service: reviews
+spec:
+  ports:
+  - port: 9080
+    name: http
+  selector:
+    app: reviews
+...
+---
+# Source: app/templates/bookinfo.yaml
+##################################################################################################
+# Productpage services
+##################################################################################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: productpage
+  namespace: bookinfo
+  labels:
+    app: productpage
+    service: productpage
+spec:
+  ports:
+  - port: 9080
+    name: http
+  selector:
+    app: productpage
+...
+---
+# Source: app/templates/bookinfo.yaml
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: details-v1
+  namespace: bookinfo 
+  labels:
+    app: details
+    version: v1
+spec:
+  replicas: 1
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "true"
+      labels:
+        app: details
+        version: v1
+    spec:
+      containers:
+      - name: details
+        image: docker.io/maistra/examples-bookinfo-details-v1:0.12.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 9080
+...
+---
+# Source: app/templates/bookinfo.yaml
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: ratings-v1
+  namespace: bookinfo
+  labels:
+    app: ratings
+    version: v1
+spec:
+  replicas: 1
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "true"
+      labels:
+        app: ratings
+        version: v1
+    spec:
+      containers:
+      - name: ratings
+        image: docker.io/maistra/examples-bookinfo-ratings-v1:0.12.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 9080
+...
+---
+# Source: app/templates/bookinfo.yaml
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: reviews-v1
+  namespace: bookinfo
+  labels:
+    app: reviews
+    version: v1
+spec:
+  replicas: 1
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "true"
+      labels:
+        app: reviews
+        version: v1
+    spec:
+      containers:
+      - name: reviews
+        image: docker.io/maistra/examples-bookinfo-reviews-v1:0.12.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 9080
+...
+---
+# Source: app/templates/bookinfo.yaml
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: reviews-v2
+  namespace: bookinfo
+  labels:
+    app: reviews
+    version: v2
+spec:
+  replicas: 1
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "true"
+      labels:
+        app: reviews
+        version: v2
+    spec:
+      serviceAccountName: bookinfo-reviews
+      containers:
+      - name: reviews
+        image: docker.io/maistra/examples-bookinfo-reviews-v2:0.12.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 9080
+...
+---
+# Source: app/templates/bookinfo.yaml
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: reviews-v3
+  namespace: bookinfo
+  labels:
+    app: reviews
+    version: v3
+spec:
+  replicas: 1
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "true"
+      labels:
+        app: reviews
+        version: v3
+    spec:
+      serviceAccountName: bookinfo-reviews
+      containers:
+      - name: reviews
+        image: docker.io/maistra/examples-bookinfo-reviews-v3:0.12.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 9080
+...
+---
+# Source: app/templates/bookinfo.yaml
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: productpage-v1
+  namespace: bookinfo
+  labels:
+    app: productpage
+    version: v1
+spec:
+  replicas: 1
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "true"
+      labels:
+        app: productpage
+        version: v1
+    spec:
+      serviceAccountName: bookinfo-productpage
+      containers:
+      - name: productpage
+        image: docker.io/maistra/examples-bookinfo-productpage-v1:0.12.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 9080
+...

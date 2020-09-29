@@ -74,7 +74,7 @@ echo "https://$(oc get route ${control_plane_route_name} -n ${control_plane_name
 
 ## Multiple Ingress Gateways with MongoDB
 
-This example is based on the blog post [Consuming External MongoDB Services](https://istio.io/latest/blog/2018/egress-mongo/) but takes it a step further to show how to deploy a MongoDB instance behind the same Service Mesh on Openshift and expose it via a NodePort on the mongo ingress gateway for external communication. With this configuration we can present a certificate in the mongo-ingressgateway proxy and test TLS connections from outside the mesh to MongoDB. A normal Openshift route does not support the mongo protocol.
+This example is based on the blog post [Consuming External MongoDB Services](https://istio.io/latest/blog/2018/egress-mongo/) but takes it a step further to show how to deploy a MongoDB instance behind the same Service Mesh on Openshift and expose it via an External Load Balancer on the mongo ingress gateway for external communication. With this configuration we can present a certificate in the mongo-ingressgateway proxy and test TLS connections from outside the mesh to MongoDB.
 
 The bookinfo application is also deployed with an additional ratings-v2 service that connects to MongoDB via a ServiceEntry to the NodePort with TLS.
 

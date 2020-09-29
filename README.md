@@ -114,8 +114,6 @@ echo "https://$(oc get route ${control_plane_route_name} -n ${control_plane_name
 
 Refresh the product info page multiple times. If all was successful, you should see Reviewer 1 with a one star rating under Book Reviews.
 
-> Note: the External Load Balancer host's IP can change to the mongo-ingressgateway kubernetes service on AWS. If that happens you will need to rerun install-mongo-egressgateway-configuration.sh to update the IP address of the direct-mongo-through-egress-gateway VirtualService and mongodb ServiceEntry.
-
 Within Kiali, all reviews requests should be directed to the rating-v2 service and then to the mongodb ServiceEntry.
 
 You won't see traffic in kiali for mongodb requests since it is not using http or grcp, just tcp.

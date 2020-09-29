@@ -6,7 +6,7 @@ metadata:
   namespace: {{ .Values.control_plane_namespace }}
 spec:
   hosts:
-  - {{ .Values.arbitrary_mongodb_host }}
+  - {{ .Values.mongodb.host }}
   gateways:
   - mesh
   - istio-egressgateway
@@ -29,7 +29,7 @@ spec:
       port: {{ .Values.egressgateway_port }}
     route:
     - destination:
-        host: {{ .Values.arbitrary_mongodb_host }}
+        host: {{ .Values.mongodb.host }}
         port:
           number: {{ .Values.mongodb.port }}
       weight: 100

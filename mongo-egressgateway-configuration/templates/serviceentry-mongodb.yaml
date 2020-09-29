@@ -10,7 +10,7 @@ spec:
   endpoints:
     - address: {{ .Values.mongodb_ip }}
   hosts:
-    - {{ .Values.arbitrary_mongodb_host }}
+    - {{ .Values.mongodb.host }}
   location: MESH_EXTERNAL
   ports:
     - name: tcp

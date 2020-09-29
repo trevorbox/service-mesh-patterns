@@ -5,5 +5,5 @@ metadata:
   name: mongo
   namespace: {{ .Values.control_plane_namespace }}
 spec:
-  host: {{ .Values.arbitrary_mongodb_host }}
+  host: {{ .Values.mongodb.host }}
 ...

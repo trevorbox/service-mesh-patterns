@@ -13,5 +13,5 @@ spec:
       name: tcp
       protocol: TCP
     hosts:
-    - {{ .Values.arbitrary_mongodb_host }}
+    - {{ .Values.mongodb.host }}
 ...

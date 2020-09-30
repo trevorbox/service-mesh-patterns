@@ -9,8 +9,13 @@ spec:
   istio:
     gateways:
       istio-egressgateway:
-        #namespace: {{ .Values.egress.namespace }}
-        enabled: false
+        namespace: {{ .Values.egress.namespace }}
+        enabled: true
+        ports:
+          - name: mongo
+            protocol: TCP
+            port: 15666
+            targetPort: 15666
         secretVolumes:
           - name: ocp-ca-bundle
             secretName: ocp-ca-bundle
@@ -48,6 +53,33 @@ spec:
             protocol: TCP
             port: 15443
             targetPort: 15443
+      mongo-ingressgateway:
+        enabled: true
+        ior_enabled: false
+        autoscaleEnabled: false
+        labels:
+          app: mongo-ingressgateway
+          istio: mongo-ingressgateway       
+        serviceAnnotations:
+          service.beta.openshift.io/serving-cert-secret-name: mongo-proxy-tls
+        type: LoadBalancer
+        ports:
+        - port: 27017
+          targetPort: 27017
+          name: mongo
+        - port: 27018
+          targetPort: 27018
+          name: mongo-tls
+        secretVolumes:
+        - name: ingressgateway-certs
+          secretName: istio-ingressgateway-certs
+          mountPath: /etc/istio/ingressgateway-certs
+        - name: ingressgateway-ca-certs
+          secretName: istio-ingressgateway-ca-certs
+          mountPath: /etc/istio/ingressgateway-ca-certs
+        - name: mongo-proxy-tls
+          secretName: mongo-proxy-tls
+          mountPath: /etc/mongo-proxy/certs
     global:
       controlPlaneSecurityEnabled: true
       disablePolicyChecks: false

@@ -2,7 +2,7 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "egressgateway-tls-origination-trusted-ca.name" -}}
+{{- define "istio-configs.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
@@ -11,7 +11,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
 */}}
-{{- define "egressgateway-tls-origination-trusted-ca.fullname" -}}
+{{- define "istio-configs.fullname" -}}
 {{- if .Values.fullnameOverride }}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
 {{- else }}
@@ -27,16 +27,16 @@ If release name contains chart name it will be used as a full name.
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "egressgateway-tls-origination-trusted-ca.chart" -}}
+{{- define "istio-configs.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Common labels
 */}}
-{{- define "egressgateway-tls-origination-trusted-ca.labels" -}}
-helm.sh/chart: {{ include "egressgateway-tls-origination-trusted-ca.chart" . }}
-{{ include "egressgateway-tls-origination-trusted-ca.selectorLabels" . }}
+{{- define "istio-configs.labels" -}}
+helm.sh/chart: {{ include "istio-configs.chart" . }}
+{{ include "istio-configs.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -46,17 +46,17 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{/*
 Selector labels
 */}}
-{{- define "egressgateway-tls-origination-trusted-ca.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "egressgateway-tls-origination-trusted-ca.name" . }}
+{{- define "istio-configs.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "istio-configs.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
 Create the name of the service account to use
 */}}
-{{- define "egressgateway-tls-origination-trusted-ca.serviceAccountName" -}}
+{{- define "istio-configs.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create }}
-{{- default (include "egressgateway-tls-origination-trusted-ca.fullname" .) .Values.serviceAccount.name }}
+{{- default (include "istio-configs.fullname" .) .Values.serviceAccount.name }}
 {{- else }}
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}

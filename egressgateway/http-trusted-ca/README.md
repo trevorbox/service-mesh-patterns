@@ -27,7 +27,7 @@ oc create route edge nginx --service=nginx-ex --port 8080 -n mesh-external
 >
 > To fix this:
 >
-> 1. Comment out the spec.istio.gateways.istio-egressgateway section within the egressgateway-tls-origination-trusted-ca/templates/control-plane/servicemeshcontrolplane-basic-install.yaml file
+> 1. Comment out the spec.istio.gateways.istio-egressgateway section within SMCP
 > 2. Run the help upgrade shown below
 > 3. Wait for the control plane to finish deploying
 > 4. Uncomment the spec.istio.gateways.istio-egressgateway section and rerun the helm upgrade

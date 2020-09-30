@@ -2,23 +2,23 @@
 apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:
-  name: originate-tls-for-nginx-mesh-external
-  namespace: {{ .Values.egress.namespace }}
+  name: originate-tls-for-mongodb-mesh-external
+  namespace: {{ .Values.control_plane.egressgateway.namespace }}
 spec:
-  host: {{ .Values.nginx.host }}
+  host: {{ .Values.mongodb.host }}
   # Export to the egress namespace since the secret is mounted to the egress gateway only
   exportTo:
     - "."
   subsets:
-  - name: nginx-https
+  - name: mongdb-tls
     trafficPolicy:
       loadBalancer:
         simple: ROUND_ROBIN
       portLevelSettings:
       - port:
-          number: 443
+          number: 27018
         tls:
-          mode: SIMPLE # initiates HTTPS for connections to nginx
+          mode: SIMPLE # initiates HTTPS for connections to mongodb
           caCertificates: /etc/secrets/ocp-ca-bundle/ca.crt
-          sni: {{ .Values.nginx.host }}
+          sni: {{ .Values.mongodb.host }}
 ...

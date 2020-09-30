@@ -12,10 +12,10 @@ spec:
         namespace: {{ .Values.egress.namespace }}
         enabled: true
         ports:
-          - name: mongo
+          - name: mongodb
             protocol: TCP
-            port: 15666
-            targetPort: 15666
+            port: 27018
+            targetPort: 27018
         secretVolumes:
           - name: ocp-ca-bundle
             secretName: ocp-ca-bundle

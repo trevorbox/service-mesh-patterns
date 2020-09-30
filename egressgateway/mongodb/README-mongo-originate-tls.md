@@ -34,20 +34,27 @@ Wait for the control plane to install.
 ## Deploy mongodb
 
 ```sh
-helm upgrade -i mongodb helm/mongodb -n mongodb
+helm upgrade -i mongodb helm/mongodb -n mongodb --set mongodb.host=$(oc get service mongo-ingressgateway -n istio-system -o jsonpath={.status.loadBalancer.ingress[0].hostname})
+```
+
+## Configure mongodb
+
+Wait for the mongodb-v1 pod to run before running the setup script.
+
+This will create the test database bookinfo rating-v2 service will connect to.
+
+```sh
+./ingress-mongodb-setup-tls.sh
 ```
 
 ## Deploy bookinfo
 
 ```sh
-helm upgrade -i bookinfo helm/bookinfo -n bookinfo --set mongodb.host=$(oc get service mongo-ingressgateway -n istio-system -o jsonpath={.status.loadBalancer.ingress[0].hostname})
+helm upgrade -i bookinfo helm/bookinfo -n bookinfo \
+  --set mongodb.host=$(oc get service mongo-ingressgateway -n istio-system -o jsonpath={.status.loadBalancer.ingress[0].hostname}) \
+  --set control_plane.ingressgateway.host=$(oc get route api -n istio-system -o jsonpath={'.spec.host'})
 ```
 
-## Deploy Istio Configurations
-
-```sh
-
-```
 
 ## Install the bookinfo application and basic gateway configuration to test tls origination from
 

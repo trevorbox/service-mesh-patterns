@@ -3,17 +3,17 @@ apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
   name: istio-egressgateway
-  namespace: {{ .Values.egress.namespace }}
+  namespace: {{ .Values.control_plane.egressgateway.namespace }}
 spec:
   selector:
     istio: egressgateway
   servers:
   - port:
-      number: 80
-      name: https
-      protocol: HTTPS
+      number: 27017
+      name: tcp
+      protocol: TCP
     hosts:
-    - {{ .Values.nginx.host }}
+    - {{ .Values.mongodb.host }}
     tls:
       mode: MUTUAL
       serverCertificate: /etc/certs/cert-chain.pem

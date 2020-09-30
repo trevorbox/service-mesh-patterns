@@ -1,6 +1,9 @@
 mongodb:
+  host:
   user: bookinfo
-  password: redhat
+  password: redhat  
 control_plane:
   namespace: istio-system
   name: basic-install
+  egressgateway:
+    namespace: istio-system-egress

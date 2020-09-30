@@ -4,7 +4,7 @@ mongodb:
   user: bookinfo
   password: redhat
   ssl:
-    is_enabled: true
+    is_enabled: false
 control_plane:
   namespace: istio-system
   ingressgateway: 

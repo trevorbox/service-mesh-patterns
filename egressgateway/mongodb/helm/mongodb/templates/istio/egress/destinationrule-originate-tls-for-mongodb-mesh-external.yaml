@@ -10,7 +10,7 @@ spec:
   exportTo:
     - "."
   subsets:
-  - name: mongdb-tls
+  - name: mongodb-tls
     trafficPolicy:
       loadBalancer:
         simple: ROUND_ROBIN
@@ -18,7 +18,7 @@ spec:
       - port:
           number: 27018
         tls:
-          mode: SIMPLE # initiates HTTPS for connections to mongodb
+          mode: SIMPLE # initiates TLS for connections to mongodb
           caCertificates: /etc/secrets/ocp-ca-bundle/ca.crt
           sni: {{ .Values.mongodb.host }}
 ...

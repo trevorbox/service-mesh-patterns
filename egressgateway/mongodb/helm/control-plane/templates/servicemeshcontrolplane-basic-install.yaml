@@ -9,13 +9,13 @@ spec:
   istio:
     gateways:
       istio-egressgateway:
-        namespace: {{ .Values.egress.namespace }}
+        namespace: {{ .Values.control_plane.egressgateway.namespace }}
         enabled: true
         ports:
-          - name: mongodb
+          - name: mongo
             protocol: TCP
-            port: 27018
-            targetPort: 27018
+            port: 15666
+            targetPort: 15666
         secretVolumes:
           - name: ocp-ca-bundle
             secretName: ocp-ca-bundle

@@ -9,9 +9,6 @@ oc new-project istio-system
 oc new-project istio-system-egress
 oc new-project mongodb
 oc new-project bookinfo
-
-oc get secrets -n openshift-ingress-operator router-ca -o jsonpath='{.data.tls\.crt}' | base64 -d > /tmp/ca.crt
-oc create secret generic ocp-ca-bundle --from-file=/tmp/ca.crt -n istio-system-egress
 ```
 
 ## Install the control plane
@@ -30,6 +27,14 @@ helm upgrade -i control-plane -n istio-system helm/control-plane
 ```
 
 Wait for the control plane to install.
+
+## Add the mongo proxy ca to egressgateway
+
+```sh
+oc get secrets -n istio-system mongo-proxy-tls -o jsonpath='{.data.tls\.crt}' | base64 -d > /tmp/ca.crt
+
+oc create secret generic ocp-ca-bundle --from-file=/tmp/ca.crt -n istio-system-egress
+```
 
 ## Deploy mongodb
 

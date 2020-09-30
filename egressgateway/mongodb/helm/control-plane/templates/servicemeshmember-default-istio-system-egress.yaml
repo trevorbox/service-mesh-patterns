@@ -3,7 +3,7 @@ apiVersion: maistra.io/v1
 kind: ServiceMeshMember
 metadata:
   name: default
-  namespace: {{ .Values.egress.namespace }}
+  namespace: {{ .Values.control_plane.egressgateway.namespace }}
 spec:
   controlPlaneRef:
     name: {{ .Values.control_plane.name }}

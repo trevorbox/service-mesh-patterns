@@ -9,9 +9,9 @@ spec:
     istio: egressgateway
   servers:
   - port:
-      number: 27017
-      name: tcp
-      protocol: TCP
+      number: {{ .Values.control_plane.egressgateway.port }}
+      name: mongo
+      protocol: MONGO
     hosts:
     - {{ .Values.mongodb.host }}
 ...

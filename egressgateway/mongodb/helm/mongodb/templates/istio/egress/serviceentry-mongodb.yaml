@@ -8,10 +8,10 @@ spec:
   hosts:
     - {{ .Values.mongodb.host }}
   ports:
-    - name: tcp
+    - name: mongo
       number: 27017
-      protocol: TCP
-    - name: tcp-tls
+      protocol: MONGO
+    - name: mongo-tls
       number: 27018
       protocol: TCP
   resolution: DNS

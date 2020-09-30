@@ -55,49 +55,10 @@ helm upgrade -i bookinfo helm/bookinfo -n bookinfo \
   --set control_plane.ingressgateway.host=$(oc get route api -n istio-system -o jsonpath={'.spec.host'})
 ```
 
+### Verify traffic flows through the egressgateway
 
-## Install the bookinfo application and basic gateway configuration to test tls origination from
-
-```sh
-cd ..
-source default-vars.txt && export $(cut -d= -f1 default-vars.txt)
-./install-basic-gateway-configuration.sh
-```
-
-## Verify TLS Origination from a pod within the mesh
+Open the following url in a web browser.
 
 ```sh
-# Test from mesh pod
-oc rsh -n bookinfo -c ratings deployment/ratings-v1 curl -v http://$(oc get route nginx -n mesh-external -o jsonpath={.spec.host})
-```
-
-Kiali should show the traffic flowing through the egress gateway.
-
-### Helpful test commands
-
-```sh
-# Test from mesh pod
-oc rsh -n bookinfo -c ratings deployment/ratings-v1 curl -v http://$(oc get route nginx -n mesh-external -o jsonpath={.spec.host})
-
-# Test from egressgateway
-oc rsh -n istio-system-egress -c istio-proxy deployment/istio-egressgateway curl -v https://$(oc get route nginx -n mesh-external -o jsonpath={.spec.host}) --cacert /etc/configmaps/ocp-ca-bundle/ca.crt
-
-# show routes
-istioctl pc route $(oc get pod -l app=ratings -n bookinfo -o jsonpath='{.items[0].metadata.name}') -n bookinfo --name 80 -o json
-
-istioctl pc route $(oc get pod -l app=istio-egressgateway -n istio-system-egress -o jsonpath='{.items[0].metadata.name}') -n istio-system-egress --name http.80 -o json
-
-# change log level
-istioctl pc log $(oc get pod -l app=istio-egressgateway -n istio-system-egress -o jsonpath='{.items[0].metadata.name}') --level debug -n istio-system-egress
-
-istioctl pc cluster $(oc get pod -l app=istio-egressgateway -n istio-system-egress -o jsonpath='{.items[0].metadata.name}') -n istio-system-egress --fqdn nginx-mesh-external.apps.cluster-a57a.a57a.sandbox1041.opentlc.com -o json
-```
-
-## Cleanup
-
-```sh
-helm delete bookinfo -n bookinfo
-helm delete basic-gateway-configuration -n bookinfo
-helm delete egress -n istio-system
-oc delete project mesh-external istio-system bookinfo istio-system-egress
+echo "https://$(oc get route api -n istio-system -o jsonpath={'.spec.host'})/productpage"
 ```

@@ -200,4 +200,5 @@ This [guide](https://github.com/cloudfirst-dev/istio-egress-traffic-control) wil
 
 ## Originate TLS through an Egress Gateway with a trusted CA Certificate
 
-Follow the instructions from the [README.md](egressgateway/README.md) within the egressgateway folder.
+- See http TLS origination example [README.md](egressgateway/http-trusted-ca/README.md).
+- See mongo TLS origination example [README.md](egressgateway/mongodb-trusted-ca/README.md).

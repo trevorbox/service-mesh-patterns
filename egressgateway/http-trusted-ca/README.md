@@ -40,7 +40,7 @@ helm upgrade -i egress -n istio-system egressgateway-tls-origination-trusted-ca 
 ## Install the bookinfo application and basic gateway configuration to test tls origination from
 
 ```sh
-cd ..
+cd ../..
 source default-vars.txt && export $(cut -d= -f1 default-vars.txt)
 ./install-basic-gateway-configuration.sh
 ```

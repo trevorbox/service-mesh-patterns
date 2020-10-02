@@ -9,8 +9,8 @@ spec:
   istio:
     gateways:
       istio-egressgateway:
-        #namespace: {{ .Values.egress.namespace }}
-        enabled: false
+        namespace: {{ .Values.egress.namespace }}
+        enabled: true
         secretVolumes:
           - name: ocp-ca-bundle
             secretName: ocp-ca-bundle

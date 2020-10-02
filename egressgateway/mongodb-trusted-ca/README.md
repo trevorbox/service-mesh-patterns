@@ -2,7 +2,7 @@
 
 For this configuration to work we need to deploy the Egress Gateway into a separate namespace dedicated just for the Egress Gateway. This is because we need to mount our own CA Certificate to the proxy pod and create a DestinationRule just for the Egress Gateway proxy.
 
-## Create root ca secret within egress gateway namespace
+## Setup
 
 ```sh
 oc new-project istio-system
@@ -17,7 +17,7 @@ oc new-project bookinfo
 >
 > To fix this:
 >
-> 1. Comment out the spec.istio.gateways.istio-egressgateway section within the egressgateway-tls-origination-trusted-ca/templates/control-plane/servicemeshcontrolplane-basic-install.yaml file
+> 1. Comment out the spec.istio.gateways.istio-egressgateway section within the SMCP
 > 2. Run the help upgrade shown below
 > 3. Wait for the control plane to finish deploying
 > 4. Uncomment the spec.istio.gateways.istio-egressgateway section and rerun the helm upgrade

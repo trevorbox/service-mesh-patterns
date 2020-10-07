@@ -171,7 +171,7 @@ Notice that traffic from the bookinfo pod does not work and returns a 503. You u
 oc rsh -n bookinfo -c ratings deployment/ratings-v1 curl -v http://$(oc get route nginx -n mesh-external -o jsonpath={.spec.host})
 ```
 
-Additionally, the destinationrule "originate-tls-for-nginx-mesh-external" does not modify the envoy cluster and add the tls conext on the istio-egressgateway pod when exportTo is set to "." within the istio-system namespace.
+Additionally, the destinationrule "originate-tls-for-nginx-mesh-external" does not modify the envoy cluster and add the tls context on the istio-egressgateway pod when exportTo is set to "." within the istio-system namespace.
 
 ```sh
 istioctl pc cluster $(oc get pod -l app=istio-egressgateway -n istio-system -o jsonpath='{.items[0].metadata.name}') -n istio-system --fqdn $(oc get route nginx -n mesh-external -o jsonpath='{.spec.host}') -o json

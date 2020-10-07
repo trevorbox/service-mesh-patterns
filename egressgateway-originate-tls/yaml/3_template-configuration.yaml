@@ -1,0 +1,170 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: case
+  annotations:
+    description: "02754767"
+objects:
+- apiVersion: networking.istio.io/v1alpha3
+  kind: Gateway
+  metadata:
+    name: default
+    namespace: ${ISTIO_SYSTEM}
+  spec:
+    selector:
+      istio: ingressgateway # use istio default controller
+    servers:
+    - port:
+        number: 80
+        name: http
+        protocol: HTTP
+      hosts:
+        - ${API_HOST}
+- apiVersion: maistra.io/v1
+  kind: ServiceMeshMember
+  metadata:
+    name: default
+    namespace: ${BOOKINFO}
+  spec:
+    controlPlaneRef:
+      name: basic-install
+      namespace: istio-system
+- apiVersion: networking.istio.io/v1alpha3
+  kind: VirtualService
+  metadata:
+    name: bookinfo
+    namespace: ${BOOKINFO}
+  spec:
+    gateways:
+    - istio-system/default
+    hosts:
+    - ${API_HOST}
+    http:
+    - match:
+      - uri:
+          exact: /productpage
+      - uri:
+          exact: /login
+      - uri:
+          exact: /logout
+      - uri:
+          prefix: /api/v1/products
+      route:
+      - destination:
+          host: productpage
+          port:
+            number: 9080
+- apiVersion: networking.istio.io/v1alpha3
+  kind: DestinationRule
+  metadata:
+    name: egressgateway-for-nginx-mesh-external
+    namespace: ${ISTIO_SYSTEM}
+  spec:
+    host: istio-egressgateway.istio-system.svc.cluster.local
+    subsets:
+    - name: nginx
+- apiVersion: networking.istio.io/v1alpha3
+  kind: DestinationRule
+  metadata:
+    name: originate-tls-for-nginx-mesh-external
+    namespace: ${ISTIO_SYSTEM}
+  spec:
+    host: ${NGINX_HOST}
+  # <TODO 1>
+  # Why does the request from application pod fail if this destinationrule is exported to only the istio-system namespace?
+    exportTo:
+      - "."
+  # <END TODO 1>
+    trafficPolicy:
+      loadBalancer:
+        simple: ROUND_ROBIN
+      portLevelSettings:
+      - port:
+          number: 443
+        tls:
+          mode: SIMPLE # initiates HTTPS for connections to nginx
+          # <TODO 2>
+          # We want the destinationrule applied to just the istio-system namespace only so that we can trust our own ca-cert
+          caCertificates: /etc/secrets/ocp-ca-bundle/ca.crt
+          # <END TODO 2>
+          sni: ${NGINX_HOST}
+- apiVersion: networking.istio.io/v1alpha3
+  kind: Gateway
+  metadata:
+    name: istio-egressgateway
+    namespace: ${ISTIO_SYSTEM}
+  spec:
+    selector:
+      istio: egressgateway
+    servers:
+    - port:
+        number: 80
+        name: http-port-for-tls-origination
+        protocol: HTTP
+      hosts:
+        - ${NGINX_HOST}
+- apiVersion: networking.istio.io/v1alpha3
+  kind: ServiceEntry
+  metadata:
+    name: nginx
+    namespace: ${ISTIO_SYSTEM}
+  spec:
+    hosts:
+      - ${NGINX_HOST}
+    ports:
+    - number: 80
+      name: http
+      protocol: HTTP
+    - number: 443
+      name: https
+      protocol: HTTPS
+    resolution: DNS
+    location: MESH_EXTERNAL
+- apiVersion: networking.istio.io/v1alpha3
+  kind: VirtualService
+  metadata:
+    name: direct-nginx-mesh-external-through-egressgateway
+    namespace: ${ISTIO_SYSTEM}
+  spec:
+    hosts:
+    - ${NGINX_HOST}
+    gateways:
+    - istio-system/istio-egressgateway
+    - mesh
+    http:
+    - match:
+      - gateways:
+        - mesh
+        port: 80
+      route:
+      - destination:
+          host: istio-egressgateway.istio-system.svc.cluster.local
+          subset: nginx
+          port:
+            number: 80
+        weight: 100
+    - match:
+      - gateways:
+        - istio-system/istio-egressgateway
+        port: 80
+      route:
+      - destination:
+          host: ${NGINX_HOST}
+          port:
+            number: 443
+        weight: 100
+parameters:
+- description: The host of the api route in istio-system
+  name: API_HOST
+  value: "api-istio-system.apps.cluster-a57a.a57a.sandbox1041.opentlc.com"
+- description: The host of the api route in istio-system
+  name: NGINX_HOST
+  value: "nginx-mesh-external.apps.cluster-a57a.a57a.sandbox1041.opentlc.com"
+- description: Namespace istio-system
+  name: ISTIO_SYSTEM
+  value: istio-system
+- description: Namespace bookinfo
+  name: BOOKINFO
+  value: bookinfo
+labels:
+  template: case

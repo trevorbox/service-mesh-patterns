@@ -163,8 +163,7 @@ Install bookinfo
 oc apply -f yaml/4_bookinfo.yaml
 ```
 
-Notice that traffic from the bookinfo pod does not work and returns a 503.
-You use a normal http request since the egressgateway originates TLS.
+Notice that traffic from the bookinfo pod does not work and returns a 503. You use a normal http request since the egressgateway originates TLS.
 
 ```sh
 oc rsh -n bookinfo -c ratings deployment/ratings-v1 curl -v http://$(oc get route nginx -n mesh-external -o jsonpath={.spec.host})

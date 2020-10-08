@@ -1,0 +1,8 @@
+control_plane:
+  namespace: istio-system
+  name: basic-install
+  egressgateway:
+    enabled: false
+    namespace: istio-system-egress
+bookinfo:
+  namespace: bookinfo

@@ -23,9 +23,6 @@ spec:
           istio: mongo-ingressgateway       
         type: LoadBalancer
         ports:
-        - port: 27017
-          targetPort: 27017
-          name: mongo
         - port: 27018
           targetPort: 27018
           name: mongo-tls

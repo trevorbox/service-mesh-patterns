@@ -11,12 +11,6 @@ spec:
   - hosts:
     - {{ .Values.mongodb.host }}
     port:
-      name: mongo
-      number: 27017
-      protocol: MONGO
-  - hosts:
-    - {{ .Values.mongodb.host }}
-    port:
       name: mongo-tls
       number: 27018
       protocol: TLS

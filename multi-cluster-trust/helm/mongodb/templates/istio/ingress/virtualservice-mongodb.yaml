@@ -11,13 +11,6 @@ spec:
   - {{ .Values.mongodb.host }}
   tcp:
   - match:
-    - port: 27017
-    route:
-    - destination:
-        host: mongodb
-        port:
-          number: 27017
-  - match:
     - port: 27018
     route:
     - destination:

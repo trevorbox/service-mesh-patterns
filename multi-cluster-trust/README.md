@@ -1,5 +1,9 @@
 # multiple cluster trust
 
+This demonstrates mTLS using a common rootca between two different control planes. mTLS is originated from the istio-system egressgateway to the istio-system2 mongo-ingressgateway.
+
+## Setup
+
 ```sh
 oc new-project istio-system
 oc new-project istio-system-egress
@@ -9,13 +13,13 @@ oc new-project bookinfo
 oc new-project mongodb
 ```
 
-Deploy cert-manager (skip if already present in the cluster)
+## Deploy cert-manager (skip if already present in the cluster)
 
 ```shell
 oc apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/v0.15.0/cert-manager.yaml
 ```
 
-Deploy local root and intermeadiate CAs
+## Deploy local root CA to both control planes
 
 ```shell
 helm upgrade -i cert-manager -n istio-system helm/cert-manager
@@ -29,7 +33,7 @@ helm upgrade -i rootca helm/install-cacerts -n istio-system2 \
   --set rootca.tls_key=$(oc get secret rootca -n istio-system -o jsonpath='{.data.tls\.key}')
 ```
 
-Install control planes using cacerts
+## Install control planes using common root cacerts
 
 ```sh
 helm upgrade -i istio-system-control-plane -n istio-system helm/istio-system-control-plane
@@ -45,7 +49,7 @@ helm upgrade -i istio-system2-control-plane -n istio-system2 helm/istio-system2-
 helm upgrade -i mongodb helm/mongodb -n mongodb --set mongodb.host=$(oc get service mongo-ingressgateway -n istio-system2 -o jsonpath={.status.loadBalancer.ingress[0].hostname})
 ```
 
-Manually create user and add ratings data from the mongodb pod terminal...
+## Manually create user and add ratings data from the mongodb pod terminal
 
 ```sh
 mongo -u admin -p redhat --authenticationDatabase admin

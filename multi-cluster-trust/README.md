@@ -56,6 +56,7 @@ helm upgrade -i mongodb helm/mongodb -n mongodb --set mongodb.host=$(oc get serv
 ```sh
 mongo -u admin -p redhat --authenticationDatabase admin
 use test
+db.createCollection("ratings");
 db.createUser(
    {
      user: "bookinfo",
@@ -64,7 +65,8 @@ db.createUser(
    }
 );
 db.ratings.insert(
-  [{rating: 1}]
+  [{rating: 1},
+   {rating: 1}]
 );
 db.ratings.find({});
 ```

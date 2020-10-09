@@ -71,7 +71,7 @@ helm upgrade -i bookinfo helm/bookinfo -n bookinfo \
   --set control_plane.ingressgateway.host=$(oc get route api -n istio-system -o jsonpath={'.spec.host'})
 ```
 
-### Verify traffic flows through the egressgateway
+## Verify traffic flows through the egressgateway
 
 Open the following url in a web browser. If you get the ratings star its works.
 
@@ -79,7 +79,7 @@ Open the following url in a web browser. If you get the ratings star its works.
 echo "https://$(oc get route api -n istio-system -o jsonpath={'.spec.host'})/productpage"
 ```
 
-### Helpful test commands
+## Helpful test commands
 
 ```sh
 # Test from mesh pod

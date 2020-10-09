@@ -71,6 +71,14 @@ helm upgrade -i bookinfo helm/bookinfo -n bookinfo \
   --set control_plane.ingressgateway.host=$(oc get route api -n istio-system -o jsonpath={'.spec.host'})
 ```
 
+### Verify traffic flows through the egressgateway
+
+Open the following url in a web browser. If you get the ratings star its works.
+
+```sh
+echo "https://$(oc get route api -n istio-system -o jsonpath={'.spec.host'})/productpage"
+```
+
 ### Helpful test commands
 
 ```sh

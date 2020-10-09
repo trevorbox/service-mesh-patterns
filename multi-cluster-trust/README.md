@@ -2,6 +2,8 @@
 
 This demonstrates mTLS using a common rootca between two different control planes. mTLS is originated from the istio-system egressgateway to the istio-system2 mongo-ingressgateway.
 
+> TODO with this configuration TLS origination should be possible from just the sidecar (no egressgateway needed)
+
 ## Setup
 
 ```sh

@@ -22,4 +22,5 @@ spec:
           clientCertificate: /etc/certs/cert-chain.pem
           privateKey: /etc/certs/key.pem
           caCertificates: /etc/certs/root-cert.pem
+          sni: {{ .Values.mongodb.host }}
 ...

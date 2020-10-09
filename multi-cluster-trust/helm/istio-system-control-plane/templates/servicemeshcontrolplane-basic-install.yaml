@@ -7,6 +7,8 @@ metadata:
 spec:
   version: v1.1
   istio:
+    security:
+      selfSigned: false
     gateways:
       istio-egressgateway:
         {{- if .Values.control_plane.egressgateway.enabled }}

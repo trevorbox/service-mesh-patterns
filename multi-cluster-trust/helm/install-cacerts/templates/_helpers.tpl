@@ -2,7 +2,7 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "install-istio-ca-secret.name" -}}
+{{- define "install-cacerts.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
@@ -11,7 +11,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
 */}}
-{{- define "install-istio-ca-secret.fullname" -}}
+{{- define "install-cacerts.fullname" -}}
 {{- if .Values.fullnameOverride }}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
 {{- else }}
@@ -27,16 +27,16 @@ If release name contains chart name it will be used as a full name.
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "install-istio-ca-secret.chart" -}}
+{{- define "install-cacerts.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Common labels
 */}}
-{{- define "install-istio-ca-secret.labels" -}}
-helm.sh/chart: {{ include "install-istio-ca-secret.chart" . }}
-{{ include "install-istio-ca-secret.selectorLabels" . }}
+{{- define "install-cacerts.labels" -}}
+helm.sh/chart: {{ include "install-cacerts.chart" . }}
+{{ include "install-cacerts.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -46,17 +46,17 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{/*
 Selector labels
 */}}
-{{- define "install-istio-ca-secret.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "install-istio-ca-secret.name" . }}
+{{- define "install-cacerts.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "install-cacerts.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
 Create the name of the service account to use
 */}}
-{{- define "install-istio-ca-secret.serviceAccountName" -}}
+{{- define "install-cacerts.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create }}
-{{- default (include "install-istio-ca-secret.fullname" .) .Values.serviceAccount.name }}
+{{- default (include "install-cacerts.fullname" .) .Values.serviceAccount.name }}
 {{- else }}
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}

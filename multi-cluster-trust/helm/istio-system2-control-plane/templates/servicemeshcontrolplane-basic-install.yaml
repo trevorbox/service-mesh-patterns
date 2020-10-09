@@ -2,11 +2,13 @@
 apiVersion: maistra.io/v1
 kind: ServiceMeshControlPlane
 metadata:
-  name: basic-install
+  name: {{ .Values.control_plane.name }}
   namespace: {{ .Values.control_plane.namespace }}
 spec:
   version: v1.1
   istio:
+    security:
+      selfSigned: false
     gateways:
       istio-egressgateway:
         enabled: false
@@ -30,7 +32,6 @@ spec:
     global:
       controlPlaneSecurityEnabled: true
       disablePolicyChecks: false
-      istioNamespace: {{ .Values.control_plane.namespace }}
       mtls:
         enabled: true
       proxy:

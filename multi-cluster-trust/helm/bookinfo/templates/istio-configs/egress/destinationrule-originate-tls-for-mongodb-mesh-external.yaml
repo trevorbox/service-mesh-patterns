@@ -6,9 +6,6 @@ metadata:
   namespace: {{ .Values.control_plane.egressgateway.namespace }}
 spec:
   host: {{ .Values.mongodb.host }}
-  # Export to the egress namespace since the secret is mounted to the egress gateway only
-  exportTo:
-    - "."
   subsets:
   - name: mongodb-tls
     trafficPolicy:

@@ -45,6 +45,24 @@ helm upgrade -i istio-system2-control-plane -n istio-system2 helm/istio-system2-
 helm upgrade -i mongodb helm/mongodb -n mongodb --set mongodb.host=$(oc get service mongo-ingressgateway -n istio-system2 -o jsonpath={.status.loadBalancer.ingress[0].hostname})
 ```
 
+Manually create user and add ratings data from the mongodb pod terminal...
+
+```sh
+mongo -u admin -p redhat --authenticationDatabase admin
+use test
+db.createUser(
+   {
+     user: "bookinfo",
+     pwd: "redhat",
+     roles: [ "read"]
+   }
+);
+db.ratings.insert(
+  [{rating: 1}]
+);
+db.ratings.find({});
+```
+
 ## Install bookinfo in istio-system
 
 ```sh

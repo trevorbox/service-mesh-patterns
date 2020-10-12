@@ -7,8 +7,8 @@ BOOKINFO_PASSWORD=redhat
 
 CONTROL_PLANE_NAMESPACE=istio-system2
 
-MONGODB_HOST=$(oc get service mongo-ingressgateway -n ${CONTROL_PLANE_NAMESPACE} -o jsonpath={.status.loadBalancer.ingress[0].hostname})
-MONGODB_PORT=27018
+MONGODB_HOST=$(oc get route mongo -n istio-system2 -o jsonpath={.spec.host})
+MONGODB_PORT=443
 
 cat <<EOF | mongo --ssl --sslAllowInvalidCertificates $MONGODB_HOST:$MONGODB_PORT -u admin -p $MONGO_ADMIN_PASSWORD --authenticationDatabase admin
 use test

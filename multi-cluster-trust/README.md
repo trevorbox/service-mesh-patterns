@@ -1,8 +1,12 @@
 # multiple cluster trust
 
-This demonstrates mTLS using a common rootca between two different control planes. mTLS is originated from the istio-system egressgateway to the istio-system2 mongo-ingressgateway.
+With minimal configration, two different Service Mesh Control Planes can be configured to use the same root CA when signing workload certificates allowing mTLS to be performed directly from a sidecar to another control plane's ingress gateway. This results in federated trust between Service Mesh Control planes.
 
-> TODO with this configuration TLS origination should be possible from just the sidecar (no egressgateway needed)
+To demonstrate, we will deploy the bookinfo application into a control plane and configure the ratings v2 application to communicate to a mongo instance in a different control plane.
+
+A single OCP cluster is used to demonstrate this configuration, but since communication is performed via the exposed Openshift Route between control planes one could deploy the mongodb control plane and application in a different cluster.
+
+> TODO insert diagram
 
 ## Setup
 
@@ -36,6 +40,20 @@ helm upgrade -i rootca helm/install-cacerts -n istio-system2 \
 
 ## Install control planes using common root cacerts
 
+> Note: with the below configuration defined in the SMCP, Citadel will use the **cacerts** secret (created in both control planes from previous commands) as the root certificate instead of its own self-signed certificate.
+>
+> ```yaml
+> apiVersion: maistra.io/v1
+> kind: ServiceMeshControlPlane
+> metadata:
+>   name: basic-install
+> spec:
+>   istio:
+>     security:
+>       selfSigned: false
+> ...
+> ```
+
 ```sh
 helm upgrade -i istio-system-control-plane -n istio-system helm/istio-system-control-plane
 helm upgrade -i istio-system2-control-plane -n istio-system2 helm/istio-system2-control-plane
@@ -47,30 +65,33 @@ helm upgrade -i istio-system2-control-plane -n istio-system2 helm/istio-system2-
 helm upgrade -i mongodb helm/mongodb -n mongodb --set mongodb.host=$(oc get route mongo -n istio-system2 -o jsonpath={.spec.host})
 ```
 
-## Manually create user and add ratings data from the mongodb pod terminal
+## Create user and add ratings data to mongodb
 
 ```sh
-mongo -u admin -p redhat --authenticationDatabase admin
+oc exec deploy/mongodb-v1 -c mongodb -n mongodb -i -t -- /bin/bash -c "cat <<EOF | mongo -u admin -p redhat --authenticationDatabase admin
 use test
-db.createCollection("ratings");
 db.createUser(
    {
-     user: "bookinfo",
-     pwd: "redhat",
-     roles: [ "read"]
+     user: \"bookinfo\",
+     pwd: \"redhat\",
+     roles: [ \"read\"]
    }
 );
+db.createCollection(\"ratings\");
 db.ratings.insert(
   [{rating: 1},
    {rating: 1}]
 );
 db.ratings.find({});
+EOF"
 ```
 
 ## Install bookinfo in istio-system
 
+> Note: [Service entries for TCP traffic](https://istio.io/latest/blog/2018/egress-tcp/#service-entries-for-tcp-traffic) should have CIDR addresses defined. The bookinfo ratings v2 application will use the mongodb ServiceEntry.
+
 ```sh
-IP_ADDRESSES=$(echo "{$(echo $(dig $(oc get route api -n istio-system -o jsonpath={'.spec.host'}) +short) | sed -e "s/ /,/g")}")
+IP_ADDRESSES=$(echo "{$(echo $(host $(oc get route api -n istio-system -o jsonpath={'.spec.host'}) | cut -d" " -f4) | sed -e "s/ /,/g")}")
 # or set manually, for example IP_ADDRESSES={3.131.22.164,3.129.227.164}
 
 helm upgrade -i bookinfo helm/bookinfo -n bookinfo \
@@ -81,35 +102,13 @@ helm upgrade -i bookinfo helm/bookinfo -n bookinfo \
 
 ## Verify traffic flows through the egressgateway
 
-Open the following url in a web browser. If you get the ratings star its works.
+Open the following url in a web browser. If you get the single ratings star it works.
 
 ```sh
 echo "https://$(oc get route api -n istio-system -o jsonpath={'.spec.host'})/productpage"
 ```
 
-## Helpful test commands
-
-```sh
-# Test from mesh pod
-oc rsh -n bookinfo -c ratings deployment/ratings-v1 curl -v http://$(oc get route nginx -n mesh-external -o jsonpath={.spec.host})
-
-# Test from egressgateway
-oc rsh -n istio-system-egress -c istio-proxy deployment/istio-egressgateway curl -v https://$(oc get route nginx -n mesh-external -o jsonpath={.spec.host}) --cacert /etc/configmaps/ocp-ca-bundle/ca.crt
-
-# show routes
-istioctl pc route $(oc get pod -l app=ratings -n bookinfo -o jsonpath='{.items[0].metadata.name}') -n bookinfo --name 80 -o json
-
-istioctl pc route $(oc get pod -l app=istio-egressgateway -n istio-system-egress -o jsonpath='{.items[0].metadata.name}') -n istio-system-egress --name http.80 -o json
-
-# change log level
-istioctl pc log $(oc get pod -l app=istio-egressgateway -n istio-system-egress -o jsonpath='{.items[0].metadata.name}') --level debug -n istio-system-egress
-
-istioctl pc log $(oc get pod -l app=ratings,version=v2 -n bookinfo -o jsonpath='{.items[0].metadata.name}') --level debug -n bookinfo
-
-istioctl pc cluster $(oc get pod -l app=istio-egressgateway -n istio-system-egress -o jsonpath='{.items[0].metadata.name}') -n istio-system-egress --fqdn nginx-mesh-external.apps.cluster-a57a.a57a.sandbox1041.opentlc.com -o json
-```
-
-## Misc
+## Changing 
 
 ```sh
 SECRETS=$(oc get secrets -n istio-system -o name | egrep 'istio\.')

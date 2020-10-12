@@ -10,6 +10,3 @@ control_plane:
   ingressgateway: 
     name: ingressgateway
     host: 
-  egressgateway:
-    namespace: istio-system-egress
-    port: 15666

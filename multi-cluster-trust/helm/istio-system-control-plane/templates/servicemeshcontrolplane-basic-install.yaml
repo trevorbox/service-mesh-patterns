@@ -11,15 +11,7 @@ spec:
       selfSigned: false
     gateways:
       istio-egressgateway:
-        {{- if .Values.control_plane.egressgateway.enabled }}
-        namespace: {{ .Values.control_plane.egressgateway.namespace }}
-        {{- end }}
-        enabled: {{ .Values.control_plane.egressgateway.enabled }}
-        ports:
-          - name: mongo
-            protocol: TCP
-            port: 15666
-            targetPort: 15666
+        enabled: false    
       istio-ingressgateway:
         enabled: false        
       custom-ingressgateway:
@@ -56,7 +48,6 @@ spec:
     global:
       controlPlaneSecurityEnabled: true
       disablePolicyChecks: false
-      istioNamespace: {{ .Values.control_plane.namespace }}
       mtls:
         enabled: true
       proxy:

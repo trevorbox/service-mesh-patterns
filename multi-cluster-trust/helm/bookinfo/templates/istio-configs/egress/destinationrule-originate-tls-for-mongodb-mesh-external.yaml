@@ -3,7 +3,6 @@ apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:
   name: originate-tls-for-mongodb-mesh-external
-  namespace: {{ .Values.control_plane.egressgateway.namespace }}
 spec:
   host: {{ .Values.mongodb.host }}
   subsets:
@@ -13,7 +12,8 @@ spec:
         simple: ROUND_ROBIN
       portLevelSettings:
       - port:
-          number: 27018
+          #number: 27018
+          number: 443
         tls:
           mode: MUTUAL # initiates TLS for connections to mongodb
           clientCertificate: /etc/certs/cert-chain.pem

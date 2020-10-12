@@ -3,7 +3,6 @@ apiVersion: networking.istio.io/v1alpha3
 kind: ServiceEntry
 metadata:
   name: mongodb
-  namespace: {{ .Values.control_plane.egressgateway.namespace }}
 spec:
   hosts:
     - {{ .Values.mongodb.host }}
@@ -12,7 +11,8 @@ spec:
       number: 27017
       protocol: MONGO
     - name: mongo-tls
-      number: 27018
+      #number: 27018
+      number: 443
       protocol: TCP
   resolution: DNS
   location: MESH_EXTERNAL

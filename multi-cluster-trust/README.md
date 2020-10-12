@@ -8,7 +8,6 @@ This demonstrates mTLS using a common rootca between two different control plane
 
 ```sh
 oc new-project istio-system
-oc new-project istio-system-egress
 oc new-project istio-system2
 oc new-project cert-manager
 oc new-project bookinfo
@@ -48,7 +47,7 @@ helm upgrade -i istio-system2-control-plane -n istio-system2 helm/istio-system2-
 ## Install mongodb in istio-system2
 
 ```sh
-helm upgrade -i mongodb helm/mongodb -n mongodb --set mongodb.host=$(oc get service mongo-ingressgateway -n istio-system2 -o jsonpath={.status.loadBalancer.ingress[0].hostname})
+helm upgrade -i mongodb helm/mongodb -n mongodb --set mongodb.host=$(oc get route mongo -n istio-system2 -o jsonpath={.spec.host})
 ```
 
 ## Manually create user and add ratings data from the mongodb pod terminal
@@ -75,7 +74,7 @@ db.ratings.find({});
 
 ```sh
 helm upgrade -i bookinfo helm/bookinfo -n bookinfo \
-  --set mongodb.host=$(oc get service mongo-ingressgateway -n istio-system2 -o jsonpath={.status.loadBalancer.ingress[0].hostname}) \
+  --set mongodb.host=$(oc get route mongo -n istio-system2 -o jsonpath={.spec.host}) \
   --set control_plane.ingressgateway.host=$(oc get route api -n istio-system -o jsonpath={'.spec.host'})
 ```
 

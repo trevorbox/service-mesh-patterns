@@ -38,9 +38,6 @@ helm upgrade -i rootca helm/install-cacerts -n istio-system2 \
 
 ```sh
 helm upgrade -i istio-system-control-plane -n istio-system helm/istio-system-control-plane
-# wait for cp to finish installing then enable the egressgateway
-helm upgrade -i istio-system-control-plane -n istio-system helm/istio-system-control-plane --values values-istio-system-egressgateway-enabled.yaml
-
 helm upgrade -i istio-system2-control-plane -n istio-system2 helm/istio-system2-control-plane
 ```
 

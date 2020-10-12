@@ -1,4 +1,4 @@
-# multiple cluster trust
+# Federated trust across Service Mesh domains
 
 With minimal configration, two different Service Mesh Control Planes can be configured to use the same root CA when signing workload certificates allowing mTLS to be performed directly from a sidecar to another control plane's ingress gateway. This results in federated trust between Service Mesh Control planes.
 
@@ -6,7 +6,7 @@ To demonstrate, we will deploy the bookinfo application into a control plane and
 
 A single OCP cluster is used to demonstrate this configuration, but since communication is performed via the exposed Openshift Route between control planes one could deploy the mongodb control plane and application in a different cluster.
 
-> TODO insert diagram
+![Federated trust](./documentation/pictures/federated-trust.png)
 
 ## Setup
 
@@ -108,7 +108,9 @@ Open the following url in a web browser. If you get the single ratings star it w
 echo "https://$(oc get route api -n istio-system -o jsonpath={'.spec.host'})/productpage"
 ```
 
-## Changing 
+![Bookinfo successful result](./documentation/pictures/bookinfo-result.png)
+
+## How to regenerate istio workload certificates in a namespace
 
 ```sh
 SECRETS=$(oc get secrets -n istio-system -o name | egrep 'istio\.')

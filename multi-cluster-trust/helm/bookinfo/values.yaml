@@ -1,6 +1,6 @@
 mongodb:
   host: <set from helm install command>
-  port: 27017
+  port: 443
   user: bookinfo
   password: redhat
   ssl:

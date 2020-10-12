@@ -5,19 +5,11 @@ metadata:
   name: originate-tls-for-mongodb-mesh-external
 spec:
   host: {{ .Values.mongodb.host }}
-  subsets:
-  - name: mongodb-tls
-    trafficPolicy:
-      loadBalancer:
-        simple: ROUND_ROBIN
-      portLevelSettings:
-      - port:
-          #number: 27018
-          number: 443
-        tls:
-          mode: MUTUAL # initiates TLS for connections to mongodb
-          clientCertificate: /etc/certs/cert-chain.pem
-          privateKey: /etc/certs/key.pem
-          caCertificates: /etc/certs/root-cert.pem
-          sni: {{ .Values.mongodb.host }}
+  trafficPolicy: # Apply to all ports
+    tls:
+      mode: MUTUAL # initiates TLS for connections to mongodb
+      clientCertificate: /etc/certs/cert-chain.pem
+      privateKey: /etc/certs/key.pem
+      caCertificates: /etc/certs/root-cert.pem
+      sni: {{ .Values.mongodb.host }}
 ...

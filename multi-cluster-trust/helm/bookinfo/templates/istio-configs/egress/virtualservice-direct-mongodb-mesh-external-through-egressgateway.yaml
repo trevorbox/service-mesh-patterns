@@ -1,19 +1,19 @@
----
-apiVersion: networking.istio.io/v1alpha3
-kind: VirtualService
-metadata:
-  name: direct-mongodb-mesh-external-through-egressgateway
-spec:
-  hosts:
-  - {{ .Values.mongodb.host }}
-  tcp:
-  - match:
-    - port: 27017
-    route:
-    - destination:
-        host: {{ .Values.mongodb.host }}
-        subset: mongodb-tls
-        port:
-          #number: 27018
-          number: 443
-...
+#---
+#apiVersion: networking.istio.io/v1alpha3
+#kind: VirtualService
+#metadata:
+#  name: direct-mongodb-mesh-external-through-egressgateway
+#spec:
+#  hosts:
+#  - {{ .Values.mongodb.host }}
+#  tcp:
+#  - match:
+#    - port: 27017
+#    route:
+#    - destination:
+#        host: {{ .Values.mongodb.host }}
+#        subset: mongodb-tls
+#        port:
+#          #number: 27018
+#          number: 443
+#...

@@ -70,9 +70,13 @@ db.ratings.find({});
 ## Install bookinfo in istio-system
 
 ```sh
+IP_ADDRESSES=$(echo "{$(echo $(dig $(oc get route api -n istio-system -o jsonpath={'.spec.host'}) +short) | sed -e "s/ /,/g")}")
+# or set manually, for example IP_ADDRESSES={3.131.22.164,3.129.227.164}
+
 helm upgrade -i bookinfo helm/bookinfo -n bookinfo \
   --set mongodb.host=$(oc get route mongo -n istio-system2 -o jsonpath={.spec.host}) \
-  --set control_plane.ingressgateway.host=$(oc get route api -n istio-system -o jsonpath={'.spec.host'})
+  --set control_plane.ingressgateway.host=$(oc get route api -n istio-system -o jsonpath={'.spec.host'}) \
+  --set mongodb.addresses=$IP_ADDRESSES
 ```
 
 ## Verify traffic flows through the egressgateway
@@ -100,7 +104,7 @@ istioctl pc route $(oc get pod -l app=istio-egressgateway -n istio-system-egress
 # change log level
 istioctl pc log $(oc get pod -l app=istio-egressgateway -n istio-system-egress -o jsonpath='{.items[0].metadata.name}') --level debug -n istio-system-egress
 
-istioctl pc log $(oc get pod -l app=istio-egressgateway -n istio-system-egress -o jsonpath='{.items[0].metadata.name}') --level debug -n istio-system-egress
+istioctl pc log $(oc get pod -l app=ratings,version=v2 -n bookinfo -o jsonpath='{.items[0].metadata.name}') --level debug -n bookinfo
 
 istioctl pc cluster $(oc get pod -l app=istio-egressgateway -n istio-system-egress -o jsonpath='{.items[0].metadata.name}') -n istio-system-egress --fqdn nginx-mesh-external.apps.cluster-a57a.a57a.sandbox1041.opentlc.com -o json
 ```

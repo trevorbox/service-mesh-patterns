@@ -6,22 +6,14 @@ metadata:
 spec:
   hosts:
     - {{ .Values.mongodb.host }}
-  #addresses:
-  #  - 3.129.227.164/32
-  #  - 3.131.22.164/32
-  #endpoints:
-  #  - address: 3.129.227.164
-  #  - address: 3.131.22.164
+  addresses:
+    {{- range .Values.mongodb.addresses}}
+    - {{ . }}/32
+    {{- end }}
   ports:
     - name: mongo-tls
-      #number: 27018
       number: 443
-      #protocol: TCP
-      protocol: TCP
-    #- name: mongo
-    #  number: 27017
-    #  protocol: MONGO
-  resolution: DNS
-  #resolution: STATIC
+      protocol: MONGO
+  resolution: NONE
   location: MESH_EXTERNAL
 ...

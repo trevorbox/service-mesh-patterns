@@ -5,6 +5,7 @@ mongodb:
   password: redhat
   ssl:
     is_enabled: false
+  addresses:
 control_plane:
   namespace: istio-system
   ingressgateway: 

@@ -2,9 +2,9 @@
 
 With minimal configration, two different Service Mesh Control Planes can be configured to use the same root CA when signing workload certificates allowing mTLS to be performed directly from a sidecar to another control plane's ingress gateway. This results in federated trust between Service Mesh Control planes.
 
-To demonstrate, we will deploy the bookinfo application into a control plane and configure the ratings v2 application to communicate to a mongo instance in a different control plane.
+To demonstrate, we will deploy the bookinfo application into a control plane and configure the ratings v2 application to communicate to a mongo instance in a different control plane via an ingress gateway. A ServiceEntry and DestinationRule is used to instruct the sidecar to originate mTLS using the generated workload certificates from Citadel. The Gateway defined for the mongo ingress gateway is also configured to present its own generated server certificates for mTLS.
 
-A single OCP cluster is used to demonstrate this configuration, but since communication is performed via the exposed Openshift Route between control planes one could deploy the mongodb control plane and application in a different cluster.
+A single OCP cluster is used to demonstrate this configuration, but since communication is performed via the exposed Openshift Route between control planes one could deploy the mongodb control plane and application in a different OCP cluster with the same result.
 
 ![Federated trust](./documentation/pictures/federated-trust.png)
 

@@ -10,11 +10,10 @@ spec:
   hosts:
   - {{ .Values.mongodb.host }}
   tcp:
-  - match:
-    - port: 27018
-    route:
+  - route:
     - destination:
         host: mongodb
         port:
           number: 27017
+        subset: v1
 ...

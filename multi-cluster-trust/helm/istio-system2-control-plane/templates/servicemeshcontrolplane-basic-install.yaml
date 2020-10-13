@@ -23,9 +23,10 @@ spec:
           istio: mongo-ingressgateway       
         type: ClusterIP
         ports:
-        - port: 27018
-          targetPort: 27018
-          name: mongo-tls
+          - name: tls
+            protocol: TCP
+            port: 15443
+            targetPort: 15443
     global:
       controlPlaneSecurityEnabled: true
       disablePolicyChecks: false

@@ -9,7 +9,7 @@ spec:
     name: mongo-ingressgateway
     weight: 100
   port:
-    targetPort: mongo-tls
+    targetPort: tls
   tls:
     termination: passthrough
     insecureEdgeTerminationPolicy: Redirect

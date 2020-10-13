@@ -127,7 +127,7 @@ echo "https://$(oc get route api -n istio-system -o jsonpath={'.spec.host'})/pro
 
 ![Bookinfo successful result](./documentation/pictures/bookinfo-result.png)
 
-## How to regenerate istio workload certificates in a namespace
+## How to regenerate Istio workload certificates in a namespace
 
 ```sh
 SECRETS=$(oc get secrets -n istio-system -o name | egrep 'istio\.')

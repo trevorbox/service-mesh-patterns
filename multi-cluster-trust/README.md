@@ -18,18 +18,17 @@ A single OCP cluster is used to demonstrate this configuration, but since commun
 #Service Mesh A
 oc new-project istio-system
 oc new-project bookinfo
+oc new-project cert-manager
 
 #Service Mesh B
 oc new-project istio-system2
 oc new-project mongodb
-
-#Cert Manager
-oc new-project cert-manager
 ```
 
 ## Deploy cert-manager (skip if already present in the cluster)
 
 ```shell
+#Service Mesh A
 oc apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/v0.15.0/cert-manager.yaml
 ```
 
@@ -39,14 +38,17 @@ oc apply --validate=false -f https://github.com/jetstack/cert-manager/releases/d
 #Service Mesh A
 helm upgrade -i cert-manager -n istio-system helm/cert-manager
 
+export tls_crt=$(oc get secret rootca -n istio-system -o jsonpath='{.data.tls\.crt}')
+export tls_key=$(oc get secret rootca -n istio-system -o jsonpath='{.data.tls\.key}')
+
 helm upgrade -i rootca helm/install-cacerts -n istio-system \
-  --set rootca.tls_crt=$(oc get secret rootca -n istio-system -o jsonpath='{.data.tls\.crt}') \
-  --set rootca.tls_key=$(oc get secret rootca -n istio-system -o jsonpath='{.data.tls\.key}')
+  --set rootca.tls_crt=${tls_crt} \
+  --set rootca.tls_key=${tls_key}
 
 #Service Mesh B
 helm upgrade -i rootca helm/install-cacerts -n istio-system2 \
-  --set rootca.tls_crt=$(oc get secret rootca -n istio-system -o jsonpath='{.data.tls\.crt}') \
-  --set rootca.tls_key=$(oc get secret rootca -n istio-system -o jsonpath='{.data.tls\.key}')
+  --set rootca.tls_crt=${tls_crt} \
+  --set rootca.tls_key=${tls_key}
 ```
 
 ## Install control planes using common root cacerts
@@ -106,14 +108,16 @@ EOF"
 > Note: [Service entries for TCP traffic](https://istio.io/latest/blog/2018/egress-tcp/#service-entries-for-tcp-traffic) should have CIDR addresses defined. The bookinfo ratings v2 application will use the mongodb ServiceEntry.
 
 ```sh
-#Service Mesh A
-IP_ADDRESSES=$(echo "{$(echo $(host $(oc get route api -n istio-system -o jsonpath={'.spec.host'}) | cut -d" " -f4) | sed -e "s/ /,/g")}")
+#Service Mesh B
+export IP_ADDRESSES=$(echo "{$(echo $(host $(oc get route mongo -n istio-system2 -o jsonpath={'.spec.host'}) | cut -d" " -f4) | sed -e "s/ /,/g")}")
 # or set manually, for example IP_ADDRESSES={3.131.22.164,3.129.227.164}
+export MONGODB_HOST=$(oc get route mongo -n istio-system2 -o jsonpath={.spec.host})
 
+#Service Mesh A
 helm upgrade -i bookinfo helm/bookinfo -n bookinfo \
-  --set mongodb.host=$(oc get route mongo -n istio-system2 -o jsonpath={.spec.host}) \
+  --set mongodb.host=${MONGODB_HOST} \
   --set control_plane.ingressgateway.host=$(oc get route api -n istio-system -o jsonpath={'.spec.host'}) \
-  --set mongodb.addresses=$IP_ADDRESSES
+  --set mongodb.addresses=${IP_ADDRESSES}
 ```
 
 ## Verify mTLS works between SMCP domains

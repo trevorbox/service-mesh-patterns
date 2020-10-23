@@ -1,0 +1,81 @@
+---
+apiVersion: maistra.io/v1
+kind: ServiceMeshControlPlane
+metadata:
+  name: {{ .Values.control_plane.name }}
+  namespace: {{ .Values.control_plane.namespace }}
+spec:
+  version: v1.1
+  istio:
+    security:
+      selfSigned: false
+    gateways:
+      istio-egressgateway:
+        enabled: false
+      istio-ingressgateway:
+        enabled: false        
+      mongo-ingressgateway:
+        enabled: true
+        ior_enabled: false
+        autoscaleEnabled: false
+        labels:
+          app: mongo-ingressgateway
+          istio: mongo-ingressgateway       
+        type: ClusterIP
+        ports:
+          - name: tls
+            protocol: TCP
+            port: 15443
+            targetPort: 15443
+    global:
+      controlPlaneSecurityEnabled: true
+      disablePolicyChecks: false
+      mtls:
+        enabled: true
+      proxy:
+        accessLogFile: "/dev/stdout"
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+    grafana:
+      enabled: true
+      resources:
+        requests:
+          cpu: 10m
+          memory: 128Mi
+    kiali:
+      enabled: true
+      resources:
+        requests:
+          cpu: 100m
+          memory: 128Mi
+    mixer:
+      policy:
+        autoscaleEnabled: false
+        resources:
+          requests:
+            cpu: 10m
+            memory: 128Mi
+      telemetry:
+        autoscaleEnabled: false
+        resources:
+          requests:
+            cpu: 100m
+            memory: 1G
+    pilot:
+      autoscaleEnabled: false
+      traceSampling: 100
+      resources:
+        requests:
+          cpu: 10m
+          memory: 128Mi
+    tracing:
+      enabled: true
+      jaeger:
+        template: all-in-one
+        resources:
+          requests:
+            cpu: 10m
+            memory: 128Mi
+...

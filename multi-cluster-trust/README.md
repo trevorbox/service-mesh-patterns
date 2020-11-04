@@ -1,18 +1,20 @@
 # Federated trust across Service Mesh domains
 
-## Motivation
+## Introduction
 
-Mutual TLS (mTLS) ensures traffic is trusted and secure between both client and server and is a primary motivation for using a Service Mesh. If your organization has a requirement to implement Multicluster Service Meshes, you can still utilize mTLS for cross-cluster communication if both Service Mesh Control Planes (SMCPs) are configured to use the same root CA when signing workload certificates. Additionally, mTLS can be performed directly from a sidecar to another control plane's ingress gateway. The result is federated trust between SMCPs.
+Mutual TLS (mTLS), which provides trusted communication between both a client and a server, is a primary motivation for using Red Hat Openshift Service Mesh. With a simple configuration all communication between services in a mesh can communicate with mTLS but if your organization has a requirement to implement Multicluster Service Meshes, you can still utilize mTLS for cross-cluster communication provided that both Service Mesh Control Planes (SMCPs) are configured to use the same [root certificate](https://en.wikipedia.org/wiki/Root_certificate) authority (CA) when signing workload certificates. Additionally, mTLS can be performed directly from a sidecar to another control plane's ingress gateway. The result is federated trust between SMCPs.
 
-This example differs from Istio's [Replicated control planes Multicluster Installation](https://istio.io/latest/docs/setup/install/multicluster/gateways/) example in that we aren't configuring DNS since, as of this writing, the istiocoredns feature is not currently supported (though it is on [the roadmap](https://medium.com/@mageru/openshift-4-6-announcement-highlights-9e5601d97c0d)). For this reason, we need to manually create ServiceEntries because services are not auto-discovered between SMCPs without this feature.
-
-To demonstrate, we will deploy the bookinfo application into a control plane and configure the ratings-v2 application to communicate to a mongo instance in a different control plane via an ingress gateway. A ServiceEntry and DestinationRule is used to instruct the sidecar to originate mTLS using the generated workload certificates from Citadel. The Gateway defined for the mongo ingress gateway within the other control plane is also configured to present its own generated workload certificates for mTLS.
-
-A single OCP cluster is used to demonstrate this configuration, but since communication is performed via the exposed Openshift Route between control planes one could deploy the mongodb control plane and application in a different Openshift cluster with the same result.
+## Example
 
 ![Federated trust](./documentation/pictures/federated-trust.png)
 
-## Setup
+This example differs from Istio's [Replicated control planes](https://istio.io/latest/docs/setup/install/multicluster/gateways/) Multicluster Installation example in that we aren't configuring DNS since, as of this writing, the istiocoredns feature is not currently supported with Red Hat Openshift Service Mesh (though it is on the roadmap - see the slides on [whats-new](https://www.openshift.com/learn/whats-new)). For this reason, we need to manually create ServiceEntries because services are not auto-discovered between SMCPs without this feature.
+
+We deploy the bookinfo application into a control plane and configure the ratings-v2 application to communicate to a mongo instance in a different control plane via an ingress gateway. A ServiceEntry and DestinationRule is used to instruct the sidecar to originate mTLS using the generated workload certificates from Citadel. The Gateway defined for the mongo ingress gateway within the other control plane is also configured to present its own generated workload certificates for mTLS.
+
+A single OCP cluster is used to demonstrate this configuration, but since communication is performed via the exposed Openshift Route between control planes one could deploy the mongodb control plane and application in a different Openshift cluster with the same result.
+
+### Setup
 
 ```sh
 #Service Mesh A
@@ -25,14 +27,14 @@ oc new-project istio-system2
 oc new-project mongodb
 ```
 
-## Deploy cert-manager (skip if already present in the cluster)
+### Deploy cert-manager (skip if already present in the cluster)
 
 ```shell
 #Service Mesh A
 oc apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/v0.15.0/cert-manager.yaml
 ```
 
-## Deploy local root CA to both control planes
+### Deploy local root CA to both control planes
 
 ```shell
 #Service Mesh A
@@ -51,7 +53,7 @@ helm upgrade -i rootca helm/install-cacerts -n istio-system2 \
   --set rootca.tls_key=${tls_key}
 ```
 
-## Install control planes using common root cacerts
+### Install control planes using common root cacerts
 
 > Note: with the below configuration defined in the SMCP, Citadel will use the **cacerts** secret (created in both control planes from previous commands) as the root certificate instead of its own self-signed certificate.
 >
@@ -74,14 +76,14 @@ helm upgrade -i istio-system-control-plane -n istio-system helm/istio-system-con
 helm upgrade -i istio-system2-control-plane -n istio-system2 helm/istio-system2-control-plane
 ```
 
-## Install mongodb in istio-system2
+### Install mongodb in istio-system2
 
 ```sh
 #Service Mesh B
 helm upgrade -i mongodb helm/mongodb -n mongodb --set mongodb.host=$(oc get route mongo -n istio-system2 -o jsonpath={.spec.host})
 ```
 
-## Create user and add ratings data to mongodb
+### Create user and add ratings data to mongodb
 
 ```sh
 #Service Mesh B
@@ -103,7 +105,7 @@ db.ratings.find({});
 EOF"
 ```
 
-## Install bookinfo in istio-system
+### Install bookinfo in istio-system
 
 > Note: [Service entries for TCP traffic](https://istio.io/latest/blog/2018/egress-tcp/#service-entries-for-tcp-traffic) should have CIDR addresses defined. The bookinfo ratings v2 application will use the mongodb ServiceEntry.
 
@@ -120,7 +122,7 @@ helm upgrade -i bookinfo helm/bookinfo -n bookinfo \
   --set mongodb.addresses=${IP_ADDRESSES}
 ```
 
-## Verify mTLS works between SMCP domains
+### Verify mTLS works between SMCP domains
 
 Open the following url in a web browser. If you get the single ratings star it works.
 
@@ -131,7 +133,9 @@ echo "https://$(oc get route api -n istio-system -o jsonpath={'.spec.host'})/pro
 
 ![Bookinfo successful result](./documentation/pictures/bookinfo-result.png)
 
-## How to regenerate Istio workload certificates in a namespace
+## Misc
+
+### How to regenerate Istio workload certificates in a namespace
 
 ```sh
 SECRETS=$(oc get secrets -n istio-system -o name | egrep 'istio\.')

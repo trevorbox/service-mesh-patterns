@@ -1,0 +1,60 @@
+---
+apiVersion: maistra.io/v2
+kind: ServiceMeshControlPlane
+metadata:
+  name: full-install
+spec:
+  security:
+    dataPlane:
+      mtls: true
+      automtls: true
+    controlPlane:
+      mtls: true
+  gateways:
+    openshiftRoute:
+      enabled: false
+    egress:
+      enabled: false
+    ingress:
+      enabled: true
+    additionalIngress:
+      custom-ingress-gateway:
+        enabled: false
+        runtime:
+          container:
+            resources:
+              requests:
+                cpu: 10m
+                memory: 128Mi
+              limits: {}
+  tracing:
+    # change to None to disable tracing
+    type: Jaeger
+  addons:
+    jaeger:
+      name: jaeger
+      # we want maistra to create the jaeger resource
+      install:
+        storage:
+          type: Elasticsearch
+          elasticsearch:
+            indexCleaner:
+              enabled: true
+              numberOfDays: 2
+              schedule: "55 23 * * *"
+            nodeCount: 3
+            redundancyPolicy: "SingleRedundancy"
+            storage:
+              storageClassName: gp2
+              size: 50Gi
+    grafana:
+      enabled: true
+      install: {}
+    kiali:
+      name: kiali
+      enabled: true
+      # we want maistra to create the kiali resource
+      install: {}
+    prometheus:
+      enabled: true
+...

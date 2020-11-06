@@ -10,7 +10,7 @@ spec:
     termination: edge
   to:
     kind: Service
-    name: istio-ingressgateway
+    name: custom-ingress-gateway
     weight: 100
   wildcardPolicy: None
 ...

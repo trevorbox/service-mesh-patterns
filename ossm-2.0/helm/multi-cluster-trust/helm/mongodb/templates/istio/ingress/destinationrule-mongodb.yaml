@@ -1,0 +1,15 @@
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: mongodb
+spec:
+  host: mongodb
+  subsets:
+  - labels:
+      version: v1
+    name: v1
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
+...

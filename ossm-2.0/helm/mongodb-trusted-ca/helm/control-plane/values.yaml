@@ -6,4 +6,7 @@ control_plane:
 mongodb:
   namespace: mongodb
 bookinfo:
-  namespace: bookinfo    
+  namespace: bookinfo  
+gateways:
+  egress:
+    enabled: true

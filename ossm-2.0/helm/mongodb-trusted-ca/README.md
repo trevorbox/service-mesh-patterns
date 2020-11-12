@@ -13,17 +13,11 @@ oc new-project bookinfo
 
 ## Install the control plane
 
-> Note: If installing for the first time, you may get a `Error: admission webhook "smcp.validation.maistra.io" denied the request: gateways.istio-egressgateway.namespace=istio-system-egress is not allowed: namespace must be part of the mesh`
->
-> To fix this:
->
-> 1. Comment out the spec.istio.gateways.istio-egressgateway section within the SMCP
-> 2. Run the help upgrade shown below
-> 3. Wait for the control plane to finish deploying
-> 4. Uncomment the spec.istio.gateways.istio-egressgateway section and rerun the helm upgrade
+> Note: When installing for the first time, you need to first install without the egress gateway enabled since the validation on the istio-system-egress namespace will fail and not progress. Once the control plane is up the egress gateway may be enabled.
 
 ```sh
-helm upgrade -i control-plane -n istio-system helm/control-plane
+helm upgrade -i control-plane -n istio-system helm/control-plane --set gateways.egress.enabled=false
+helm upgrade -i control-plane -n istio-system helm/control-plane --reset-values
 ```
 
 Wait for the control plane to install.

@@ -62,7 +62,7 @@ spec:
   gateways:
     enabled: true
     egress:
-      enabled: true
+      enabled: {{ .Values.gateways.egress.enabled }}
       namespace: {{ .Values.control_plane.egressgateway.namespace }}
       service:
         type: ClusterIP

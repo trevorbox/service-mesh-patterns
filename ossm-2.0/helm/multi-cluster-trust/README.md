@@ -43,12 +43,6 @@ helm upgrade -i --create-namespace cert-manager -n istio-system helm/cert-manage
 export tls_crt=$(oc get secret rootca -n istio-system -o jsonpath='{.data.tls\.crt}')
 export tls_key=$(oc get secret rootca -n istio-system -o jsonpath='{.data.tls\.key}')
 
-
-helm upgrade -i rootca helm/install-cacerts -n openshift-operators \
-  --set rootca.tls_crt=${tls_crt} \
-  --set rootca.tls_key=${tls_key}
-
-
 helm upgrade -i rootca helm/install-cacerts -n istio-system \
   --set rootca.tls_crt=${tls_crt} \
   --set rootca.tls_key=${tls_key}

@@ -3,7 +3,6 @@ apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
   name: api
-  namespace: {{ .Values.control_plane.namespace }}
 spec:
   port:
     targetPort: http2

@@ -11,12 +11,14 @@ spec:
       automtls: true
     controlPlane:
       mtls: true
-    certificateAuthority:
-      type: Istiod
-      istiod:
-        type: PrivateKey
-        privateKey:
-          rootCADir: /etc/cacerts
+    trust:
+      domain: ca.self-signer.cert-manager
+    #certificateAuthority:
+    #  type: Istiod
+    #  istiod:
+    #    type: PrivateKey
+    #    privateKey:
+    #      rootCADir: /etc/cacerts
   proxy:
     accessLogging:
       file:
@@ -72,7 +74,7 @@ spec:
     ingress:   
       enabled: false
     additionalIngress:
-      custom-ingress-gateway:
+      custom-ingressgateway:
         enabled: true
         service:
           type: ClusterIP

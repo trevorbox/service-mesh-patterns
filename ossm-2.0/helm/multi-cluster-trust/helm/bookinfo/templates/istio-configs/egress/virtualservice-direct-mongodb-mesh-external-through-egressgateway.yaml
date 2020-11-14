@@ -1,0 +1,36 @@
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: direct-mongodb-mesh-external-through-egressgateway
+  namespace: {{ .Values.control_plane.egressgateway.namespace }}
+spec:
+  hosts:
+  - {{ .Values.mongodb.host }}
+  gateways:
+  - {{ .Values.control_plane.egressgateway.namespace }}/istio-egressgateway
+  - mesh
+  tcp:
+  - match:
+    - gateways:
+      - mesh
+      - {{ .Values.control_plane.egressgateway.namespace }}/istio-egressgateway
+      port: 27017
+    route:
+    - destination:
+        host: istio-egressgateway.{{ .Values.control_plane.egressgateway.namespace }}.svc.cluster.local
+        subset: mongodb
+        port:
+          number: {{ .Values.control_plane.egressgateway.port }}
+  - match:
+    - gateways:
+      - {{ .Values.control_plane.egressgateway.namespace }}/istio-egressgateway
+      port: {{ .Values.control_plane.egressgateway.port }}
+    route:
+    - destination:
+        host: {{ .Values.mongodb.host }}
+        subset: mongodb-tls
+        port:
+          number: 443
+      weight: 100
+...

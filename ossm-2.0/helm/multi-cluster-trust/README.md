@@ -41,8 +41,8 @@ oc apply --validate=false -f https://github.com/jetstack/cert-manager/releases/d
 #Service Mesh A
 helm upgrade -i --create-namespace cert-manager -n istio-system helm/cert-manager
 
-export tls_crt=$(oc get secret rootca -n istio-system -o jsonpath='{.data.tls\.crt}')
-export tls_key=$(oc get secret rootca -n istio-system -o jsonpath='{.data.tls\.key}')
+export tls_crt=$(oc get secret rootca -n cert-manager -o jsonpath='{.data.tls\.crt}')
+export tls_key=$(oc get secret rootca -n cert-manager -o jsonpath='{.data.tls\.key}')
 
 helm upgrade -i rootca helm/install-cacerts -n istio-system \
   --set rootca.tls_crt=${tls_crt} \
@@ -72,7 +72,9 @@ helm upgrade -i rootca helm/install-cacerts -n istio-system2 \
 
 ```sh
 #Service Mesh A
-helm upgrade -i istio-system-control-plane -n istio-system helm/istio-system-control-plane
+helm upgrade -i istio-system-control-plane -n istio-system helm/istio-system-control-plane --set gateways.egress.enabled=false
+# Wait for it to come up then run
+helm upgrade -i istio-system-control-plane -n istio-system helm/istio-system-control-plane --reset-values
 #Service Mesh B
 helm upgrade -i istio-system2-control-plane -n istio-system2 helm/istio-system2-control-plane
 ```

@@ -3,3 +3,7 @@ control_plane:
   name: basic-install
 bookinfo:
   namespace: bookinfo
+gateways:
+  egress:
+    enabled: true
+    namespace: istio-system-egress

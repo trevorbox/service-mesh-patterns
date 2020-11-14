@@ -23,10 +23,6 @@ spec:
     accessLogging:
       file:
         name: /dev/stdout
-    runtime:
-      container:
-        env:
-          OUTPUT_CERTS: /etc/istio-certs
   runtime:
     components:
       grafana: # working without defaults
@@ -74,7 +70,31 @@ spec:
   gateways:
     enabled: true
     egress:
-      enabled: false
+      enabled: {{ .Values.gateways.egress.enabled }}
+      namespace: {{ .Values.gateways.egress.namespace }}
+      service:
+        type: ClusterIP
+        ports:
+          - name: mongo
+            protocol: TCP
+            port: 15666
+            targetPort: 15666
+      volumes:
+        - volume:
+            secret:
+              secretName: bookinfo-cert
+          volumeMount:
+            name: bookinfo-cert
+            mountPath: /etc/secrets/bookinfo-cert
+      runtime:
+        container:
+          resources:
+            requests:
+              cpu: 10m
+              memory: 128Mi
+        deployment:
+          autoScaling:
+            enabled: false
     ingress:   
       enabled: false
     additionalIngress:

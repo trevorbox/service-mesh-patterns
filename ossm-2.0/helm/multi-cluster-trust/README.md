@@ -19,6 +19,7 @@ A single OCP cluster is used to demonstrate this configuration, but since commun
 ```sh
 #Service Mesh A
 oc new-project istio-system
+oc new-project istio-system-egress
 oc new-project bookinfo
 oc new-project cert-manager
 
@@ -140,4 +141,8 @@ echo "https://$(oc get route api -n istio-system -o jsonpath={'.spec.host'})/pro
 ```sh
 SECRETS=$(oc get secrets -n istio-system -o name | egrep 'istio\.')
 for s in $SECRETS; do oc delete $s -n istio-system; done
+```
+
+```sh
+/home/tbox/Downloads/istioctl-1.4.5-linux/istioctl pc cluster $(oc get pod -l app=ratings,version=v2 -n bookinfo -o jsonpath='{.items[0].metadata.name}') -n bookinfo --fqdn mongo-istio-system2.apps.cluster-39e4.sandbox1496.opentlc.com -o json
 ```

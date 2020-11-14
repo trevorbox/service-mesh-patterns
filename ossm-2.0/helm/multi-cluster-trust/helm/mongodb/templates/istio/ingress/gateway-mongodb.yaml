@@ -15,5 +15,6 @@ spec:
       number: 15443
       protocol: TLS
     tls:
-      mode: ISTIO_MUTUAL # Compared to Mutual mode, this mode uses certificates, representing gateway workload identity, generated automatically by Istio for mTLS authentication.
+      mode: MUTUAL
+      credentialName: mongo-cert      
 ...

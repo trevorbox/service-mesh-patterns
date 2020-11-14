@@ -1,0 +1,77 @@
+---
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: self-signer
+  namespace: cert-manager
+spec:
+  selfSigned: {}
+...
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: rootca
+  namespace: cert-manager
+spec:
+  secretName: rootca
+  issuerRef:
+    kind: ClusterIssuer
+    name: self-signer
+  commonName: "ca.self-signer.cert-manager"
+  isCA: true
+...
+---  
+# Create an Issuer that uses the above generated CA certificate to issue certs
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: internal-issuer
+spec:
+  ca:
+    secretName: rootca
+...
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: bookinfo-cert
+  namespace: istio-system-egress
+spec:
+  # Secret names are always required.
+  secretName: bookinfo-cert
+  commonName: bookinfo-cert
+  usages:
+    - server auth
+    - client auth  
+  issuerRef:
+    name: internal-issuer
+    # We can reference ClusterIssuers by changing the kind here.
+    # The default value is Issuer (i.e. a locally namespaced Issuer)
+    kind: ClusterIssuer
+    # This is optional since cert-manager will default to this value however
+    # if you are using an external issuer, change this to that issuer group.
+    group: cert-manager.io
+...
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: mongo-cert
+  namespace: istio-system2
+spec:
+  # Secret names are always required.
+  secretName: mongo-cert
+  commonName: mongo-cert
+  usages:
+    - server auth
+    - client auth  
+  issuerRef:
+    name: internal-issuer
+    # We can reference ClusterIssuers by changing the kind here.
+    # The default value is Issuer (i.e. a locally namespaced Issuer)
+    kind: ClusterIssuer
+    # This is optional since cert-manager will default to this value however
+    # if you are using an external issuer, change this to that issuer group.
+    group: cert-manager.io
+...

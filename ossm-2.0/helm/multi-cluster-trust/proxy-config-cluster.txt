@@ -1,0 +1,138 @@
+[tbox@localhost multi-cluster-trust]$ istioctl pc cluster $(oc get pod -l app=ratings,version=v2 -n bookinfo -o jsonpath='{.items[0].metadata.name}') -n bookinfo --fqdn mongo-istio-system2.apps.cluster-39e4.sandbox1496.opentlc.com -o json
+[
+    {
+        "name": "outbound|443||mongo-istio-system2.apps.cluster-39e4.sandbox1496.opentlc.com",
+        "type": "ORIGINAL_DST",
+        "connectTimeout": "10s",
+        "lbPolicy": "CLUSTER_PROVIDED",
+        "circuitBreakers": {
+            "thresholds": [
+                {
+                    "maxConnections": 4294967295,
+                    "maxPendingRequests": 4294967295,
+                    "maxRequests": 4294967295,
+                    "maxRetries": 4294967295
+                }
+            ]
+        },
+        "transportSocket": {
+            "name": "envoy.transport_sockets.tls",
+            "typedConfig": {
+                "@type": "type.googleapis.com/envoy.api.v2.auth.UpstreamTlsContext",
+                "commonTlsContext": {
+                    "tlsCertificateSdsSecretConfigs": [
+                        {
+                            "name": "default",
+                            "sdsConfig": {
+                                "apiConfigSource": {
+                                    "apiType": "GRPC",
+                                    "grpcServices": [
+                                        {
+                                            "envoyGrpc": {
+                                                "clusterName": "sds-grpc"
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    ],
+                    "combinedValidationContext": {
+                        "defaultValidationContext": {},
+                        "validationContextSdsSecretConfig": {
+                            "name": "ROOTCA",
+                            "sdsConfig": {
+                                "apiConfigSource": {
+                                    "apiType": "GRPC",
+                                    "grpcServices": [
+                                        {
+                                            "envoyGrpc": {
+                                                "clusterName": "sds-grpc"
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "alpnProtocols": [
+                        "istio-peer-exchange",
+                        "istio"
+                    ]
+                },
+                "sni": "mongo-istio-system2.apps.cluster-39e4.sandbox1496.opentlc.com"
+            }
+        },
+        "metadata": {
+            "filterMetadata": {
+                "istio": {
+                    "config": "/apis/networking.istio.io/v1alpha3/namespaces/bookinfo/destination-rule/originate-tls-for-mongodb-mesh-external"
+                }
+            }
+        },
+        "filters": [
+            {
+                "name": "istio.metadata_exchange",
+                "typedConfig": {
+                    "@type": "type.googleapis.com/udpa.type.v1.TypedStruct",
+                    "typeUrl": "type.googleapis.com/envoy.tcp.metadataexchange.config.MetadataExchange",
+                    "value": {
+                        "protocol": "istio-peer-exchange"
+                    }
+                }
+            }
+        ]
+    }
+]
+
+Istio 1.4.5
+
+[tbox@localhost multi-cluster-trust]$ /home/tbox/Downloads/istioctl-1.4.5-linux/istioctl pc cluster $(oc get pod -l app=ratings,version=v2 -n bookinfo -o jsonpath='{.items[0].metadata.name}') -n bookinfo --fqdn mongo-istio-system2.apps.cluster-39e4.sandbox1496.opentlc.com -o json
+[
+    {
+        "name": "outbound|443||mongo-istio-system2.apps.cluster-39e4.sandbox1496.opentlc.com",
+        "type": "ORIGINAL_DST",
+        "connectTimeout": "10s",
+        "lbPolicy": "CLUSTER_PROVIDED",
+        "circuitBreakers": {
+            "thresholds": [
+                {
+                    "maxConnections": 4294967295,
+                    "maxPendingRequests": 4294967295,
+                    "maxRequests": 4294967295,
+                    "maxRetries": 4294967295
+                }
+            ]
+        },
+        "tlsContext": {
+            "commonTlsContext": {
+                "tlsCertificates": [
+                    {
+                        "certificateChain": {
+                            "filename": "/etc/certs/cert-chain.pem"
+                        },
+                        "privateKey": {
+                            "filename": "/etc/certs/key.pem"
+                        }
+                    }
+                ],
+                "validationContext": {
+                    "trustedCa": {
+                        "filename": "/etc/certs/root-cert.pem"
+                    }
+                },
+                "alpnProtocols": [
+                    "istio"
+                ]
+            },
+            "sni": "mongo-istio-system2.apps.cluster-39e4.sandbox1496.opentlc.com"
+        },
+        "metadata": {
+            "filterMetadata": {
+                "istio": {
+                    "config": "/apis/networking/v1alpha3/namespaces/bookinfo/destination-rule/originate-tls-for-mongodb-mesh-external"
+                }
+            }
+        }
+    }
+]

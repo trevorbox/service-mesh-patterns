@@ -13,16 +13,20 @@ spec:
       mtls: true
     trust:
       domain: ca.self-signer.cert-manager
-    #certificateAuthority:
-    #  type: Istiod
-    #  istiod:
-    #    type: PrivateKey
-    #    privateKey:
-    #      rootCADir: /etc/cacerts
+    certificateAuthority:
+      type: Istiod
+      istiod:
+        type: PrivateKey
+        privateKey:
+          rootCADir: /etc/cacerts
   proxy:
     accessLogging:
       file:
         name: /dev/stdout
+    runtime:
+      container:
+        env:
+          OUTPUT_CERTS: /etc/istio-certs
   runtime:
     components:
       grafana: # working without defaults

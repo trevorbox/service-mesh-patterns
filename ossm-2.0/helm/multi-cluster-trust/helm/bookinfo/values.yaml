@@ -1,6 +1,6 @@
 mongodb:
   host: <set from helm install command>
-  port: 443
+  port: 27017
   user: bookinfo
   password: redhat
   ssl:
@@ -8,6 +8,10 @@ mongodb:
   addresses:
 control_plane:
   namespace: istio-system
+  name: basic-install
   ingressgateway: 
     name: ingressgateway
     host: 
+  egressgateway:
+    namespace: istio-system-egress
+    port: 15666

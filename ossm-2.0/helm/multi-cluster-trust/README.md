@@ -39,7 +39,7 @@ oc apply --validate=false -f https://github.com/jetstack/cert-manager/releases/d
 
 ```shell
 #Service Mesh A
-helm upgrade -i --create-namespace cert-manager -n istio-system helm/cert-manager
+helm upgrade -i --create-namespace cert-manager -n cert-manager helm/cert-manager
 
 export tls_crt=$(oc get secret rootca -n cert-manager -o jsonpath='{.data.tls\.crt}')
 export tls_key=$(oc get secret rootca -n cert-manager -o jsonpath='{.data.tls\.key}')
@@ -147,4 +147,6 @@ for s in $SECRETS; do oc delete $s -n istio-system; done
 
 ```sh
 istioctl pc cluster $(oc get pod -l app=istio-egressgateway -n istio-system-egress -o jsonpath='{.items[0].metadata.name}') -n istio-system-egress --fqdn mongo-istio-system2.apps.cluster-39e4.sandbox1496.opentlc.com -o json
+
+istioctl pc log $(oc get pod -l app=istio-egressgateway -n istio-system-egress -o jsonpath='{.items[0].metadata.name}') --level debug -n istio-system-egress
 ```

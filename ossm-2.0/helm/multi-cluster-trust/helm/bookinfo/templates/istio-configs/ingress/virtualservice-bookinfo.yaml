@@ -17,6 +17,8 @@ spec:
     - uri:
         exact: /logout
     - uri:
+        prefix: /static
+    - uri:
         prefix: /api/v1/products
     route:
     - destination:

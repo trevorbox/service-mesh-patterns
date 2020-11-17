@@ -16,7 +16,7 @@ spec:
       protocol: MONGO
     - name: mongo-tls
       number: 443
-      protocol: TLS
+      protocol: MONGO
   resolution: NONE
   location: MESH_EXTERNAL
 ...

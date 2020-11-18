@@ -7,7 +7,7 @@ spec:
   port:
     targetPort: http2
   tls:
-    termination: edge
+    termination: passthrough
   to:
     kind: Service
     name: custom-ingress-gateway

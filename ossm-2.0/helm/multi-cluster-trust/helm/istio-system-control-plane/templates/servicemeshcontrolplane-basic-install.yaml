@@ -11,8 +11,8 @@ spec:
       automtls: true
     controlPlane:
       mtls: true
-    trust:
-      domain: ca.self-signer.cert-manager
+    #trust:
+    #  domain: ca.self-signer.cert-manager
     #certificateAuthority:
     #  type: Istiod
     #  istiod:

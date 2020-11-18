@@ -72,6 +72,10 @@ istioctl pc route $(oc get pod -l app=istio-egressgateway -n istio-system-egress
 istioctl pc log $(oc get pod -l app=istio-egressgateway -n istio-system-egress -o jsonpath='{.items[0].metadata.name}') --level debug -n istio-system-egress
 
 istioctl pc cluster $(oc get pod -l app=istio-egressgateway -n istio-system-egress -o jsonpath='{.items[0].metadata.name}') -n istio-system-egress --fqdn nginx-mesh-external.apps.cluster-a57a.a57a.sandbox1041.opentlc.com -o json
+
+
+istioctl pc cluster -i istio-system2 $(oc get pod -l app=istio-ingressgateway -n istio-system2 -o jsonpath='{.items[0].metadata.name}') -n istio-system2 --fqdn istio-ingressgateway.istio-system2.svc.cluster.local -o json | less
+
 ```
 
 ## Cleanup

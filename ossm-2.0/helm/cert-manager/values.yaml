@@ -1,0 +1,3 @@
+certs:
+  - name: custom-ingressgateway-cert
+    namespace: istio-system

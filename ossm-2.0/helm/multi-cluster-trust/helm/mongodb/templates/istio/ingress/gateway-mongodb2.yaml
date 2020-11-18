@@ -1,0 +1,21 @@
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: mongodb2
+  namespace: {{ .Values.control_plane.namespace }}
+spec:
+  selector:
+    istio: mongo-ingressgateway2
+  servers:
+  - hosts:
+    - mongo2-istio-system2.apps.cluster-c7bd.sandbox601.opentlc.com
+    port:
+      name: tls
+      number: 15443
+      protocol: TLS
+    tls:
+      mode: SIMPLE
+      serverCertificate: /etc/secrets/mongo-cert/tls.crt
+      privateKey: /etc/secrets/mongo-cert/tls.key
+...

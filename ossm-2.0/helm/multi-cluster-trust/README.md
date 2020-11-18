@@ -38,10 +38,10 @@ oc apply --validate=false -f https://github.com/jetstack/cert-manager/releases/d
 
 ```shell
 #Service Mesh A
-helm upgrade -i --create-namespace cert-manager -n istio-system helm/cert-manager
+helm upgrade -i --create-namespace cert-manager -n cert-manager helm/cert-manager
 
-export tls_crt=$(oc get secret rootca -n istio-system -o jsonpath='{.data.tls\.crt}')
-export tls_key=$(oc get secret rootca -n istio-system -o jsonpath='{.data.tls\.key}')
+export tls_crt=$(oc get secret rootca -n cert-manager -o jsonpath='{.data.tls\.crt}')
+export tls_key=$(oc get secret rootca -n cert-manager -o jsonpath='{.data.tls\.key}')
 
 helm upgrade -i rootca helm/install-cacerts -n istio-system \
   --set rootca.tls_crt=${tls_crt} \

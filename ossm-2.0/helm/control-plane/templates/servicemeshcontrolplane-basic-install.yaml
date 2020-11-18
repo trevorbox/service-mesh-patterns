@@ -64,14 +64,7 @@ spec:
     egress:
       enabled: false
     ingress:   
-      enabled: true
-      ingress: false # sets k8sIngress boolean
-      runtime:
-        container: 
-          resources:
-            requests:
-              cpu: 100m
-              memory: 256Mi
+      enabled: false
     additionalIngress:
       custom-ingress-gateway:
         enabled: true
@@ -84,6 +77,16 @@ spec:
                 cpu: 10m
                 memory: 128Mi
               limits: {}
+          deployment:
+            autoScaling:
+              enabled: false
+        volumes:
+          - volume: 
+              secret:
+                secretName: custom-ingressgateway-cert
+            volumeMount:
+              name: custom-ingressgateway-cert
+              mountPath: /etc/secrets/custom-ingressgateway-cert
     openshiftRoute:
       enabled: false
   tracing:

@@ -4,6 +4,8 @@ See [Authentication Policy](https://istio.io/v1.4/docs/reference/config/security
 
 This example uses the bookinfo app to demonstrate ORIGIN and PEER authentication to the productpage service. The oauth2 proxy in the gateway will take care of passing the authorization header to productpage after the user logs into Okta - required for ORIGIN authentication. mtls is handled for us by Istio - required for PEER authentication.
 
+Additionally, we are adding headers to the request using an Istio Rule to demonstrate the jwt claims, request auth principal and source principal.
+
 > Note: since productpage won't natively propagate the authroization header, we can't use the same Policy on other downstream services.
 
 ## Setup
@@ -52,7 +54,13 @@ Requests without a valid jwt should return `401 Unauthorized`...
 oc exec deploy/ratings-v1 -c ratings -n ${bookinfo_namespace} -i -t -- /bin/bash -c "curl -I http://productpage:9080"
 ```
 
-To verify the authorization request header is passed you can enable debug level logs on the sidecar...
+To verify the request headers is passed to the application container...
+
+```sh
+echo Open this page: https://api-${istio_system_namespace}.$(oc get route console -o jsonpath={.status.ingress[0].routerCanonicalHostname} -n openshift-console)/nginx-echo-headers
+```
+
+You can also enable debug level logs on the sidecar...
 
 ```sh
 istioctl pc log $(oc get pod -l app=productpage -n ${bookinfo_namespace} -o jsonpath='{.items[0].metadata.name}') --level debug -n ${bookinfo_namespace}

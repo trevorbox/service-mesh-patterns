@@ -23,4 +23,12 @@ spec:
         host: productpage
         port:
           number: 9080
+  - match:
+    - uri:
+        exact: /nginx-echo-headers
+    route:
+    - destination:
+        host: nginx-echo-headers
+        port:
+          number: 8080
 ...

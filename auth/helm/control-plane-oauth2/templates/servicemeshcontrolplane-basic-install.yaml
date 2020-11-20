@@ -104,7 +104,7 @@ spec:
         accessLogFile: "/dev/stdout"
         resources:
           requests:
-            cpu: 25m
+            cpu: 100m
             memory: 25Mi
     grafana:
       enabled: true

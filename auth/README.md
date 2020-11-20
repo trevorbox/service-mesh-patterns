@@ -2,7 +2,7 @@
 
 See [Authentication Policy](https://istio.io/v1.4/docs/reference/config/security/istio.authentication.v1alpha1/)
 
-This example will use the bookinfo app to demonstrate ORIGIN and PEER authentication to the productpage service. The oauth2 proxy in the gateway will take care of passing th authorization header to productpage after the user logs into Okta - required for ORIGIN authentication. mtls is handles for us by Istio - required for PEER authentication.
+This example uses the bookinfo app to demonstrate ORIGIN and PEER authentication to the productpage service. The oauth2 proxy in the gateway will take care of passing the authorization header to productpage after the user logs into Okta - required for ORIGIN authentication. mtls is handled for us by Istio - required for PEER authentication.
 
 > Note: since productpage won't natively propagate the authroization header, we can't use the same Policy on other downstream services.
 

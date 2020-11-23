@@ -10,7 +10,7 @@ spec:
     termination: passthrough
   to:
     kind: Service
-    name: istio-ingressgateway
+    name: custom-ingressgateway
     weight: 100
   wildcardPolicy: None
 ...

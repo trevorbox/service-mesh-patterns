@@ -13,12 +13,12 @@ spec:
       mtls: true
     #trust:
     #  domain: ca.self-signer.cert-manager
-    #certificateAuthority:
-    #  type: Istiod
-    #  istiod:
-    #    type: PrivateKey
-    #    privateKey:
-    #      rootCADir: /etc/cacerts
+    certificateAuthority:
+      type: Istiod
+      istiod:
+        type: PrivateKey
+        privateKey:
+          rootCADir: /etc/cacerts
   proxy:
     accessLogging:
       file:
@@ -85,6 +85,9 @@ spec:
                 cpu: 10m
                 memory: 128Mi
               limits: {}
+          deployment:
+            autoScaling:
+              enabled: false
     openshiftRoute:
       enabled: false
   tracing:

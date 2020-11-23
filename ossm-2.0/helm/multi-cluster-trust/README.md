@@ -55,19 +55,7 @@ helm upgrade -i rootca helm/install-cacerts -n istio-system2 \
 
 ### Install control planes using common root cacerts
 
-> Note: with the below configuration defined in the SMCP, Citadel will use the **cacerts** secret (created in both control planes from previous commands) as the root certificate instead of its own self-signed certificate.
->
-> ```yaml
-> apiVersion: maistra.io/v1
-> kind: ServiceMeshControlPlane
-> metadata:
->   name: basic-install
-> spec:
->   istio:
->     security:
->       selfSigned: false
-> ...
-> ```
+> Note: Istiod will use the **cacerts** secret (created in both control planes from previous commands) as the root certificate instead of its own self-signed certificate.
 
 ```sh
 #Service Mesh A

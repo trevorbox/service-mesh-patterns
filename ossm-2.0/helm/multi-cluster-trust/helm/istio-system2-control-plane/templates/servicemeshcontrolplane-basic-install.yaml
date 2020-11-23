@@ -72,14 +72,7 @@ spec:
     egress:
       enabled: false
     ingress:   
-      enabled: true
-      volumes:
-        - volume: 
-            secret:
-              secretName: mongo-cert
-          volumeMount:
-            name: mongo-cert
-            mountPath: /etc/secrets/mongo-cert
+      enabled: false
     additionalIngress:
       mongo-ingressgateway:
         enabled: true
@@ -88,7 +81,7 @@ spec:
           metadata:
             labels:
               app: mongo-ingressgateway
-              istio: mongo-ingressgateway
+              istio: ingressgateway # Do not change this - required since only one networkpolicy is created for ingress with this label
           ports:
             - name: tls
               protocol: TCP
@@ -101,33 +94,9 @@ spec:
                 cpu: 10m
                 memory: 128Mi
               limits: {}
-      mongo-ingressgateway2:
-        enabled: true
-        service:
-          type: ClusterIP
-          metadata:
-            labels:
-              app: mongo-ingressgateway2
-              istio: mongo-ingressgateway2
-          ports:
-            - name: tls
-              protocol: TCP
-              port: 15443
-              targetPort: 15443
-        runtime:
-          container:
-            resources:
-              requests:
-                cpu: 10m
-                memory: 128Mi
-              limits: {}
-        volumes:
-          - volume: 
-              secret:
-                secretName: mongo-cert
-            volumeMount:
-              name: mongo-cert
-              mountPath: /etc/secrets/mongo-cert
+          deployment:
+            autoScaling:
+              enabled: false
     openshiftRoute:
       enabled: false
   tracing:

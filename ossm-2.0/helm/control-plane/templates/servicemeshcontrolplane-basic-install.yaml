@@ -65,6 +65,25 @@ spec:
       enabled: false
     ingress:   
       enabled: true
+    additionalIngress:
+      custom-ingressgateway:
+        enabled: true
+        service:
+          type: ClusterIP
+          metadata:
+            labels:
+              istio: ingressgateway # Do not change this - required since only one networkpolicy is created for ingress with this label
+              app: custom-ingressgateway
+        runtime:
+          container:
+            resources:
+              requests:
+                cpu: 10m
+                memory: 128Mi
+              limits: {}
+          deployment:
+            autoScaling:
+              enabled: false
     openshiftRoute:
       enabled: false
   tracing:

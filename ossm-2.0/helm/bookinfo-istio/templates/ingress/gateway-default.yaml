@@ -6,16 +6,15 @@ metadata:
   namespace: {{ .Values.control_plane.namespace }}
 spec:
   selector:
-    istio: {{ .Values.control_plane.ingressgateway.name }}
+    istio: ingressgateway
   servers:
   - port:
-      number: 80
-      name: http
-      protocol: TLS
+      number: 443
+      name: https
+      protocol: HTTPS
     hosts:
       - {{ .Values.control_plane.ingressgateway.host }}
     tls:
       mode: SIMPLE
-      serverCertificate: /etc/secrets/custom-ingressgateway-cert/tls.crt
-      privateKey: /etc/secrets/custom-ingressgateway-cert/tls.key
+      credentialName: ingressgateway-cert
 ...

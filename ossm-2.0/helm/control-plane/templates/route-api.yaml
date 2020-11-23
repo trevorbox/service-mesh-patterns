@@ -5,12 +5,12 @@ metadata:
   name: api
 spec:
   port:
-    targetPort: http2
+    targetPort: https
   tls:
     termination: passthrough
   to:
     kind: Service
-    name: custom-ingress-gateway
+    name: istio-ingressgateway
     weight: 100
   wildcardPolicy: None
 ...

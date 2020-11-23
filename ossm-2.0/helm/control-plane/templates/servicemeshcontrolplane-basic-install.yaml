@@ -40,10 +40,10 @@ spec:
           resources:
             requests:
               cpu: '1'
-              memory: 6Gi
+              memory: 4Gi
             limits:
               cpu: '1'
-              memory: 6Gi
+              memory: 4Gi
       tracing.jaeger.collector:
         container:
           resources:
@@ -64,29 +64,7 @@ spec:
     egress:
       enabled: false
     ingress:   
-      enabled: false
-    additionalIngress:
-      custom-ingress-gateway:
-        enabled: true
-        service:
-          type: ClusterIP
-        runtime:
-          container:
-            resources:
-              requests:
-                cpu: 10m
-                memory: 128Mi
-              limits: {}
-          deployment:
-            autoScaling:
-              enabled: false
-        volumes:
-          - volume: 
-              secret:
-                secretName: custom-ingressgateway-cert
-            volumeMount:
-              name: custom-ingressgateway-cert
-              mountPath: /etc/secrets/custom-ingressgateway-cert
+      enabled: true
     openshiftRoute:
       enabled: false
   tracing:

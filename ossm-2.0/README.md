@@ -10,6 +10,7 @@ helm upgrade -i service-mesh-operators -n openshift-operators helm/service-mesh-
 
 ```sh
 oc apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/v1.0.4/cert-manager.yaml
+oc new-project istio-system
 helm upgrade -i --create-namespace -n cert-manager cert-manager helm/cert-manager
 ```
 

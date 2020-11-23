@@ -1,0 +1,8 @@
+control_plane_name: basic-install
+is_production_deployment: false
+ingressgateway_name: oauth2-ingressgateway
+redirect_url: https://api-istio-system.apps.<my_cluster>/oauth2/callback
+oidc_issuer_url: https://dev-338970.okta.com/oauth2/default
+cookie_secret: GRerqX0kInomjzMYFr50wA==
+client_id:
+client_secret:

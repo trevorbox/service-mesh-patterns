@@ -1,0 +1,17 @@
+---
+apiVersion: authentication.istio.io/v1alpha1
+kind: Policy
+metadata:
+  name: mtls-jwt-example
+spec:
+  targets:
+  - name: productpage
+  - name: nginx-echo-headers
+  peers:
+  - mtls: {}
+  origins:
+  - jwt:
+      issuer: "https://dev-338970.okta.com/oauth2/default"
+      jwksUri: "https://dev-338970.okta.com/oauth2/default/v1/keys"
+  principalBinding: USE_ORIGIN
+...

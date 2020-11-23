@@ -1,0 +1,169 @@
+
+apiVersion: maistra.io/v1
+kind: ServiceMeshControlPlane
+metadata:
+  name: {{ .Values.control_plane_name }}
+spec:
+  version: v1.1
+  istio:
+    gateways:
+      istio-egressgateway:
+        enabled: false
+      istio-ingressgateway:
+        enabled: false        
+      {{ .Values.ingressgateway_name }}:
+        enabled: true
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+        autoscaleEnabled: false
+        #namespace: bookinfo
+        additionalContainers:
+        - name: oauth2-proxy
+          args:
+          - --provider=oidc
+          - --redirect-url={{ .Values.redirect_url }}
+          - --oidc-issuer-url={{ .Values.oidc_issuer_url }}
+          - --upstream=http://127.0.0.1:8080
+          - '--email-domain=*'
+          - --client-id={{ .Values.client_id }}
+          - --client-secret={{ .Values.client_secret }}
+          - --pass-access-token=true
+          - --pass-authorization-header=true
+          - --cookie-secret={{ .Values.cookie_secret }}
+          - --skip-provider-button=true
+          - --http-address=0.0.0.0:8081
+          env:
+          image: quay.io/oauth2-proxy/oauth2-proxy:latest
+          imagePullPolicy: Always          
+          ports:
+            - containerPort: 8081
+              protocol: TCP
+              name: oauth-http
+            - containerPort: 8081
+              protocol: TCP
+              name: oauth-https
+          volumeMounts:
+            - name: oauth2-proxy-tls
+              mountPath: /etc/oauth2-proxy/certs
+        sds:
+          # If true, ingress gateway fetches credentials from SDS server to handle TLS connections.
+          enabled: false
+        labels:
+          app: {{ .Values.ingressgateway_name }}
+          istio: ingressgateway
+          #'maistra.io/expose-route': "true"
+        serviceAnnotations:
+          service.beta.openshift.io/serving-cert-secret-name: oauth2-proxy-tls
+        type: ClusterIP
+        #externalTrafficPolicy: Local #change to Local to preserve source IP or Cluster for default behaviour or leave commented out
+        ports:
+          ## You can add custom gateway ports
+          # Note that AWS ELB will by default perform health checks on the first port
+          # on this list. Setting this to the health check port will ensure that health
+          # checks always work. https://github.com/istio/istio/issues/12503
+        - port: 15020
+          targetPort: 15020
+          name: status-port
+        - port: 80
+          targetPort: 8080
+          name: http2
+        - port: 443
+          targetPort: 8443
+          name: https
+        # Example of a port to add. Remove if not needed
+        ### PORTS FOR UI/metrics #####
+        ## Disable if not needed
+          # This is the port where sni routing happens
+        - port: 15443
+          targetPort: 15443
+          name: tls
+        - port: 8081
+          targetPort: 8081
+          name: oauth-http
+        - port: 8444
+          targetPort: 8444
+          name: oauth-https
+        secretVolumes:
+        - name: ingressgateway-certs
+          secretName: istio-ingressgateway-certs
+          mountPath: /etc/istio/ingressgateway-certs
+        - name: ingressgateway-ca-certs
+          secretName: istio-ingressgateway-ca-certs
+          mountPath: /etc/istio/ingressgateway-ca-certs
+        - name: oauth2-proxy-tls
+          secretName: oauth2-proxy-tls
+          mountPath: /etc/oauth2-proxy/certs
+    global:
+      controlPlaneSecurityEnabled: true
+      disablePolicyChecks: false
+      mtls:
+        enabled: true
+      proxy:
+        accessLogFile: "/dev/stdout"
+        resources:
+          requests:
+            cpu: 100m
+            memory: 25Mi
+    grafana:
+      enabled: true
+      resources:
+        requests:
+          cpu: 10m
+          memory: 128Mi
+    kiali:
+      enabled: true
+      resources:
+        requests:
+          cpu: 100m
+          memory: 128Mi
+    mixer:
+      policy:
+        autoscaleEnabled: false
+        resources:
+          requests:
+            cpu: 10m
+            memory: 128Mi
+      telemetry:
+        autoscaleEnabled: false
+        resources:
+          requests:
+            cpu: 100m
+            memory: 1G
+    pilot:
+      autoscaleEnabled: false
+      traceSampling: 100
+      resources:
+        requests:
+          cpu: 10m
+          memory: 128Mi
+    tracing:
+      enabled: true
+      jaeger:
+{{- if .Values.is_production_deployment }}      
+        template: production-elasticsearch
+        elasticsearch:
+          nodeCount: 3
+          redundancyPolicy: "MultipleRedundancy"
+          resources:
+            requests:
+              cpu: "1"
+              memory: "4Gi"
+            limits:
+              cpu: "1"
+              memory: "4Gi"
+          storage:
+            storageClassName: gp2
+            size: 50Gi
+          esIndexCleaner:
+            enabled: true            # turn the cron job deployment on and off
+            numberOfDays: 60         # number of days to wait before deleting a record
+            schedule: "55 23 * * *"  # cron expression for it to run
+{{- else }}
+        template: all-in-one
+        resources:
+          requests:
+            cpu: 10m
+            memory: 128Mi
+{{- end }}

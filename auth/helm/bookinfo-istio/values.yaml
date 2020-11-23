@@ -1,0 +1,6 @@
+control_plane:
+  name: basic-install
+  namespace: istio-system3
+  ingressgateway: 
+    name: ingressgateway
+    host: 

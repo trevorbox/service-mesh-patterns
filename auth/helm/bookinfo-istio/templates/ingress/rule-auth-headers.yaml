@@ -1,0 +1,20 @@
+---
+apiVersion: config.istio.io/v1alpha2
+kind: rule
+metadata:
+  name: auth-headers
+spec:
+  requestHeaderOperations:
+    - name: jwt-principal
+      values:
+        - request.auth.principal
+    - name: jwt-claims
+      values:
+        - request.auth.raw_claims
+    - name: jwt-subject
+      values:
+        - request.auth.claims["sub"]
+    - name: mtls-principal
+      values:
+        - source.principal
+...

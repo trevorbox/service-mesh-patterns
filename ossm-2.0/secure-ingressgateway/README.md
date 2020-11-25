@@ -1,5 +1,7 @@
 # OSSM 2.0
 
+This example demonstrates an Openshift passthrough route to an ingress gateway that presents a cert-manager certificate using SDS.
+
 ## Install Operators
 
 ```sh

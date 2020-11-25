@@ -1,0 +1,146 @@
+---
+apiVersion: maistra.io/v2
+kind: ServiceMeshControlPlane
+metadata:
+  name: basic-install
+spec:
+  version: v2.0
+  security:
+    dataPlane:
+      mtls: true
+      automtls: true
+    controlPlane:
+      mtls: true
+  proxy:
+    accessLogging:
+      file:
+        name: /dev/stdout
+  runtime:
+    components:
+      grafana: # working without defaults
+        container:
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+      prometheus: # working without defaults
+        container:
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi      
+      kiali: # not working
+        container:
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+      tracing.jaeger.elasticsearch: # working regardless of defaults
+        container:
+          resources:
+            requests:
+              cpu: '1'
+              memory: 4Gi
+            limits:
+              cpu: '1'
+              memory: 4Gi
+      tracing.jaeger.collector:
+        container:
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+      tracing.jaeger.query:
+        container:
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+    defaults: # merged into any component specific overrides. component specific overrides take precedence
+      container:
+        resources: {} # opting to use LimitRange instead since oauth sidecars don't get the defaults
+  gateways:
+    enabled: true
+    egress:
+      enabled: false
+    ingress:   
+      enabled: true
+      volumes:
+        - volume: 
+            secret:
+              secretName: oauth2-proxy-tls
+          volumeMount:
+            name: oauth2-proxy-tls
+            mountPath: /etc/oauth2-proxy/certs
+      service:
+        type: ClusterIP
+        metadata:
+          annotations:
+            service.alpha.openshift.io/serving-cert-secret-name: oauth2-proxy-tls
+        ports:
+          - port: 8081
+            targetPort: 8081
+            name: oauth-http
+          - port: 80
+            targetPort: 8080
+            name: http2
+    openshiftRoute:
+      enabled: false
+  tracing:
+    # change to None to disable tracing
+    type: Jaeger
+  addons:
+    jaeger:
+      name: jaeger
+      install:
+        storage:
+          type: Elasticsearch
+          elasticsearch:
+            indexCleaner:
+              enabled: true
+              numberOfDays: 2
+              schedule: "55 23 * * *"
+            nodeCount: 3
+            redundancyPolicy: "SingleRedundancy"
+            storage:
+              storageClassName: gp2
+              size: 50Gi
+            # resource requests/limits specified in spec.runtime
+    grafana:
+      enabled: true
+      install: {}
+    kiali:
+      name: kiali
+      enabled: true
+      # we want maistra to create the kiali resource
+      install: {}
+    prometheus:
+      enabled: true
+  techPreview:
+    gateways:
+      istio-ingressgateway:
+        additionalContainers:
+          - name: oauth2-proxy
+            image: quay.io/oauth2-proxy/oauth2-proxy:latest
+            args:
+              - --provider=oidc
+              - --redirect-url={{ .Values.redirect_url }}
+              - --oidc-issuer-url={{ .Values.oidc_issuer_url }}
+              - --upstream=http://127.0.0.1:8080
+              - '--email-domain=*'
+              - --client-id={{ .Values.client_id }}
+              - --client-secret={{ .Values.client_secret }}
+              - --pass-access-token=true
+              - --pass-authorization-header=true
+              - --cookie-secret={{ .Values.cookie_secret }}
+              - --skip-provider-button=true
+              - --http-address=0.0.0.0:8081
+            imagePullPolicy: Always
+            ports:
+              - containerPort: 8081
+                protocol: TCP
+                name: oauth-http
+            volumeMounts:
+              - name: oauth2-proxy-tls
+                mountPath: /etc/oauth2-proxy/certs
+...

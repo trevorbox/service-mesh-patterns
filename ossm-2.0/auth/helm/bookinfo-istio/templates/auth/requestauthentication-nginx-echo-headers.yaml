@@ -1,0 +1,13 @@
+---
+apiVersion: security.istio.io/v1beta1
+kind: RequestAuthentication
+metadata:
+  name: nginx-echo-headers
+spec:
+  selector:
+    matchLabels:
+      app: nginx-echo-headers
+  jwtRules:
+    - issuer: "https://dev-338970.okta.com/oauth2/default"
+      jwksUri: "https://dev-338970.okta.com/oauth2/default/v1/keys"
+...

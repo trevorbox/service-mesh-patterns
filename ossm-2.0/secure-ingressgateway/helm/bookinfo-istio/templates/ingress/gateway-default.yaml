@@ -15,7 +15,6 @@ spec:
     hosts:
       - {{ .Values.control_plane.ingressgateway.host }}
     tls:
-      #mode: SIMPLE
-      mode: ISTIO_MUTUAL
-      #credentialName: ingressgateway-cert
+      mode: SIMPLE
+      credentialName: ingressgateway-cert
 ...

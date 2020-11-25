@@ -65,18 +65,8 @@ spec:
       enabled: false
     ingress:   
       enabled: true
-      volumes:
-        - volume: 
-            secret:
-              secretName: oauth2-proxy-tls
-          volumeMount:
-            name: oauth2-proxy-tls
-            mountPath: /etc/oauth2-proxy/certs
       service:
         type: ClusterIP
-        metadata:
-          annotations:
-            service.alpha.openshift.io/serving-cert-secret-name: oauth2-proxy-tls
         ports:
           - port: 8081
             targetPort: 8081
@@ -140,7 +130,4 @@ spec:
               - containerPort: 8081
                 protocol: TCP
                 name: oauth-http
-            volumeMounts:
-              - name: oauth2-proxy-tls
-                mountPath: /etc/oauth2-proxy/certs
 ...

@@ -1,0 +1,41 @@
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: EnvoyFilter
+metadata:
+  name: jwt-to-header-filter
+spec:
+  workloadSelector:
+    labels:
+      app: nginx-echo-headers
+  configPatches:
+  - applyTo: HTTP_FILTER
+    match:
+      context: SIDECAR_INBOUND
+      listener:
+        filterChain:
+          filter:
+            name: "envoy.http_connection_manager"
+            subFilter:
+              name: "envoy.router"
+    patch:
+      operation: INSERT_BEFORE
+      value:
+        name: envoy.lua
+        config: 
+          inlineCode: |
+            function envoy_on_request(request_handle)
+              local meta = request_handle:streamInfo():dynamicMetadata():get("istio_authn")
+
+              local auth_principal = meta["request.auth.principal"]
+              request_handle:logInfo("auth_principal"..auth_principal)
+              request_handle:headers():add("x-jwt-auth-principal", auth_principal)
+
+              local raw_claims = meta["request.auth.raw_claims"]
+              request_handle:logInfo("raw_claims"..raw_claims)
+              request_handle:headers():add("x-jwt-claims", raw_claims)
+
+              local mtls_principal = meta["source.principal"]
+              request_handle:logInfo("mtls_principal"..mtls_principal)
+              request_handle:headers():add("x-mtls-principal", mtls_principal)            
+            end
+...

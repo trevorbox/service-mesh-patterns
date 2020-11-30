@@ -1,0 +1,14 @@
+---
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: nginx-echo-headers
+spec:
+  selector:
+    matchLabels:
+      app: nginx-echo-headers
+  rules:
+  - from:
+    - source:
+        requestPrincipals: ["*"]
+...

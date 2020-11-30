@@ -1,0 +1,14 @@
+---
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: productpage
+spec:
+  selector:
+    matchLabels:
+      app: productpage
+  rules:
+  - from:
+    - source:
+        requestPrincipals: ["*"]
+...

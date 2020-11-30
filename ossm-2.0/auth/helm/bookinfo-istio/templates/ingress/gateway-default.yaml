@@ -1,0 +1,17 @@
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: default
+  namespace: {{ .Values.control_plane.namespace }}
+spec:
+  selector:
+    istio: {{ .Values.control_plane.ingressgateway.name }}
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+      - {{ .Values.control_plane.ingressgateway.host }}
+...

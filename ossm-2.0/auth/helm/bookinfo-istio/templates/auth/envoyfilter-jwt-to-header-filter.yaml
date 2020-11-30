@@ -29,7 +29,7 @@ spec:
               
               -- Example commented out in block below...
               --[[
-              local my_issuer = "https://dev-338970.okta.com/oauth2/default"            
+              local my_issuer = "my_issuer"            
               local claims = request_handle:streamInfo():dynamicMetadata():get("envoy.filters.http.jwt_authn")[my_issuer]
               request_handle:logInfo("x-jwt-authn-sub: "..claims["sub"])
               request_handle:headers():add("x-jwt-authn-sub", claims["sub"])

@@ -2,7 +2,7 @@
 
 > Note: OSSM 2.0 requires OCP 4.6+
 
-See [Authentication Policy](https://istio.io/v1.4/docs/reference/config/security/istio.authentication.v1alpha1/)
+See [Security](https://istio.io/v1.6/docs/reference/config/security/)
 
 This example demonstrates request (JWT) and peer (mTLS) authentication & authorization to the bookinfo app's productpage and nginx-echo-headers services. Only requests originating from the ingressgateway with a valid JWT will be authorized to each service. The oauth2 proxy sidecar in the ingressgateway will pass the authorization header to the productpage or nginx-echo-headers services after the user logs into Okta (required for request authentication). mTLS is handled for us by Istio (required for peer authentication).
 

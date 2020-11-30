@@ -52,13 +52,36 @@ Bookinfo should work because it passed the JWT auth header after authenticating 
 echo "Open this page: https://$(oc get route api -n ${istio_system_namespace} -o jsonpath={'.spec.host'})/productpage"
 ```
 
-Requests without a valid JWT should return `403 Forbidden`...
+Requests from the ratings pod without a valid JWT should return `403 Forbidden`...
 
 ```sh
 oc exec deploy/ratings-v1 -c ratings -n ${apps_namespace} -i -t -- /bin/bash -c "curl -I http://productpage:9080"
 ```
 
-You can also enable debug level logs on the sidecar...
+You can try changing the AuthorizationPolicy's `source.principals` to something other than the ingressgateway's service account to demonstrate forbidden access from the ingressgateway pod with a valid JWT as well. For example change authorizationpolicy-productpage.yaml to the following, run the helm upgrade command to redeploy the istio configs, and then open the bookinfo page again.
+
+```yaml
+---
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: productpage
+spec:
+  selector:
+    matchLabels:
+      app: productpage
+  rules:
+  - from:
+    # Require a valid jwt for all requests from a fake service account only
+    - source:
+        requestPrincipals:
+          - "*"
+        principals:
+          - "my_fake_principal"
+...
+```
+
+You can also enable debug level logs on the sidecar for more info...
 
 ```sh
 istioctl pc log $(oc get pod -l app=productpage -n ${apps_namespace} -o jsonpath='{.items[0].metadata.name}') --level debug -n ${apps_namespace}

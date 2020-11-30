@@ -40,7 +40,9 @@ helm upgrade --create-namespace -i bookinfo-istio helm/bookinfo-istio -n ${booki
 helm upgrade --create-namespace -i bookinfo helm/bookinfo -n ${bookinfo_namespace}
 ```
 
-## Verify Authentication for Origin works
+## Verify
+
+### Verify Authentication for Origin works
 
 Bookinfo should work because it passed the jwt auth header after authenticating from the oauth2-proxy...
 
@@ -54,14 +56,22 @@ Requests without a valid jwt should return `401 Unauthorized`...
 oc exec deploy/ratings-v1 -c ratings -n ${bookinfo_namespace} -i -t -- /bin/bash -c "curl -I http://productpage:9080"
 ```
 
-To verify the request headers is passed to the application container...
+You can also enable debug level logs on the sidecar...
+
+```sh
+istioctl pc log $(oc get pod -l app=productpage -n ${bookinfo_namespace} -o jsonpath='{.items[0].metadata.name}') --level debug -n ${bookinfo_namespace}
+```
+
+### Verify custom nginx-echo-headers passed to the application container
+
+Since we deployed the echo headers app we can directly see what headers are finally passed to the application container by just accessing the page in the browser...
 
 ```sh
 echo Open this page: https://api-${istio_system_namespace}.$(oc get route console -o jsonpath={.status.ingress[0].routerCanonicalHostname} -n openshift-console)/nginx-echo-headers
 ```
 
-You can also enable debug level logs on the sidecar...
+Enable the info logs on the nginx-echo-headers sidecar to view the same additional headers in the sidecar logs...
 
 ```sh
-istioctl pc log $(oc get pod -l app=productpage -n ${bookinfo_namespace} -o jsonpath='{.items[0].metadata.name}') --level debug -n ${bookinfo_namespace}
+istioctl pc log $(oc get pod -l app=nginx-echo-headers -n ${bookinfo_namespace} -o jsonpath='{.items[0].metadata.name}') --level info -n ${bookinfo_namespace}
 ```

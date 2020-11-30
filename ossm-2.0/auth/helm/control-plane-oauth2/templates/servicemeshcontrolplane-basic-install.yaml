@@ -125,6 +125,7 @@ spec:
               - --cookie-secret={{ .Values.cookie_secret }}
               - --skip-provider-button=true
               - --http-address=0.0.0.0:8081
+              - --cookie-expire=0h45m0s #Note: this should be smaller than the jwt expiration configured by your oidc issuer
             imagePullPolicy: Always
             ports:
               - containerPort: 8081

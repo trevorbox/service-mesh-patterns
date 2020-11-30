@@ -1,14 +1,14 @@
-# Authentication w/mtls & jwt
+# Authentication and Authorization w/mTLS & JWT
 
 > Note: OSSM 2.0 requires OCP 4.6+
 
 See [Authentication Policy](https://istio.io/v1.4/docs/reference/config/security/istio.authentication.v1alpha1/)
 
-This example demonstrates request (jwt) and peer (mtls) authentication to the bookinfo app's productpage and nginx-echo-headers service. The oauth2 proxy in the gateway will take care of passing the authorization header to productpage or nginx-echo-headers after the user logs into Okta - required for request authentication. mtls is handled for us by Istio - required for peer authentication.
+This example demonstrates request (JWT) and peer (mTLS) authentication & authorization to the bookinfo app's productpage and nginx-echo-headers services. Only requests originating from the ingressgateway with a valid JWT will be authorized to each service. The oauth2 proxy sidecar in the ingressgateway will pass the authorization header to the productpage or nginx-echo-headers services after the user logs into Okta (required for request authentication). mTLS is handled for us by Istio (required for peer authentication).
 
-Additionally, we are adding additional headers to the request using an EnvoyFilter to demonstrate the jwt claims, request auth principal and source principal. These can be viewed by the nginx-echo-headers service.
+Additionally, we are adding headers to the request using an EnvoyFilter to demonstrate the JWT claims, request auth principal and source principal. These headers can be viewed by the nginx-echo-headers service.
 
-> Note: since productpage won't natively propagate the authroization header, we can't use the same request policies on other upstream services (reviews, details, ratings).
+> Note: since productpage won't natively propagate the authroization header, we can't use the same authorization policies on other upstream services (reviews, details, ratings).
 
 ## Setup
 
@@ -44,15 +44,15 @@ helm upgrade --create-namespace -i apps helm/apps -n ${apps_namespace}
 
 ## Verify
 
-### Verify Authentication for Requests and Peers works
+### Verify Authentication & Authentication for Requests and Peers works
 
-Bookinfo should work because it passed the jwt auth header after authenticating from the oauth2-proxy...
+Bookinfo should work because it passed the JWT auth header after authenticating from the oauth2-proxy...
 
 ```sh
 echo "Open this page: https://$(oc get route api -n ${istio_system_namespace} -o jsonpath={'.spec.host'})/productpage"
 ```
 
-Requests without a valid jwt should return `403 Forbidden`...
+Requests without a valid JWT should return `403 Forbidden`...
 
 ```sh
 oc exec deploy/ratings-v1 -c ratings -n ${apps_namespace} -i -t -- /bin/bash -c "curl -I http://productpage:9080"

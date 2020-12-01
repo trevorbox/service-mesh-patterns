@@ -31,7 +31,7 @@ helm upgrade -i control-plane-oauth2 --create-namespace -n ${istio_system_namesp
 ## Deploy Istio Configs
 
 ```sh
-helm upgrade --create-namespace -i bookinfo-istio helm/bookinfo-istio -n ${bookinfo_namespace} --set control_plane.ingressgateway.host=$(oc get route api -n ${istio_system_namespace} -o jsonpath={'.spec.host'})
+helm upgrade --create-namespace -i bookinfo-istio helm/bookinfo-istio -n ${bookinfo_namespace} --set control_plane.ingressgateway.host=$(oc get route api -n ${istio_system_namespace} -o jsonpath={'.spec.host'}) --set control_plane.namespace=${istio_system_namespace}
 ```
 
 ## Deploy App

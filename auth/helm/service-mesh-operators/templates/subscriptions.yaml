@@ -1,0 +1,48 @@
+---
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+  name: elasticsearch-operator
+spec:
+  channel: "4.4"
+  installPlanApproval: {{ .Values.approval_strategy }}
+  name: elasticsearch-operator
+  source: redhat-operators
+  sourceNamespace: openshift-marketplace
+...
+---
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+  name: jaeger-product
+spec:
+  channel: stable
+  installPlanApproval: {{ .Values.approval_strategy }}
+  name: jaeger-product
+  source: redhat-operators
+  sourceNamespace: openshift-marketplace
+...
+---
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+  name: kiali-ossm
+spec:
+  channel: stable
+  installPlanApproval: {{ .Values.approval_strategy }}
+  name: kiali-ossm
+  source: redhat-operators
+  sourceNamespace: openshift-marketplace
+...
+---
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+  name: servicemeshoperator
+spec:
+  channel: stable
+  installPlanApproval: {{ .Values.approval_strategy }}
+  name: servicemeshoperator
+  source: redhat-operators
+  sourceNamespace: openshift-marketplace
+...

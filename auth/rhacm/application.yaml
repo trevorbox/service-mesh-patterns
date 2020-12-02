@@ -1,0 +1,44 @@
+---
+apiVersion: apps.open-cluster-management.io/v1
+kind: Channel
+metadata:
+  name: auth-apps-latest
+  namespace: service-mesh-patterns
+spec:
+  type: GitHub
+  pathname: https://github.com/trevorbox/service-mesh-patterns.git
+---
+apiVersion: app.k8s.io/v1beta1
+kind: Application
+metadata:
+  name: auth-apps
+  namespace: service-mesh-patterns
+spec:
+  componentKinds:
+  - group: apps.open-cluster-management.io
+    kind: Subscription
+  descriptor: {}
+  selector:
+    matchExpressions:
+    - key: app
+      operator: In
+      values:
+      - auth-apps
+---
+apiVersion: apps.open-cluster-management.io/v1
+kind: Subscription
+metadata:
+  name: auth-apps
+  namespace: service-mesh-patterns
+  labels:
+    app: auth-apps
+  annotations:
+    apps.open-cluster-management.io/github-path: auth/helm
+    apps.open-cluster-management.io/github-branch: rhacm
+spec:
+  channel: service-mesh-patterns/auth-apps-latest
+  placement:
+    placementRef:
+      kind: PlacementRule
+      name: dev-clusters
+

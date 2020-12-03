@@ -65,3 +65,12 @@ You can also enable debug level logs on the sidecar...
 ```sh
 istioctl pc log $(oc get pod -l app=productpage -n ${bookinfo_namespace} -o jsonpath='{.items[0].metadata.name}') --level debug -n ${bookinfo_namespace}
 ```
+
+## Deploy RHACM apps to Hub
+
+```sh
+helm upgrade -i --create-namespace servicemeshoperators .deploy-rhacm/helm/servicemeshoperators -n global-operators
+helm upgrade -i --create-namespace control-plane .deploy-rhacm/helm/control-plane-oauth2 -n istio-system
+helm upgrade -i --create-namespace bookinfo-istio .deploy-rhacm/helm/bookinfo-istio -n bookinfo
+helm upgrade -i --create-namespace bookinfo .deploy-rhacm/helm/bookinfo -n bookinfo
+```

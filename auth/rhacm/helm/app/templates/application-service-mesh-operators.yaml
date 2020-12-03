@@ -2,7 +2,7 @@
 apiVersion: apps.open-cluster-management.io/v1
 kind: Channel
 metadata:
-  name: service-mesh-patterns
+  name: auth-service-mesh-operators-latest
 spec:
   type: GitHub
   pathname: https://github.com/trevorbox/service-mesh-patterns.git
@@ -30,10 +30,10 @@ metadata:
   labels:
     app: auth-service-mesh-operators
   annotations:
-    apps.open-cluster-management.io/github-path: auth/helm/service-mesh-operators
+    apps.open-cluster-management.io/github-path: auth/helm/servicemeshoperators
     apps.open-cluster-management.io/github-branch: rhacm
 spec:
-  channel: {{ .Release.Namespace }}/service-mesh-patterns
+  channel: {{ .Release.Namespace }}/auth-service-mesh-operators-latest
   placement:
     placementRef:
       kind: PlacementRule

@@ -10,4 +10,7 @@ spec:
   clusterSelector:
     matchLabels:
       environment: dev
+#status:
+#  decisions:
+#    - clusterNamespace: global-operators
 ...

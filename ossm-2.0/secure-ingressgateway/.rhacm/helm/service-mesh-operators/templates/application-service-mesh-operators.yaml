@@ -2,7 +2,7 @@
 apiVersion: apps.open-cluster-management.io/v1
 kind: Channel
 metadata:
-  name: servicemeshoperators-latest
+  name: service-mesh-operators-latest
 spec:
   type: GitHub
   pathname: https://github.com/trevorbox/service-mesh-patterns.git
@@ -10,7 +10,7 @@ spec:
 apiVersion: app.k8s.io/v1beta1
 kind: Application
 metadata:
-  name: servicemeshoperators
+  name: service-mesh-operators
 spec:
   componentKinds:
   - group: apps.open-cluster-management.io
@@ -21,19 +21,19 @@ spec:
     - key: app
       operator: In
       values:
-      - servicemeshoperators
+      - service-mesh-operators
 ---
 apiVersion: apps.open-cluster-management.io/v1
 kind: Subscription
 metadata:
-  name: servicemeshoperators
+  name: service-mesh-operators
   labels:
-    app: servicemeshoperators
+    app: service-mesh-operators
   annotations:
-    apps.open-cluster-management.io/github-path: auth/helm/servicemeshoperators
+    apps.open-cluster-management.io/github-path: ossm-2.0/secure-ingressgateway/helm/service-mesh-operators
     apps.open-cluster-management.io/github-branch: rhacm
 spec:
-  channel: {{ .Release.Namespace }}/servicemeshoperators-latest
+  channel: {{ .Release.Namespace }}/service-mesh-operators-latest
   placement:
     placementRef:
       kind: PlacementRule

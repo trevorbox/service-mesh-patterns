@@ -37,8 +37,9 @@ helm upgrade --create-namespace -i bookinfo helm/bookinfo -n bookinfo
 ## Deploy RHACM apps to Hub
 
 ```sh
-helm upgrade -i --create-namespace servicemeshoperators .rhacm/helm/service-mesh-operators -n openshift-operators
-helm upgrade -i --create-namespace control-plane .rhacm/helm/control-plane-oauth2 -n istio-system
+helm upgrade -i --create-namespace operators .rhacm/helm/operators -n openshift-operators
+helm upgrade -i --create-namespace cert-manager .rhacm/helm/cert-manager -n istio-system
+helm upgrade -i --create-namespace control-plane .rhacm/helm/control-plane -n istio-system
 helm upgrade -i --create-namespace bookinfo-istio .rhacm/helm/bookinfo-istio -n bookinfo
 helm upgrade -i --create-namespace bookinfo .rhacm/helm/bookinfo -n bookinfo
 ```

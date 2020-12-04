@@ -2,7 +2,7 @@
 apiVersion: apps.open-cluster-management.io/v1
 kind: Channel
 metadata:
-  name: control-plane-oauth2-latest
+  name: control-plane-latest
 spec:
   type: GitHub
   pathname: https://github.com/trevorbox/service-mesh-patterns.git
@@ -10,7 +10,7 @@ spec:
 apiVersion: app.k8s.io/v1beta1
 kind: Application
 metadata:
-  name: control-plane-oauth2
+  name: control-plane
 spec:
   componentKinds:
   - group: apps.open-cluster-management.io
@@ -21,19 +21,19 @@ spec:
     - key: app
       operator: In
       values:
-      - control-plane-oauth2
+      - control-plane
 ---
 apiVersion: apps.open-cluster-management.io/v1
 kind: Subscription
 metadata:
-  name: control-plane-oauth2
+  name: control-plane
   labels:
-    app: control-plane-oauth2
+    app: control-plane
   annotations:
-    apps.open-cluster-management.io/github-path: auth/helm/control-plane-oauth2
+    apps.open-cluster-management.io/github-path: ossm-2.0/secure-ingressgateway/helm/control-plane
     apps.open-cluster-management.io/github-branch: rhacm
 spec:
-  channel: {{ .Release.Namespace }}/control-plane-oauth2-latest
+  channel: {{ .Release.Namespace }}/control-plane-latest
   placement:
     placementRef:
       kind: PlacementRule

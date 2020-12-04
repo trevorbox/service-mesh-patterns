@@ -1,0 +1,41 @@
+---
+apiVersion: apps.open-cluster-management.io/v1
+kind: Channel
+metadata:
+  name: cert-manager-latest
+spec:
+  type: GitHub
+  pathname: https://github.com/trevorbox/service-mesh-patterns.git
+---
+apiVersion: app.k8s.io/v1beta1
+kind: Application
+metadata:
+  name: cert-manager
+spec:
+  componentKinds:
+  - group: apps.open-cluster-management.io
+    kind: Subscription
+  descriptor: {}
+  selector:
+    matchExpressions:
+    - key: app
+      operator: In
+      values:
+      - cert-manager
+---
+apiVersion: apps.open-cluster-management.io/v1
+kind: Subscription
+metadata:
+  name: cert-manager
+  labels:
+    app: cert-manager
+  annotations:
+    apps.open-cluster-management.io/github-path: ossm-2.0/secure-ingressgateway/helm/cert-manager
+    apps.open-cluster-management.io/github-branch: rhacm
+spec:
+  channel: {{ .Release.Namespace }}/cert-manager-latest
+  placement:
+    placementRef:
+      kind: PlacementRule
+      name: dev-clusters
+

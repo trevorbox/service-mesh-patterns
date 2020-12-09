@@ -6,5 +6,5 @@ control_plane:
   namespace: istio-system
   name: basic-install
   egressgateway:
-    namespace: istio-system-egress
+    namespace: istio-system
     port: 15666

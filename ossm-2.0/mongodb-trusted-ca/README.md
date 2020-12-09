@@ -6,7 +6,6 @@ For this configuration to work we need to deploy the Egress Gateway into a separ
 
 ```sh
 oc new-project istio-system
-oc new-project istio-system-egress
 oc new-project mongodb
 oc new-project bookinfo
 ```
@@ -27,7 +26,7 @@ Wait for the control plane to install.
 ```sh
 oc get secrets -n istio-system mongo-proxy-tls -o jsonpath='{.data.tls\.crt}' | base64 -d > /tmp/ca.crt
 
-oc create secret generic ocp-ca-bundle --from-file=/tmp/ca.crt -n istio-system-egress
+oc create secret generic ocp-ca-bundle --from-file=/tmp/ca.crt -n istio-system
 ```
 
 ## Deploy mongodb

@@ -22,16 +22,18 @@ oc apply -f yaml/service-mesh-operators.yaml
 
 ```sh
 oc new-project istio-system
+oc new-project istio-system-egress
 
 oc get secrets -n openshift-ingress-operator router-ca -o jsonpath='{.data.tls\.crt}' | base64 -d > /tmp/ca.crt
-#oc -n istio-system create configmap ocp-ca-bundle --from-file=/tmp/ca.crt
-oc create secret generic ocp-ca-bundle --from-file=/tmp/ca.crt -n istio-system
+
+oc create secret generic ocp-ca-bundle --from-file=/tmp/ca.crt -n istio-system-egress
 ```
 
 ## Install the control plane
 
 ```sh
-helm upgrade -i control-plane -n istio-system control-plane
+helm upgrade -i control-plane -n istio-system control-plane --set egressgateway.enabled=false
+helm upgrade -i control-plane -n istio-system control-plane --set egressgateway.enabled=true
 ```
 
 OR

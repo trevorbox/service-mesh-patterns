@@ -62,7 +62,8 @@ spec:
   gateways:
     enabled: true
     egress:
-      enabled: true
+      enabled: {{ .Values.egressgateway.enabled }}
+      namespace: {{ .Values.egressgateway.namespace }}
       volumes:
         - volume: 
             secret:

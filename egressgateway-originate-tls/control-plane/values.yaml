@@ -1,0 +1,5 @@
+egressgateway:
+  namespace: istio-system-egress
+  enabled: true
+control_plane_namespace: istio-system
+control_plane_name: basic-install

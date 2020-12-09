@@ -3,9 +3,9 @@ apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:
   name: egressgateway-for-nginx-mesh-external
-  namespace: istio-system
+  namespace: {{ .Values.egressgateway.namespace }}
 spec:
-  host: istio-egressgateway.istio-system.svc.cluster.local
+  host: istio-egressgateway.{{ .Values.egressgateway.namespace }}.svc.cluster.local
   subsets:
   - name: nginx
     #trafficPolicy:

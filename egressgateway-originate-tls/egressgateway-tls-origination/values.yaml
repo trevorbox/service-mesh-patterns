@@ -1,2 +1,4 @@
 nginx:
   host: 
+egressgateway:
+  namespace: istio-system-egress

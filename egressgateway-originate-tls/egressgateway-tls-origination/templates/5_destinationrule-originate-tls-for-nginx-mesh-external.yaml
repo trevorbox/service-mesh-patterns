@@ -3,7 +3,7 @@ apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:
   name: originate-tls-for-nginx-mesh-external
-  namespace: istio-system
+  namespace: {{ .Values.egressgateway.namespace }}
 spec:
   host: {{ .Values.nginx.host }}
   exportTo:
@@ -18,5 +18,4 @@ spec:
         mode: SIMPLE # initiates HTTPS for connections to nginx
         caCertificates: /etc/secrets/ocp-ca-bundle/ca.crt
         sni: {{ .Values.nginx.host }}
-        mode: SIMPLE # initiates TLS for connections to mongodb
 ...

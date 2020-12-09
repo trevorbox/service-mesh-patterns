@@ -24,7 +24,8 @@ oc apply -f yaml/service-mesh-operators.yaml
 oc new-project istio-system
 
 oc get secrets -n openshift-ingress-operator router-ca -o jsonpath='{.data.tls\.crt}' | base64 -d > /tmp/ca.crt
-oc -n istio-system create configmap ocp-ca-bundle --from-file=/tmp/ca.crt
+#oc -n istio-system create configmap ocp-ca-bundle --from-file=/tmp/ca.crt
+oc create secret generic ocp-ca-bundle --from-file=/tmp/ca.crt -n istio-system
 ```
 
 ## Install the control plane

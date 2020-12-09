@@ -6,7 +6,6 @@ apiVersion: v1
 kind: Service
 metadata:
   name: details
-  namespace: {{ .Release.Namespace }}
   labels:
     app: details
     service: details
@@ -18,16 +17,19 @@ spec:
     app: details
 ...
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: details-v1
-  namespace: {{ .Release.Namespace }} 
   labels:
     app: details
     version: v1
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: details
+      version: v1
   template:
     metadata:
       annotations:
@@ -51,7 +53,6 @@ apiVersion: v1
 kind: Service
 metadata:
   name: ratings
-  namespace: {{ .Release.Namespace }}
   labels:
     app: ratings
     service: ratings
@@ -63,16 +64,19 @@ spec:
     app: ratings
 ...
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: ratings-v1
-  namespace: {{ .Release.Namespace }}
   labels:
     app: ratings
     version: v1
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: ratings
+      version: v1
   template:
     metadata:
       annotations:
@@ -93,7 +97,6 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: bookinfo-reviews
-  namespace: {{ .Release.Namespace }}
 ...
 ---
 ##################################################################################################
@@ -103,7 +106,6 @@ apiVersion: v1
 kind: Service
 metadata:
   name: reviews
-  namespace: {{ .Release.Namespace }}
   labels:
     app: reviews
     service: reviews
@@ -115,16 +117,19 @@ spec:
     app: reviews
 ...
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: reviews-v1
-  namespace: {{ .Release.Namespace }}
   labels:
     app: reviews
     version: v1
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: reviews
+      version: v1
   template:
     metadata:
       annotations:
@@ -141,16 +146,19 @@ spec:
         - containerPort: 9080
 ...
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: reviews-v2
-  namespace: {{ .Release.Namespace }}
   labels:
     app: reviews
     version: v2
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: reviews
+      version: v2
   template:
     metadata:
       annotations:
@@ -168,16 +176,19 @@ spec:
         - containerPort: 9080
 ...
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: reviews-v3
-  namespace: {{ .Release.Namespace }}
   labels:
     app: reviews
     version: v3
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: reviews
+      version: v3
   template:
     metadata:
       annotations:
@@ -199,7 +210,6 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: bookinfo-productpage
-  namespace: {{ .Release.Namespace }}
 ...
 ---
 ##################################################################################################
@@ -209,7 +219,6 @@ apiVersion: v1
 kind: Service
 metadata:
   name: productpage
-  namespace: {{ .Release.Namespace }}
   labels:
     app: productpage
     service: productpage
@@ -221,16 +230,19 @@ spec:
     app: productpage
 ...
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: productpage-v1
-  namespace: {{ .Release.Namespace }}
   labels:
     app: productpage
     version: v1
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: productpage
+      version: v1
   template:
     metadata:
       annotations:

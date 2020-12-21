@@ -19,7 +19,7 @@ spec:
     route:
     - destination:
         host: istio-egressgateway.{{ .Values.control_plane.egressgateway.namespace }}.svc.cluster.local
-        subset: mongodb
+        subset: external-mongodb
         port:
           number: {{ .Values.control_plane.egressgateway.port }}
   - match:

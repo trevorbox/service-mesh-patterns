@@ -7,5 +7,5 @@ metadata:
 spec:
   host: istio-egressgateway.{{ .Values.control_plane.egressgateway.namespace }}.svc.cluster.local
   subsets:
-  - name: mongodb
+  - name: external-mongodb
 ...

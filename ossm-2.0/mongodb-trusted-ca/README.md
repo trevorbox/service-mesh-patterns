@@ -15,8 +15,7 @@ oc new-project bookinfo
 > Note: When installing for the first time, you need to first install without the egress gateway enabled since the validation on the istio-system-egress namespace will fail and not progress. Once the control plane is up the egress gateway may be enabled.
 
 ```sh
-helm upgrade -i control-plane -n istio-system helm/control-plane --set gateways.egress.enabled=false
-helm upgrade -i control-plane -n istio-system helm/control-plane --reset-values
+helm upgrade -i control-plane -n istio-system helm/control-plane
 ```
 
 Wait for the control plane to install.

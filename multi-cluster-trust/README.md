@@ -27,6 +27,16 @@ oc new-project istio-system2
 oc new-project mongodb
 ```
 
+### Deploy the Service Mesh Operators (if not already installed)
+
+> Note: set the channel variable to match your OCP version in values.yaml. Default is set to 4.6.
+
+```sh
+helm upgrade -i service-mesh-operators helm/operators -n openshift-operators
+```
+
+Wait for the operators to finish installing before proceeding.
+
 ### Deploy cert-manager (skip if already present in the cluster)
 
 ```shell

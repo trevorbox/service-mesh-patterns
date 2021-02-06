@@ -29,7 +29,9 @@ oc new-project mongodb
 
 ### Deploy the Service Mesh Operators (if not already installed)
 
-> Note: set the channel variable to match your OCP version in values.yaml. Default is set to 4.6.
+This will install all operators as noted in [installing-ossm](https://docs.openshift.com/container-platform/4.6/service_mesh/v1x/installing-ossm.html)
+
+> Note: set the channel variable to match your OCP version in helm/operators/values.yaml. Default is set to 4.6.
 
 ```sh
 helm upgrade -i service-mesh-operators helm/operators -n openshift-operators

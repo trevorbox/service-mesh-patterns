@@ -20,18 +20,19 @@ export bookinfo_namespace=bookinfo
 export client_id=<your_client_id>
 export client_secret=<your_client_secret>
 export redirect_url="https://api-${istio_system_namespace}.$(oc get route console -o jsonpath={.status.ingress[0].routerCanonicalHostname} -n openshift-console)/oauth2/callback"
+export oidc_issuer_url=https://dev-338970.okta.com/oauth2/default
 ```
 
 ## Deploy Control Plane
 
 ```sh
-helm upgrade -i control-plane-oauth2 --create-namespace -n ${istio_system_namespace} --set client_id=${client_id} --set client_secret=${client_secret} --set redirect_url=${redirect_url} helm/control-plane-oauth2
+helm upgrade -i control-plane-oauth2 --create-namespace -n ${istio_system_namespace} --set client_id=${client_id} --set client_secret=${client_secret} --set redirect_url=${redirect_url} --set oidc_issuer_url=${oidc_issuer_url} helm/control-plane-oauth2
 ```
 
 ## Deploy Istio Configs
 
 ```sh
-helm upgrade --create-namespace -i bookinfo-istio helm/bookinfo-istio -n ${bookinfo_namespace} --set control_plane.ingressgateway.host=$(oc get route api -n ${istio_system_namespace} -o jsonpath={'.spec.host'}) --set control_plane.namespace=${istio_system_namespace}
+helm upgrade --create-namespace -i bookinfo-istio helm/bookinfo-istio -n ${bookinfo_namespace} --set control_plane.ingressgateway.host=$(oc get route api -n ${istio_system_namespace} -o jsonpath={'.spec.host'}) --set control_plane.namespace=${istio_system_namespace} --set oidc_issuer_url=${oidc_issuer_url}
 ```
 
 ## Deploy App

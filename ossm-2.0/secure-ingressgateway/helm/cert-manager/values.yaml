@@ -1,3 +1,3 @@
-certs:
-  - name: ingressgateway-cert
-    namespace: istio-system
+ingressgateway:
+  cert:
+    commonName: 

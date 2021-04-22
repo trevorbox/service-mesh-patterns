@@ -19,19 +19,30 @@ helm install cert-manager jetstack/cert-manager \
   --version v1.2.0 \
   --create-namespace \
   --set installCRDs=true
-helm upgrade -i --create-namespace -n istio-system cert-manager-certs helm/cert-manager
+```
+
+## Setup
+
+```sh
+export istio_system_namespace=istio-system
+```
+
+## Create certificate for ingressgateway
+
+```sh
+helm upgrade -i --create-namespace -n ${istio_system_namespace} cert-manager-certs helm/cert-manager --set ingressgateway.cert.commonName=api-${istio_system_namespace}.$(oc get route console -o jsonpath={.status.ingress[0].routerCanonicalHostname} -n openshift-console)
 ```
 
 ## Install Control Plane
 
 ```sh
-helm upgrade --create-namespace -i control-plane -n istio-system helm/control-plane
+helm upgrade --create-namespace -i control-plane -n ${istio_system_namespace} helm/control-plane
 ```
 
 ## Install Bookinfo Istio Configs
 
 ```sh
-helm upgrade --create-namespace -i bookinfo-istio helm/bookinfo-istio -n bookinfo --set control_plane.ingressgateway.host=$(oc get route api -n istio-system -o jsonpath={'.spec.host'})
+helm upgrade --create-namespace -i bookinfo-istio helm/bookinfo-istio -n bookinfo --set control_plane.ingressgateway.host=$(oc get route api -n ${istio_system_namespace} -o jsonpath={'.spec.host'})
 ```
 
 ## Install Bookinfo

@@ -4,3 +4,4 @@ control_plane:
   ingressgateway: 
     name: ingressgateway
     host: 
+oidc_issuer_url: https://dev-338970.okta.com/oauth2/default

@@ -3,3 +3,4 @@ control_plane:
   namespace: istio-system
   ingressgateway: 
     name: ingressgateway
+oidc_issuer_url: https://dev-338970.okta.com/oauth2/default

@@ -10,6 +10,12 @@ Additionally, we are adding headers to the request using an EnvoyFilter to demon
 
 > Note: since productpage won't natively propagate the authroization header, we can't use the same authorization policies on other upstream services (reviews, details, ratings).
 
+## Install Operators
+
+```sh
+helm upgrade -i service-mesh-operators helm/service-mesh-operators -n openshift-operators
+```
+
 ## Setup
 
 Follow the steps described within [Configuring the OIDC Provider with Okta](https://github.com/trevorbox/oauth2-proxy/blob/update-okta-doc/docs/2_auth.md#configuring-the-oidc-provider-with-okta) to create an Okta application & authorization server. Retrieve its `client_id` and `client_secret`.
@@ -22,18 +28,19 @@ export apps_namespace=bookinfo
 export client_id=<your_client_id>
 export client_secret=<your_client_secret>
 export redirect_url="https://api-${istio_system_namespace}.$(oc get route console -o jsonpath={.status.ingress[0].routerCanonicalHostname} -n openshift-console)/oauth2/callback"
+export oidc_issuer_url=https://dev-338970.okta.com/oauth2/default
 ```
 
 ## Deploy Control Plane
 
 ```sh
-helm upgrade -i control-plane-oauth2 --create-namespace -n ${istio_system_namespace} --set client_id=${client_id} --set client_secret=${client_secret} --set redirect_url=${redirect_url} helm/control-plane-oauth2
+helm upgrade -i control-plane-oauth2 --create-namespace -n ${istio_system_namespace} --set client_id=${client_id} --set client_secret=${client_secret} --set redirect_url=${redirect_url} helm/control-plane-oauth2 --set oidc_issuer_url=${oidc_issuer_url}
 ```
 
 ## Deploy Istio Configs
 
 ```sh
-helm upgrade --create-namespace -i apps-istio helm/apps-istio -n ${apps_namespace} --set control_plane.ingressgateway.host=$(oc get route api -n ${istio_system_namespace} -o jsonpath={'.spec.host'}) --set control_plane.namespace=${istio_system_namespace}
+helm upgrade --create-namespace -i apps-istio helm/apps-istio -n ${apps_namespace} --set control_plane.ingressgateway.host=$(oc get route api -n ${istio_system_namespace} -o jsonpath={'.spec.host'}) --set control_plane.namespace=${istio_system_namespace} --set oidc_issuer_url=${oidc_issuer_url}
 ```
 
 ## Deploy App

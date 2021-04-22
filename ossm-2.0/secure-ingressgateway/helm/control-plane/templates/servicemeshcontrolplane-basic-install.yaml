@@ -64,7 +64,7 @@ spec:
     egress:
       enabled: false
     ingress:   
-      enabled: true
+      enabled: false
     additionalIngress:
       custom-ingressgateway:
         enabled: true

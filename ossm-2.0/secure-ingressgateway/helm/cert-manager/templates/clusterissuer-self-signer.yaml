@@ -10,9 +10,9 @@ spec:
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: rootca
+  name: ingressgateway-rootca
 spec:
-  secretName: rootca
+  secretName: ingressgateway-rootca
   issuerRef:
     kind: ClusterIssuer
     name: self-signer
@@ -27,7 +27,7 @@ metadata:
   name: internal-issuer
 spec:
   ca:
-    secretName: rootca
+    secretName: ingressgateway-rootca
 ...
 ---
 apiVersion: cert-manager.io/v1

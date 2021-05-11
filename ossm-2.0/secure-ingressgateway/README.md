@@ -5,7 +5,7 @@ This example demonstrates an Openshift passthrough route to an ingress gateway t
 ## Install Operators
 
 ```sh
-helm upgrade -i service-mesh-operators -n openshift-operators helm/service-mesh-operators
+helm upgrade -i service-mesh-operators -n openshift-operators-redhat helm/service-mesh-operators --create-namespace
 ```
 
 ## Install Cert Manager for Passthrough route TLS

@@ -2,5 +2,5 @@ control_plane:
   name: full-install
   namespace: istio-system
   ingressgateway: 
-    name: ingressgateway
+    app: istio-ingressgateway
     host: 

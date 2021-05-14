@@ -6,7 +6,7 @@ metadata:
   namespace: {{ .Values.control_plane.namespace }}
 spec:
   selector:
-    app: custom-ingressgateway
+    app: istio-ingressgateway
   servers:
   - port:
       number: 80

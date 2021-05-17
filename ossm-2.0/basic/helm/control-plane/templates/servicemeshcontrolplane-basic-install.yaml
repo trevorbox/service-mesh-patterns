@@ -92,7 +92,7 @@ spec:
           elasticsearch:
             indexCleaner:
               enabled: true
-              numberOfDays: 2
+              numberOfDays: 14
               schedule: "55 23 * * *"
             nodeCount: 3
             redundancyPolicy: "SingleRedundancy"

@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Mutual TLS (mTLS), which provides trusted communication between both a client and a server, is a primary motivation for using Red Hat Openshift Service Mesh. With a simple configuration all communication between services in a mesh can communicate with mTLS but if your organization has a requirement to implement Multicluster Service Meshes, you can still utilize mTLS for cross-cluster communication provided that both Service Mesh Control Planes (SMCPs) are configured to use the same [root certificate](https://en.wikipedia.org/wiki/Root_certificate) authority (CA) when signing workload certificates. Additionally, mTLS can be performed directly from a sidecar to another control plane's ingress gateway. The result is federated trust between SMCPs.
+Mutual TLS (mTLS), which provides trusted communication between both a client and a server, is a primary motivation for using Red Hat Openshift Service Mesh. With a simple configuration all communication between services in a mesh can communicate with mTLS but if your organization has a requirement to implement Multicluster Service Meshes, you can still utilize mTLS for cross-cluster communication provided that both Service Mesh Control Planes (SMCPs) are configured to use intermediate certificates generated from the same [root certificate](https://en.wikipedia.org/wiki/Root_certificate) authority (CA) when signing workload certificates. Additionally, mTLS can be performed directly from a sidecar to another control plane's ingress gateway. The result is federated trust between SMCPs.
 
 ## Example
 
@@ -32,28 +32,44 @@ oc new-project mongodb
 ```shell
 #Service Mesh A
 oc apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/v1.0.4/cert-manager.yaml
+helm repo add jetstack https://charts.jetstack.io
+helm repo update
+helm install \
+  cert-manager jetstack/cert-manager \
+  --namespace cert-manager \
+  --create-namespace \
+  --version v1.3.1 \
+  --set installCRDs=true
 ```
 
-### Deploy local root CA to both control planes
+### Deploy local intermediate CAs to both control planes
 
 ```shell
 #Service Mesh A
-helm upgrade -i --create-namespace cert-manager -n cert-manager helm/cert-manager
+helm upgrade -i --create-namespace certs -n cert-manager helm/cert-manager
 
-export tls_crt=$(oc get secret rootca -n cert-manager -o jsonpath='{.data.tls\.crt}')
-export tls_key=$(oc get secret rootca -n cert-manager -o jsonpath='{.data.tls\.key}')
+export tls_crt=$(oc get secret intermediate-ca-1 -n cert-manager -o jsonpath='{.data.tls\.crt}')
+export tls_key=$(oc get secret intermediate-ca-1 -n cert-manager -o jsonpath='{.data.tls\.key}')
+export ca_crt=$(oc get secret intermediate-ca-1 -n cert-manager -o jsonpath='{.data.ca\.crt}')
 
 helm upgrade -i rootca helm/install-cacerts -n istio-system \
   --set rootca.tls_crt=${tls_crt} \
-  --set rootca.tls_key=${tls_key}
+  --set rootca.tls_key=${tls_key} \
+  --set rootca.ca_crt=${ca_crt}
+
+export tls_crt=$(oc get secret intermediate-ca-2 -n cert-manager -o jsonpath='{.data.tls\.crt}')
+export tls_key=$(oc get secret intermediate-ca-2 -n cert-manager -o jsonpath='{.data.tls\.key}')
+export ca_crt=$(oc get secret intermediate-ca-2 -n cert-manager -o jsonpath='{.data.ca\.crt}')
 
 #Service Mesh B
+
 helm upgrade -i rootca helm/install-cacerts -n istio-system2 \
   --set rootca.tls_crt=${tls_crt} \
-  --set rootca.tls_key=${tls_key}
+  --set rootca.tls_key=${tls_key} \
+  --set rootca.ca_crt=${ca_crt}
 ```
 
-### Install control planes using common root cacerts
+### Install control planes using intermediate cacerts
 
 > Note: Istiod will use the **cacerts** secret (created in both control planes from previous commands) as the root certificate instead of its own self-signed certificate.
 

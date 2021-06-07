@@ -42,7 +42,7 @@ helm install \
   --set installCRDs=true
 ```
 
-### Deploy local intermediate CAs to both control planes
+### Deploy intermediate CAs to both control planes
 
 ```shell
 #Service Mesh A

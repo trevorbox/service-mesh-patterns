@@ -132,6 +132,8 @@ spec:
               - --skip-provider-button=true
               - --http-address=0.0.0.0:8081
               - --cookie-expire=0h45m0s #Note: this should be smaller than the jwt expiration configured by your oidc issuer
+              - --skip-jwt-bearer-tokens=true
+              - --extra-jwt-issuers=https://dev-338970.okta.com/oauth2/default=api://default # audience returned by okta for client_credentials
             imagePullPolicy: Always
             ports:
               - containerPort: 8081

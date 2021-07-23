@@ -10,7 +10,7 @@ oc new-project ${DEPLOY_NAMESPACE}
 
 echo "Install VirtualService & bookinfo App in namespace \"${DEPLOY_NAMESPACE}\" and Gateway in namespace \"${CONTROL_PLANE_NAMESPACE}\"..."
 
-helm install basic-gateway-configuration -n ${DEPLOY_NAMESPACE} \
+helm upgrade -i basic-gateway-configuration -n ${DEPLOY_NAMESPACE} \
   --set control_plane_namespace=${CONTROL_PLANE_NAMESPACE} \
   --set control_plane_name=${CONTROL_PLANE_NAME} \
   --set route_hostname=$(oc get route ${CONTROL_PLANE_ROUTE_NAME} -n ${CONTROL_PLANE_NAMESPACE} -o jsonpath={'.spec.host'}) \
@@ -18,7 +18,7 @@ helm install basic-gateway-configuration -n ${DEPLOY_NAMESPACE} \
 
 echo "Install bookinfo App..."
 
-helm install bookinfo -n ${DEPLOY_NAMESPACE} bookinfo
+helm upgrade -i bookinfo -n ${DEPLOY_NAMESPACE} bookinfo
 
 echo "Done."
 

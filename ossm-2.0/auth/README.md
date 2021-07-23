@@ -107,3 +107,25 @@ Enable the info logs on the nginx-echo-headers sidecar to view the same addition
 ```sh
 istioctl pc log $(oc get pod -l app=nginx-echo-headers -n ${apps_namespace} -o jsonpath='{.items[0].metadata.name}') --level info -n ${apps_namespace}
 ```
+
+### Client Credentials
+
+> Create a scope called blackbox and a claim called blackbox assigned to the blackbox scope in Okta Security -> API dashboard.
+
+This is an example...
+
+```sh
+export access_token=$(curl --request POST \
+  --url https://dev-338970.okta.com/oauth2/default/v1/token \
+  --header 'accept: application/json' \
+  --header 'cache-control: no-cache' \
+  --header 'content-type: application/x-www-form-urlencoded' \
+  --data "grant_type=client_credentials&scope=blackbox&client_id=${client_id}&client_secret=${client_secret}" | jq -r '.access_token')
+
+curl -k \
+  --header "Authorization: Bearer ${access_token}" \
+  https://api-${istio_system_namespace}.$(oc get route console -o jsonpath={.status.ingress[0].routerCanonicalHostname} -n openshift-console)/nginx-echo-headers
+
+curl -k \
+  https://api-${istio_system_namespace}.$(oc get route console -o jsonpath={.status.ingress[0].routerCanonicalHostname} -n openshift-console)/nginx-echo-headers
+```

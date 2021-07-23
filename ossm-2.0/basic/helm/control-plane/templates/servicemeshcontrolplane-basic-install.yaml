@@ -112,5 +112,5 @@ spec:
       # we want maistra to create the kiali resource
       install: {}
     prometheus:
-      enabled: true
+      enabled: false
 ...

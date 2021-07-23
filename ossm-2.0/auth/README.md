@@ -125,7 +125,4 @@ export access_token=$(curl --request POST \
 curl -k \
   --header "Authorization: Bearer ${access_token}" \
   https://api-${istio_system_namespace}.$(oc get route console -o jsonpath={.status.ingress[0].routerCanonicalHostname} -n openshift-console)/nginx-echo-headers
-
-curl -k \
-  https://api-${istio_system_namespace}.$(oc get route console -o jsonpath={.status.ingress[0].routerCanonicalHostname} -n openshift-console)/nginx-echo-headers
 ```

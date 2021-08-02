@@ -15,6 +15,11 @@ spec:
     accessLogging:
       file:
         name: /dev/stdout
+    networking:
+      trafficControl:
+        inbound:
+          excludedPorts:
+          - 15020
   runtime:
     components:
       grafana: # working without defaults

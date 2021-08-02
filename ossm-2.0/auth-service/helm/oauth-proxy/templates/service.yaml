@@ -4,6 +4,8 @@ metadata:
   name: {{ include "oauth-proxy.fullname" . }}
   labels:
     {{- include "oauth-proxy.labels" . | nindent 4 }}
+    service: oauth-proxy
+    app: oauth-proxy
 spec:
   type: {{ .Values.service.type }}
   ports:

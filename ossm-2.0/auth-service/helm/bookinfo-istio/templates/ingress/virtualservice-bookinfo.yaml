@@ -1,0 +1,42 @@
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: bookinfo
+spec:
+  gateways:
+  - {{ .Values.control_plane.namespace }}/default
+  hosts:
+  - {{ .Values.control_plane.ingressgateway.host }}
+  http:
+  - match:
+    - uri:
+        exact: /productpage
+    - uri:
+        exact: /login
+    - uri:
+        exact: /logout
+    - uri:
+        prefix: /api/v1/products
+    route:
+    - destination:
+        host: productpage
+        port:
+          number: 8081
+  - match:
+    - uri:
+        prefix: /oauth2
+    route:
+    - destination:
+        host: oauth-proxy
+        port:
+          number: 8081
+  - match:
+    - uri:
+        prefix: /nginx-echo-headers
+    route:
+    - destination:
+        host: oauth-proxy
+        port:
+          number: 8081
+...

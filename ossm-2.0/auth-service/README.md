@@ -16,11 +16,41 @@ Additionally, we are adding headers to the request using an EnvoyFilter to demon
 helm upgrade -i service-mesh-operators helm/service-mesh-operators -n openshift-operators-redhat --create-namespace
 ```
 
+## Install Cert Manager for creating a certificate to present in the ingress gateway for Passthrough route TLS
+
+```sh
+helm repo add jetstack https://charts.jetstack.io
+helm repo update
+helm install cert-manager jetstack/cert-manager \
+  --namespace cert-manager \
+  --version v1.3.2 \
+  --create-namespace \
+  --set installCRDs=true
+```
+
+> Wait for the cert-manager pods to run in the cert-manager namespace
+
 ## Setup
 
-Follow the steps described within [Configuring the OIDC Provider with Okta](https://github.com/trevorbox/oauth2-proxy/blob/update-okta-doc/docs/2_auth.md#configuring-the-oidc-provider-with-okta) to create an Okta application & authorization server. Retrieve its `client_id` and `client_secret`.
+```sh
+export istio_system_namespace=istio-system
+```
 
-> Note: the Okta Application needs the login redirect URI to match the ${redirect_url} defined below.
+## Create certificate for ingressgateway
+
+```sh
+helm upgrade -i --create-namespace -n ${istio_system_namespace} cert-manager-certs helm/cert-manager --set ingressgateway.cert.commonName=api-${istio_system_namespace}.$(oc get route console -o jsonpath={.status.ingress[0].routerCanonicalHostname} -n openshift-console)
+```
+
+## Install Control Plane
+
+```sh
+helm upgrade --create-namespace -i control-plane -n ${istio_system_namespace} helm/control-plane
+```
+
+## Deploy oauth proxy service
+
+This will handle the callback from Okta
 
 ```sh
 export istio_system_namespace=istio-system
@@ -29,24 +59,31 @@ export client_id=<your_client_id>
 export client_secret=<your_client_secret>
 export redirect_url="https://api-${istio_system_namespace}.$(oc get route console -o jsonpath={.status.ingress[0].routerCanonicalHostname} -n openshift-console)/oauth2/callback"
 export oidc_issuer_url=https://dev-338970.okta.com/oauth2/default
+export extra_jwt_issuers="${oidc_issuer_url}=api://default" # audience returned by okta for client_credentials
 ```
 
-## Deploy Control Plane
+## Install oauth-proxy Istio Configs
 
 ```sh
-helm upgrade -i control-plane-oauth2 --create-namespace -n ${istio_system_namespace} --set client_id=${client_id} --set client_secret=${client_secret} --set redirect_url=${redirect_url} helm/control-plane-oauth2 --set oidc_issuer_url=${oidc_issuer_url}
+helm upgrade --create-namespace -i oauth-proxy-istio helm/oauth-proxy-istio -n bookinfo --set control_plane.ingressgateway.host=$(oc get route api -n ${istio_system_namespace} -o jsonpath={'.spec.host'})
 ```
 
-## Deploy Istio Configs
+## Install oauth-proxy
 
 ```sh
-helm upgrade --create-namespace -i apps-istio helm/apps-istio -n ${apps_namespace} --set control_plane.ingressgateway.host=$(oc get route api -n ${istio_system_namespace} -o jsonpath={'.spec.host'}) --set control_plane.namespace=${istio_system_namespace} --set oidc_issuer_url=${oidc_issuer_url}
+helm upgrade -i oauth-proxy helm/oauth-proxy -n bookinfo --create-namespace --set client_id=${client_id} --set client_secret=${client_secret} --set redirect_url=${redirect_url} --set oidc_issuer_url=${oidc_issuer_url}
 ```
 
-## Deploy App
+## Install bookinfo Istio Configs
 
 ```sh
-helm upgrade --create-namespace -i apps helm/apps -n ${apps_namespace}
+helm upgrade --create-namespace -i bookinfo-istio helm/bookinfo-istio -n bookinfo --set control_plane.ingressgateway.host=$(oc get route api -n ${istio_system_namespace} -o jsonpath={'.spec.host'})
+```
+
+## Install bookinfo
+
+```sh
+helm upgrade -i bookinfo helm/bookinfo -n bookinfo --create-namespace --set client_id=${client_id} --set client_secret=${client_secret} --set redirect_url=${redirect_url} --set oidc_issuer_url=${oidc_issuer_url}
 ```
 
 ## Verify

@@ -25,11 +25,32 @@ Follow the steps described within [Configuring the OIDC Provider with Okta](http
 ```sh
 export istio_system_namespace=istio-system
 export apps_namespace=bookinfo
-export client_id=<your_client_id>
-export client_secret=<your_client_secret>
-export redirect_url="https://api-${istio_system_namespace}.$(oc get route console -o jsonpath={.status.ingress[0].routerCanonicalHostname} -n openshift-console)/oauth2/callback"
+export client_id=<your client_id>
+export client_secret=<your client_secret>
+export base_domain=apps.cluster-2b6f.2b6f.sandbox1326.opentlc.com
+export redirect_url="https://api-${istio_system_namespace}.${base_domain}/oauth2/callback"
 export oidc_issuer_url=https://dev-338970.okta.com/oauth2/default
 ```
+
+## Install Cert Manager for Passthrough route TLS
+
+```sh
+oc new-project istio-system
+helm repo add jetstack https://charts.jetstack.io
+helm repo update
+helm install cert-manager jetstack/cert-manager \
+  --namespace cert-manager \
+  --version v1.6.1 \
+  --create-namespace \
+  --set installCRDs=true
+```
+
+## Create certificate for ingressgateway
+
+```sh
+helm upgrade -i --create-namespace -n ${istio_system_namespace} cert-manager-certs helm/cert-manager --set ingressgateway.cert.commonName=api-${istio_system_namespace}.${base_domain}
+```
+
 
 ## Deploy Control Plane
 

@@ -38,8 +38,6 @@ spec:
   # Secret names are always required.
   secretName: ingressgateway-cert
   commonName: {{ .Values.ingressgateway.cert.commonName }}
-  dnsNames:
-    - foggle.com
   usages:
     - server auth
     - client auth  

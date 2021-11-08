@@ -4,7 +4,7 @@
 
 See [Security](https://istio.io/v1.6/docs/reference/config/security/)
 
-This example demonstrates request (JWT) and peer (mTLS) authentication & authorization to the bookinfo app's productpage and nginx-echo-headers services. Only requests originating from the oauth2-proxy service with a valid JWT will be authorized to each application. The oauth2 proxy service will pass the authorization header to the productpage or nginx-echo-headers services after the user logs into Okta (required for request authentication). mTLS is handled for us by Istio (required for peer authentication). A non-wildcard certificate created by cert-manager is presented by the ingressgateway and an Openshift Route uses passthrough tls termination so that no traffic into the mesh is unencrypted.
+This example demonstrates request (JWT) and peer (mTLS) authentication & authorization to the bookinfo app's productpage and nginx-echo-headers services. A non-wildcard certificate created by cert-manager is presented by the ingressgateway and an Openshift Route uses passthrough tls termination so that no traffic into the mesh is unencrypted. Only requests originating from the oauth2-proxy service with a valid JWT will be authorized to each application. The oauth2 proxy service will pass the authorization header to the productpage or nginx-echo-headers services after the user logs into Okta (required for request authentication). mTLS is handled for us by Istio (required for peer authentication).
 
 Additionally, we are adding headers to the request using an EnvoyFilter to demonstrate the JWT claims, request auth principal and source principal. These headers can be viewed by the nginx-echo-headers service.
 

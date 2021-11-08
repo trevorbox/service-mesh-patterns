@@ -9,10 +9,10 @@ spec:
       app: nginx-echo-headers
   rules:
   - from:
-    # Require a valid jwt for all requests from the ingressgateway only
+    # Require a valid jwt for all requests from the oauth2-proxy service only
     - source:
         requestPrincipals:
           - "*"
         principals:
-          - "cluster.local/ns/{{ .Values.control_plane.namespace }}/sa/istio-ingressgateway-service-account"
+          - "cluster.local/ns/oauth2-proxy/sa/oauth2-proxy"
 ...

@@ -71,15 +71,6 @@ spec:
       enabled: false
     ingress:   
       enabled: true
-      service:
-        type: ClusterIP
-        ports:
-          - port: 8081
-            targetPort: 8081
-            name: oauth-http
-          - port: 80
-            targetPort: 8080
-            name: http2
     openshiftRoute:
       enabled: false
   tracing:
@@ -112,31 +103,5 @@ spec:
       install: {}
     prometheus:
       enabled: true
-  techPreview:
-    gateways:
-      istio-ingressgateway:
-        additionalContainers:
-          - name: oauth2-proxy
-            image: quay.io/oauth2-proxy/oauth2-proxy:latest
-            args:
-              - --provider=oidc
-              - --redirect-url={{ .Values.redirect_url }}
-              - --oidc-issuer-url={{ .Values.oidc_issuer_url }}
-              - --upstream=http://127.0.0.1:8080
-              - '--email-domain=*'
-              - --client-id={{ .Values.client_id }}
-              - --client-secret={{ .Values.client_secret }}
-              - --pass-access-token=true
-              - --pass-authorization-header=true
-              - --cookie-secret={{ .Values.cookie_secret }}
-              - --skip-provider-button=true
-              - --http-address=0.0.0.0:8081
-              - --cookie-expire=0h45m0s #Note: this should be smaller than the jwt expiration configured by your oidc issuer
-              - --skip-jwt-bearer-tokens=true
-              - --extra-jwt-issuers=https://dev-338970.okta.com/oauth2/default=api://default # audience returned by okta for client_credentials
-            imagePullPolicy: Always
-            ports:
-              - containerPort: 8081
-                protocol: TCP
-                name: oauth-http
+  techPreview: {}
 ...

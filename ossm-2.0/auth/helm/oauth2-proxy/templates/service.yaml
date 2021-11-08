@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "oauth2-proxy.fullname" . }}
+  labels:
+    {{- include "oauth2-proxy.labels" . | nindent 4 }}
+    app: oauth2-proxy
+    service: oauth2-proxy
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: oauth-http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "oauth2-proxy.selectorLabels" . | nindent 4 }}

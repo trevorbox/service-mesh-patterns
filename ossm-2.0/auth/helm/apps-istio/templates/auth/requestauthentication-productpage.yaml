@@ -8,6 +8,6 @@ spec:
     matchLabels:
       app: productpage
   jwtRules:
-    - issuer: "https://dev-338970.okta.com/oauth2/default"
-      jwksUri: "https://dev-338970.okta.com/oauth2/default/v1/keys"
+    - issuer: {{ printf .Values.oidc_issuer_url | quote }}
+      jwksUri: {{ printf "%v/v1/keys" .Values.oidc_issuer_url | quote }}
 ...

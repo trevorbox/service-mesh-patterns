@@ -1,4 +1,4 @@
-# OSSM 2.0
+# Secure Ingress Gateway
 
 This example demonstrates an Openshift passthrough route to an ingress gateway that presents a cert-manager certificate using SDS.
 
@@ -16,7 +16,7 @@ helm repo add jetstack https://charts.jetstack.io
 helm repo update
 helm install cert-manager jetstack/cert-manager \
   --namespace cert-manager \
-  --version v1.2.0 \
+  --version v1.6.1 \
   --create-namespace \
   --set installCRDs=true
 ```

@@ -1,7 +1,0 @@
-mongodb:
-  host:
-  user: bookinfo
-  password: redhat  
-control_plane:
-  namespace: istio-system2
-  name: basic-install

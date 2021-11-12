@@ -4,7 +4,7 @@ kind: ServiceMeshControlPlane
 metadata:
   name: full-install
 spec:
-  version: v2.0
+  version: v2.1
   security:
     dataPlane:
       mtls: true

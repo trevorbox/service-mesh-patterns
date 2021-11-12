@@ -1,0 +1,17 @@
+# This is a dummy upstream dns entry the oauth2-proxy forwards to.
+# Applications that need oauth2 support have VirtualServices that match on this host + uri paths.
+apiVersion: v1
+kind: Service
+metadata:
+  name: oauth2-proxy-upstream
+  labels:
+    {{- include "oauth2-proxy.labels" . | nindent 4 }}
+    app: oauth2-proxy-upstream
+    service: oauth2-proxy-upstream
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http

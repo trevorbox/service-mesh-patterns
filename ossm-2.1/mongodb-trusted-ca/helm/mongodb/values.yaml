@@ -1,0 +1,10 @@
+mongodb:
+  host:
+  user: bookinfo
+  password: redhat  
+control_plane:
+  namespace: istio-system
+  name: basic-install
+  egressgateway:
+    namespace: istio-system-egress
+    port: 15666

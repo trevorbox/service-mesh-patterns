@@ -1,0 +1,12 @@
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: originate-tls-for-mongodb-mesh-external
+spec:
+  host: {{ .Values.mongodb.host }}
+  trafficPolicy: # Apply to all ports
+    tls:
+      mode: ISTIO_MUTUAL # Compared to Mutual mode, this mode uses certificates generated automatically by Istio for mTLS authentication.
+      sni: {{ .Values.mongodb.host }} # The Openshift Passthrough Route (HAProxy) can use TLS + SNI to route the traffic to the mongo-ingressgateway pod in istio-system2
+...

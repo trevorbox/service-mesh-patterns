@@ -16,7 +16,7 @@ helm repo add jetstack https://charts.jetstack.io
 helm repo update
 helm install cert-manager jetstack/cert-manager \
   --namespace cert-manager \
-  --version v1.6.1 \
+  --version v1.7.1 \
   --create-namespace \
   --set installCRDs=true
 ```
@@ -30,7 +30,7 @@ export istio_system_namespace=istio-system
 ## Create certificate for ingressgateway
 
 ```sh
-helm upgrade -i --create-namespace -n ${istio_system_namespace} cert-manager-certs helm/cert-manager --set ingressgateway.cert.commonName=api-${istio_system_namespace}.$(oc get route console -o jsonpath={.status.ingress[0].routerCanonicalHostname} -n openshift-console)
+helm upgrade -i --create-namespace -n ${istio_system_namespace} cert-manager-certs helm/cert-manager --set ingressgateway.cert.commonName=api-${istio_system_namespace}.$(oc get ingress.config.openshift.io cluster -o jsonpath={.spec.domain})
 ```
 
 ## Install Control Plane

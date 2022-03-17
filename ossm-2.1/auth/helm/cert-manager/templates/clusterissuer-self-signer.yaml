@@ -38,9 +38,11 @@ spec:
   # Secret names are always required.
   secretName: ingressgateway-cert
   commonName: {{ .Values.ingressgateway.cert.commonName }}
+  dnsNames:
+    - {{ .Values.ingressgateway.cert.commonName }}
   usages:
     - server auth
-    - client auth  
+    - client auth
   issuerRef:
     name: internal-issuer
     # We can reference ClusterIssuers by changing the kind here.

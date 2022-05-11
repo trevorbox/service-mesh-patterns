@@ -4,6 +4,12 @@ This example demonstrates an Openshift passthrough route to an ingress gateway t
 
 By using mutual TLS, we can also create an [AuthorizationPolicy](./helm/nginx-echo-headers-istio/templates/authorizationpolicy-nginx-echo-headers.yaml) to verify the Common Names of certificates. An [EnvoyFilter](./helm/nginx-echo-headers-istio/templates/envoyfilter-subject-peer-certificate-header.yaml) is also required since widlcard values in the rule matching logic is limited on AuthorizationPolicies see [authorization-policy/#Rule](https://istio.io/latest/docs/reference/config/security/authorization-policy/#Rule) from the docs.
 
+## Concepts for authn/z with mtls
+
+TLS authentication occurs when the cert chain can be trusted. It is not possible to trust an individual intermediate CA for authentication, since the rootCA must also be trusted in order to complete the chain. In order to trust the client certificate chain, an mTLS gateway should only trust the rootCA (and thus trust any intermediate CAs as well). Clients can send their workload and intermediate certificates, excluding the rootCA, to complete the chain for the mTLS gateway to authenticate.
+
+After authentication works, you can authorize a workload certificate's Common Name. This is possible because the client presents its own certificate but you need a header or some other way to pass the workload's common name to the next service in the mesh. Obviously, the authroization *could* be compromised if someone issues multiple worklaod certificates with the same Common Names using the same issuer, but that would indicate a deeper problem with an organization's cert management system/process (or the pki is compromised).
+
 ## Install Operators
 
 ```sh
@@ -40,8 +46,9 @@ helm upgrade -i --create-namespace -n ${istio_system_namespace} cert-manager-cer
 ```sh
 oc get secret ingressgateway-cert -o jsonpath={.data.tls\\.crt} -n istio-system | base64 -d > /tmp/tls.crt
 oc get secret ingressgateway-cert -o jsonpath={.data.tls\\.key} -n istio-system | base64 -d > /tmp/tls.key
-oc get secret ingressgateway-subca -o jsonpath={.data.tls\\.crt} -n istio-system | base64 -d > /tmp/ca.crt
-oc get secret ingressgateway-subca -o jsonpath={.data.ca\\.crt} -n istio-system | base64 -d >> /tmp/ca.crt
+# trust the rootca common to all workloads for authentication
+oc get secret ingressgateway-rootca -o jsonpath={.data.ca\\.crt} -n istio-system | base64 -d > /tmp/ca.crt
+
 oc create -n istio-system secret generic ingressgateway-mtls --from-file=tls.key=/tmp/tls.key \
 --from-file=tls.crt=/tmp/tls.crt --from-file=ca.crt=/tmp/ca.crt
 ```

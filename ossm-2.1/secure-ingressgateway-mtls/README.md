@@ -4,7 +4,7 @@ This example demonstrates an Openshift passthrough route to an ingress gateway t
 
 By using mutual TLS, we can autheticate trusted root certificate authorities and also create an [AuthorizationPolicy](./helm/nginx-echo-headers-istio/templates/authorizationpolicy-nginx-echo-headers.yaml) to verify the Common Names of certificates, thus authorizing client certificates. An [EnvoyFilter](./helm/nginx-echo-headers-istio/templates/envoyfilter-subject-peer-certificate-header.yaml) is also required to create a new header with just the common name of the workload certificate since widlcard values in the rule matching logic is limited on AuthorizationPolicies; see [authorization-policy/#Rule](https://istio.io/latest/docs/reference/config/security/authorization-policy/#Rule) from the docs.
 
-## Concepts for authn/z with mtls
+## Concepts for authn/z with mtls gateways
 
 `TLS authentication` (also called certificate chain validation) occurs when the cert chain can be trusted. It is not possible to trust an individual intermediate CA for authentication, since the rootCA must also be trusted in order to complete the chain. In order to trust the client certificate chain, an mTLS gateway should only trust the rootCA (and thus trust any intermediate CAs as well). Clients can send their workload and intermediate certificates, excluding the rootCA, to complete the chain for the mTLS gateway to authenticate client certificates.
 
@@ -12,7 +12,7 @@ By using mutual TLS, we can autheticate trusted root certificate authorities and
 
 Photo credit: G. Stevens of Hosting Canada / CC 4.0
 
-After authentication works, client `Certificate authorization` can be achieved by checking the certificate's Common Name. In the context of an mTLS gateway, this is possible because the client presents its own certificate, but you need a header or some other way to pass the workload's common name to the next service in the mesh. Obviously, the authorization *could* be compromised if someone issues multiple worklaod certificates with the same Common Names using the same issuer (CA), but that would indicate a deeper problem with an organization's cert management system/process (or the pki is compromised).
+After authentication works, `client certificate authorization` can be achieved by checking the certificate's Common Name. In the context of an mTLS gateway, this is possible because the client presents its own certificate, but you need a header or some other way to pass the workload's common name to the next service in the mesh. Obviously, the authorization *could* be compromised if someone issues multiple worklaod certificates with the same Common Names using the same issuer (CA), but that would indicate a deeper problem with an organization's cert management system/process (or the pki is compromised).
 
 ```yaml
 apiVersion: security.istio.io/v1beta1

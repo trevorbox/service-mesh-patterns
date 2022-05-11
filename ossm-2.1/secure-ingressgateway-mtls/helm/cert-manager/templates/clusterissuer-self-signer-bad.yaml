@@ -61,6 +61,9 @@ spec:
   # Secret names are always required.
   secretName: ingressgateway-cert-bad
   commonName: {{ .Values.ingressgateway.cert.commonName }}
+  dnsNames:
+    - ingressgateway-cert-bad
+    - {{ .Values.ingressgateway.cert.commonName }}
   usages:
     - server auth
     - client auth  

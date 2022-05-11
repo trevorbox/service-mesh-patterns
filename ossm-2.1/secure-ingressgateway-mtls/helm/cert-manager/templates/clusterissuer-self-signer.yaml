@@ -84,6 +84,9 @@ spec:
   # Secret names are always required.
   secretName: ingressgateway-cert
   commonName: {{ .Values.ingressgateway.cert.commonName }}
+  dnsNames:
+    - ingressgateway-cert
+    - {{ .Values.ingressgateway.cert.commonName }}
   usages:
     - server auth
     - client auth  
@@ -105,6 +108,9 @@ spec:
   # Secret names are always required.
   secretName: ingressgateway-cert2
   commonName: api-not-allowed-istio-system.apps-crc.testing
+  dnsNames:
+    - ingressgateway-cert2
+    - api-not-allowed-istio-system.apps-crc.testing
   usages:
     - server auth
     - client auth  

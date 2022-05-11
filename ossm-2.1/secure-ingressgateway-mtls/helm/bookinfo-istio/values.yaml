@@ -1,0 +1,6 @@
+control_plane:
+  name: full-install
+  namespace: istio-system
+  ingressgateway: 
+    name: ingressgateway
+    host: 

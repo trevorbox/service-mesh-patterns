@@ -1,0 +1,48 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: nginx-echo-headers
+...
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-echo-headers
+  labels:
+    app: nginx-echo-headers
+spec:
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 8080
+  selector:
+    app: nginx-echo-headers
+...
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-echo-headers
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx-echo-headers
+      version: v1
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "true"
+      labels:
+        app: nginx-echo-headers
+        version: v1
+    spec:
+      serviceAccountName: nginx-echo-headers
+      containers:
+      - image: brndnmtthws/nginx-echo-headers
+        imagePullPolicy: IfNotPresent
+        name: nginx-echo-headers
+        ports:
+        - containerPort: 8080
+...

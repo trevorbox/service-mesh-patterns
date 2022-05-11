@@ -14,7 +14,7 @@ A diagram of the [certificate validation algorithm](https://datatracker.ietf.org
 
 Photo credit: G. Stevens of Hosting Canada / CC 4.0
 
-After authentication works, `client certificate authorization` can be achieved by checking the certificate's Common Name. In the context of an mTLS gateway, this is possible because the client presents its own certificate, but you need a header or some other way to pass the workload's common name to the next service in the mesh. Obviously, the authorization *could* be compromised if someone issues multiple worklaod certificates with the same Common Names using the same issuer (CA), but that would indicate a deeper problem with an organization's cert management system/process (or the pki is compromised).
+After authentication works, `client certificate authorization` can be achieved by checking the certificate's Common Name. In the context of an mTLS gateway, this is possible because the client presents its own certificate, but you need a header or some other way to pass the workload's common name to the next service in the mesh. Obviously, the authorization *could* be compromised if someone issues multiple workload certificates with the same Common Names using the same issuer (CA), but that would indicate a deeper problem with an organization's cert management system/process (or the pki is compromised).
 
 In this example, `client certificate authorization` is achieved by checking the value of the header `x-forwarded-client-cert-subject-dn`. The header will not be passed if `TLS authentication` fails...
 

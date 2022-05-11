@@ -2,13 +2,41 @@
 
 This example demonstrates an Openshift passthrough route to an ingress gateway that requires mutual TLS (mTLS).
 
-By using mutual TLS, we can also create an [AuthorizationPolicy](./helm/nginx-echo-headers-istio/templates/authorizationpolicy-nginx-echo-headers.yaml) to verify the Common Names of certificates. An [EnvoyFilter](./helm/nginx-echo-headers-istio/templates/envoyfilter-subject-peer-certificate-header.yaml) is also required since widlcard values in the rule matching logic is limited on AuthorizationPolicies see [authorization-policy/#Rule](https://istio.io/latest/docs/reference/config/security/authorization-policy/#Rule) from the docs.
+By using mutual TLS, we can autheticate trusted root certificate authorities and also create an [AuthorizationPolicy](./helm/nginx-echo-headers-istio/templates/authorizationpolicy-nginx-echo-headers.yaml) to verify the Common Names of certificates, thus authorizing client certificates. An [EnvoyFilter](./helm/nginx-echo-headers-istio/templates/envoyfilter-subject-peer-certificate-header.yaml) is also required to create a new header with just the common name of the workload certificate since widlcard values in the rule matching logic is limited on AuthorizationPolicies; see [authorization-policy/#Rule](https://istio.io/latest/docs/reference/config/security/authorization-policy/#Rule) from the docs.
 
 ## Concepts for authn/z with mtls
 
-TLS authentication occurs when the cert chain can be trusted. It is not possible to trust an individual intermediate CA for authentication, since the rootCA must also be trusted in order to complete the chain. In order to trust the client certificate chain, an mTLS gateway should only trust the rootCA (and thus trust any intermediate CAs as well). Clients can send their workload and intermediate certificates, excluding the rootCA, to complete the chain for the mTLS gateway to authenticate.
+`TLS authentication` (also called certificate chain validation) occurs when the cert chain can be trusted. It is not possible to trust an individual intermediate CA for authentication, since the rootCA must also be trusted in order to complete the chain. In order to trust the client certificate chain, an mTLS gateway should only trust the rootCA (and thus trust any intermediate CAs as well). Clients can send their workload and intermediate certificates, excluding the rootCA, to complete the chain for the mTLS gateway to authenticate client certificates.
 
-After authentication works, you can authorize a workload certificate's Common Name. This is possible because the client presents its own certificate but you need a header or some other way to pass the workload's common name to the next service in the mesh. Obviously, the authroization *could* be compromised if someone issues multiple worklaod certificates with the same Common Names using the same issuer, but that would indicate a deeper problem with an organization's cert management system/process (or the pki is compromised).
+![Cert Chain](./raf15.webp)
+
+Photo credit: G. Stevens of Hosting Canada / CC 4.0
+
+After authentication works, client `Certificate authorization` can be achieved by checking the certificate's Common Name. In the context of an mTLS gateway, this is possible because the client presents its own certificate, but you need a header or some other way to pass the workload's common name to the next service in the mesh. Obviously, the authorization *could* be compromised if someone issues multiple worklaod certificates with the same Common Names using the same issuer (CA), but that would indicate a deeper problem with an organization's cert management system/process (or the pki is compromised).
+
+```yaml
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: nginx-echo-headers
+spec:
+  selector:
+    matchLabels:
+      app: nginx-echo-headers
+  rules:
+  - from:
+    - source:
+        principals: ["cluster.local/ns/istio-system/sa/custom-ingressgateway-service-account"]
+    to:
+    - operation:
+        hosts: 
+          - api-istio-system.apps-crc.testing
+        paths:
+          - /nginx-echo-headers
+    when:
+    - key: request.headers[x-forwarded-client-cert-subject-dn]
+      values: ["CN=api-istio-system.apps-crc.testing"]
+```
 
 ## Install Operators
 
@@ -46,7 +74,9 @@ helm upgrade -i --create-namespace -n ${istio_system_namespace} cert-manager-cer
 ```sh
 oc get secret ingressgateway-cert -o jsonpath={.data.tls\\.crt} -n istio-system | base64 -d > /tmp/tls.crt
 oc get secret ingressgateway-cert -o jsonpath={.data.tls\\.key} -n istio-system | base64 -d > /tmp/tls.key
-# trust the rootca common to all workloads for authentication
+# trust the rootca common to all intermediate and workload certs for authentication, because you must. 
+# It is irrelevant to trust both the subca and rootca since the rootca is also trusted (and thus any intermediate CA).
+# The client can be responsible to send its workload cert and intermedaite CA cert to complete the chain.
 oc get secret ingressgateway-rootca -o jsonpath={.data.ca\\.crt} -n istio-system | base64 -d > /tmp/ca.crt
 
 oc create -n istio-system secret generic ingressgateway-mtls --from-file=tls.key=/tmp/tls.key \

@@ -8,11 +8,15 @@ By using mutual TLS, we can autheticate trusted root certificate authorities and
 
 `TLS authentication` (also called certificate chain validation) occurs when the cert chain can be trusted. It is not possible to trust an individual intermediate CA for authentication, since the rootCA must also be trusted in order to complete the chain. In order to trust the client certificate chain, an mTLS gateway should only trust the rootCA (and thus trust any intermediate CAs as well). Clients can send their workload and intermediate certificates, excluding the rootCA, to complete the chain for the mTLS gateway to authenticate client certificates.
 
+A diagram of the [certificate validation algorithm](https://datatracker.ietf.org/doc/html/rfc5246#section-7)...
+
 ![Cert Chain](./raf15.webp)
 
 Photo credit: G. Stevens of Hosting Canada / CC 4.0
 
 After authentication works, `client certificate authorization` can be achieved by checking the certificate's Common Name. In the context of an mTLS gateway, this is possible because the client presents its own certificate, but you need a header or some other way to pass the workload's common name to the next service in the mesh. Obviously, the authorization *could* be compromised if someone issues multiple worklaod certificates with the same Common Names using the same issuer (CA), but that would indicate a deeper problem with an organization's cert management system/process (or the pki is compromised).
+
+In this example, `client certificate authorization` is achieved by checking the value of the header `x-forwarded-client-cert-subject-dn`. The header will not be passed if `TLS authentication` fails...
 
 ```yaml
 apiVersion: security.istio.io/v1beta1

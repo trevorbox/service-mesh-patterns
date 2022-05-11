@@ -24,20 +24,20 @@ kind: AuthorizationPolicy
 metadata:
   name: nginx-echo-headers
 spec:
-  selector:
+  selector: # only apply this rule to this service in the mesh
     matchLabels:
       app: nginx-echo-headers
   rules:
-  - from:
+  - from: # traffic from the ingress gateway
     - source:
         principals: ["cluster.local/ns/istio-system/sa/custom-ingressgateway-service-account"]
-    to:
+    to: # host and path when the request hits this service 
     - operation:
         hosts: 
           - api-istio-system.apps-crc.testing
         paths:
           - /nginx-echo-headers
-    when:
+    when: # must match the values from this header to be allowed
     - key: request.headers[x-forwarded-client-cert-subject-dn]
       values: ["CN=api-istio-system.apps-crc.testing"]
 ```

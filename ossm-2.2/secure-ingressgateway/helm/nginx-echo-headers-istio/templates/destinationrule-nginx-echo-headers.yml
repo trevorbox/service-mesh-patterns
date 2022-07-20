@@ -1,0 +1,16 @@
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: nginx-echo-headers
+spec:
+  host: nginx-echo-headers.nginx-echo-headers.svc.cluster.local
+  subsets:
+  - labels:
+      version: v1
+    name: v1
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
+      sni: nginx-echo-headers.nginx-echo-headers.svc.cluster.local
+...

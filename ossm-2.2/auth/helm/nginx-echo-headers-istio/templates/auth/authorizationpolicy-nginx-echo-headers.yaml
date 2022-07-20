@@ -1,0 +1,18 @@
+---
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: nginx-echo-headers
+spec:
+  selector:
+    matchLabels:
+      app: nginx-echo-headers
+  rules:
+  - from:
+    # Require a valid jwt for all requests from the oauth2-proxy service only
+    - source:
+        requestPrincipals:
+          - "*"
+        principals:
+          - "cluster.local/ns/oauth2-proxy/sa/oauth2-proxy"
+...

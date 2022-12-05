@@ -10,7 +10,7 @@ spec:
     termination: passthrough
   to:
     kind: Service
-    name: custom-ingressgateway
+    name: {{ include "gateway.name" . }}
     weight: 100
   wildcardPolicy: None
 ...

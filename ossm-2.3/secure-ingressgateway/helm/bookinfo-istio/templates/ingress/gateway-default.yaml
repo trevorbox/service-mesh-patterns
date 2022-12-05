@@ -3,17 +3,17 @@ apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
   name: default
-  namespace: {{ .Values.control_plane.namespace }}
+  namespace: {{ .Values.ingressgateway.namespace }}
 spec:
   selector:
-    app: custom-ingressgateway
+    istio: {{ .Values.ingressgateway.name | trimPrefix "istio-" }}
   servers:
   - port:
       number: 443
       name: https
       protocol: HTTPS
     hosts:
-      - {{ .Values.control_plane.ingressgateway.host }}
+      - {{ .Values.ingressgateway.host }}
     tls:
       mode: SIMPLE
       credentialName: ingressgateway-cert

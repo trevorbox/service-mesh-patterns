@@ -5,9 +5,9 @@ metadata:
   name: bookinfo
 spec:
   gateways:
-  - {{ .Values.control_plane.namespace }}/default
+  - {{ .Values.ingressgateway.namespace }}/default
   hosts:
-  - {{ .Values.control_plane.ingressgateway.host }}
+  - {{ .Values.ingressgateway.host }}
   http:
   - match:
     - uri:

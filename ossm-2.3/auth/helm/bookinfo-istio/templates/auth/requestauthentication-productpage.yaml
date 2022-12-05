@@ -1,0 +1,13 @@
+---
+apiVersion: security.istio.io/v1beta1
+kind: RequestAuthentication
+metadata:
+  name: productpage
+spec:
+  selector:
+    matchLabels:
+      app: productpage
+  jwtRules:
+    - issuer: {{ printf .Values.oidc_issuer_url | quote }}
+      jwksUri: {{ printf "%v/v1/keys" .Values.oidc_issuer_url | quote }}
+...

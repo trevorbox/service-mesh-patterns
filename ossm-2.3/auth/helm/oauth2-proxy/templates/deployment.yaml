@@ -1,0 +1,91 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "oauth2-proxy.fullname" . }}
+  labels:
+    {{- include "oauth2-proxy.labels" . | nindent 4 }}
+    app: oauth2-proxy
+    version: v1
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "oauth2-proxy.selectorLabels" . | nindent 6 }}
+      app: oauth2-proxy
+      version: v1
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "oauth2-proxy.selectorLabels" . | nindent 8 }}
+        app: oauth2-proxy
+        version: v1
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "oauth2-proxy.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          args:
+            - --provider=oidc
+            - --redirect-url={{ .Values.redirect_url }}
+            - --oidc-issuer-url={{ .Values.oidc_issuer_url }}
+            - --upstream=http://oauth2-proxy-upstream.oauth2-proxy.svc.cluster.local:80
+            - '--email-domain=*'
+            - --client-id={{ .Values.client_id }}
+            - --pass-access-token=true
+            - --pass-authorization-header=true
+            - --skip-provider-button=true
+            - --http-address=0.0.0.0:8081
+            - --pass-host-header=false
+            - --cookie-expire=0h45m0s #Note: this should be smaller than the jwt expiration configured by your oidc issuer
+            - --skip-jwt-bearer-tokens=true
+            - --extra-jwt-issuers=https://{{ .Values.serviceentry.okta.host }}/oauth2/default=api://default # audience returned by okta for client_credentials
+            - --config=/etc/secrets/oauth2-proxy.cfg # This holds the client_secret and cookie_secret
+          ports:
+            - containerPort: 8081
+              protocol: TCP
+              name: oauth-http
+          livenessProbe:
+            httpGet:
+              path: /ping
+              port: oauth-http
+          readinessProbe:
+            httpGet:
+              path: /ping
+              port: oauth-http
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: oauth2-proxy
+              mountPath: /etc/secrets
+              readOnly: true
+      volumes:
+        - name: oauth2-proxy
+          secret:
+            secretName: oauth2-proxy
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

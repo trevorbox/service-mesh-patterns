@@ -89,6 +89,7 @@ spec:
   tracing:
     # change to None to disable tracing
     type: Jaeger
+    sampling: 10000
   addons:
     jaeger:
       name: jaeger

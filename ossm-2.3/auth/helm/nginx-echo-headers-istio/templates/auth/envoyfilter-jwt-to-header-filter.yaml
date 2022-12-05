@@ -1,0 +1,68 @@
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: EnvoyFilter
+metadata:
+  name: jwt-to-header-filter
+spec:
+  workloadSelector:
+    labels:
+      app: nginx-echo-headers
+  configPatches:
+  - applyTo: HTTP_FILTER
+    match:
+      context: SIDECAR_INBOUND
+      listener:
+        filterChain:
+          filter:
+            name: "envoy.filters.network.http_connection_manager"
+            subFilter:
+              name: "envoy.filters.http.router"
+    patch:
+      operation: INSERT_BEFORE
+      value:
+        name: envoy.lua
+        typed_config:
+          "@type": type.googleapis.com/envoy.extensions.filters.http.lua.v3.Lua
+          inlineCode: |
+            function envoy_on_request(request_handle)
+              -- Using the envoy.filters.http.jwt_authn filter metadata provides the claims. 
+              -- You need to know your issuer name since this is the key for the cliams.
+              
+              -- Example commented out in block below...
+              --[[
+              local my_issuer = "my_issuer"            
+              local claims = request_handle:streamInfo():dynamicMetadata():get("envoy.filters.http.jwt_authn")[my_issuer]
+              request_handle:logInfo("x-jwt-authn-sub: "..claims["sub"])
+              request_handle:headers():add("x-jwt-authn-sub", claims["sub"])
+              --]]
+
+              -- Using the istio_authn filter metadata
+
+              local meta = request_handle:streamInfo():dynamicMetadata():get("istio_authn")
+
+              local auth_principal = meta["request.auth.principal"]
+              request_handle:logInfo("x-jwt-auth-principal: "..auth_principal)
+              request_handle:headers():add("x-jwt-auth-principal", auth_principal)
+
+              local mtls_principal = meta["source.principal"]
+              request_handle:logInfo("x-mtls-principal: "..mtls_principal)
+              request_handle:headers():add("x-mtls-principal", mtls_principal)
+
+              -- NOTE: this example also passes the same raw claims as a base64 encoded string in the header "jwt-payload"
+              local raw_claims = meta["request.auth.raw_claims"]
+              request_handle:logInfo("x-jwt-raw-claims: "..raw_claims)
+              request_handle:headers():add("x-jwt-raw-claims", raw_claims)
+
+              -- Add the subject claim as header
+              -- NOTE: The index is 1-based
+              local sub_claim = meta["request.auth.claims"]["sub"][1]
+              request_handle:logInfo("x-jwt-sub: "..sub_claim)
+              request_handle:headers():add("x-jwt-sub", sub_claim)
+
+              -- Add the email claim as header
+              -- NOTE: The index is 1-based
+              local email_claim = meta["request.auth.claims"]["email"][1]
+              request_handle:logInfo("x-jwt-email: "..email_claim)
+              request_handle:headers():add("x-jwt-email", email_claim) 
+            end
+...

@@ -1,0 +1,13 @@
+control_plane:
+  name: basic-install
+  namespace: istio-system
+  ingressgateway: 
+    name: ingressgateway
+    host: 
+serviceentry:
+  okta:
+    host: dev-338970.okta.com
+nginx_echo_headers:
+  namespace: nginx-echo-headers
+bookinfo:
+  namespace: bookinfo

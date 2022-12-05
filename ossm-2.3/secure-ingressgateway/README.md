@@ -25,12 +25,13 @@ helm install cert-manager jetstack/cert-manager \
 
 ```sh
 export istio_system_namespace=istio-system
+export istio_ingress_namespace=istio-ingress
 ```
 
 ## Create certificate for ingressgateway
 
 ```sh
-helm upgrade -i --create-namespace -n ${istio_system_namespace} cert-manager-certs helm/cert-manager --set ingressgateway.cert.commonName=api-${istio_system_namespace}.$(oc get ingress.config.openshift.io cluster -o jsonpath={.spec.domain})
+helm upgrade -i --create-namespace -n ${istio_ingress_namespace} cert-manager-certs helm/cert-manager --set ingressgateway.cert.commonName=api-${istio_ingress_namespace}.$(oc get ingress.config.openshift.io cluster -o jsonpath={.spec.domain})
 ```
 
 ## Install Control Plane
@@ -39,10 +40,20 @@ helm upgrade -i --create-namespace -n ${istio_system_namespace} cert-manager-cer
 helm upgrade --create-namespace -i control-plane -n ${istio_system_namespace} helm/control-plane
 ```
 
+## Helmchart for istio gateway injection
+
+```sh
+# Taken from...
+# helm repo add istio https://istio-release.storage.googleapis.com/charts
+# helm repo update
+# helm install istio-ingressgateway istio/gateway -n istio-ingress
+helm upgrade -i istio-ingressgateway helm/injected-gateway -n ${istio_ingress_namespace}
+```
+
 ## Install Bookinfo Istio Configs
 
 ```sh
-helm upgrade --create-namespace -i bookinfo-istio helm/bookinfo-istio -n bookinfo --set control_plane.ingressgateway.host=$(oc get route api -n ${istio_system_namespace} -o jsonpath={'.spec.host'})
+helm upgrade --create-namespace -i bookinfo-istio helm/bookinfo-istio -n bookinfo --set ingressgateway.host=$(oc get route api -n ${istio_ingress_namespace} -o jsonpath={'.spec.host'})
 ```
 
 ## Install Bookinfo
@@ -66,5 +77,5 @@ helm upgrade --create-namespace -i nginx-echo-headers helm/nginx-echo-headers -n
 ## Test nginx-echo-headers
 
 ```sh
-curl -ik https://api-${istio_system_namespace}.$(oc get ingress.config.openshift.io cluster -o jsonpath={.spec.domain})/nginx-echo-headers
+curl -ik https://api-${istio_ingress_namespace}.$(oc get ingress.config.openshift.io cluster -o jsonpath={.spec.domain})/nginx-echo-headers
 ```

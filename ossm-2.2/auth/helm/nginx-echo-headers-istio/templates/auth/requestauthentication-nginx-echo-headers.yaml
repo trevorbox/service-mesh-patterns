@@ -1,0 +1,14 @@
+---
+apiVersion: security.istio.io/v1beta1
+kind: RequestAuthentication
+metadata:
+  name: nginx-echo-headers
+spec:
+  selector:
+    matchLabels:
+      app: nginx-echo-headers
+  jwtRules:
+    - issuer: {{ printf .Values.oidc_issuer_url | quote }}
+      jwksUri: {{ printf "%v/v1/keys" .Values.oidc_issuer_url | quote }}
+      outputPayloadToHeader: jwt-payload
+...

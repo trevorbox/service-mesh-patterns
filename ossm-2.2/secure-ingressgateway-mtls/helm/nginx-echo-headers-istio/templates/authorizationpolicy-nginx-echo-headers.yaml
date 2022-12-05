@@ -1,0 +1,23 @@
+---
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: nginx-echo-headers
+spec:
+  selector:
+    matchLabels:
+      app: nginx-echo-headers
+  rules:
+  - from:
+    - source:
+        principals: ["cluster.local/ns/istio-system/sa/custom-ingressgateway-service-account"]
+    to:
+    - operation:
+        hosts: 
+          - api-istio-system.apps-crc.testing
+        paths:
+          - /nginx-echo-headers
+    when:
+    - key: request.headers[x-forwarded-client-cert-subject-dn]
+      values: ["CN=api-istio-system.apps-crc.testing"]
+...

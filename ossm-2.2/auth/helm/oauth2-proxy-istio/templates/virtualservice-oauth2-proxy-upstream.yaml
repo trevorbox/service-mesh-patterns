@@ -1,0 +1,32 @@
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: oauth2-proxy-upstream
+spec:
+  hosts:
+  - oauth2-proxy-upstream.{{ .Release.Namespace }}.svc.cluster.local
+  http:
+  - match:
+    - uri:
+        exact: /productpage
+    - uri:
+        exact: /login
+    - uri:
+        exact: /logout
+    - uri:
+        prefix: /api/v1/products
+    route:
+    - destination:
+        host: productpage.{{ .Values.bookinfo.namespace }}.svc.cluster.local
+        port:
+          number: 9080
+  - match:
+    - uri:
+        exact: /nginx-echo-headers
+    route:
+    - destination:
+        host: nginx-echo-headers.{{ .Values.nginx_echo_headers.namespace }}.svc.cluster.local
+        port:
+          number: 8080
+...

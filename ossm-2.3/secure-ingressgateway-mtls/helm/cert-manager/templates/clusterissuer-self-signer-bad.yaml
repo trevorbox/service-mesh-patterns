@@ -1,0 +1,78 @@
+---
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: self-signer-bad
+spec:
+  selfSigned: {}
+...
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: ingressgateway-rootca-bad
+spec:
+  secretName: ingressgateway-rootca-bad
+  issuerRef:
+    kind: ClusterIssuer
+    name: self-signer-bad
+  commonName: "ca.self-signer.cert-manager"
+  isCA: true
+...
+---  
+# Create an Issuer that uses the above generated CA certificate to issue certs
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: internal-rootca-bad
+spec:
+  ca:
+    secretName: ingressgateway-rootca-bad
+...
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: ingressgateway-subca-bad
+spec:
+  secretName: ingressgateway-subca-bad
+  issuerRef:
+    kind: Issuer
+    name: internal-rootca-bad
+  commonName: "ca.subca-bad.cert-manager"
+  isCA: true
+...
+---  
+# Create an Issuer that uses the above generated CA certificate to issue certs
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: internal-subca-bad
+spec:
+  ca:
+    secretName: ingressgateway-subca-bad
+...
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: ingressgateway-cert-bad
+spec:
+  # Secret names are always required.
+  secretName: ingressgateway-cert-bad
+  commonName: {{ .Values.ingressgateway.cert.commonName }}
+  dnsNames:
+    - ingressgateway-cert-bad
+    - {{ .Values.ingressgateway.cert.commonName }}
+  usages:
+    - server auth
+    - client auth  
+  issuerRef:
+    name: internal-subca-bad
+    # We can reference ClusterIssuers by changing the kind here.
+    # The default value is Issuer (i.e. a locally namespaced Issuer)
+    kind: Issuer
+    # This is optional since cert-manager will default to this value however
+    # if you are using an external issuer, change this to that issuer group.
+    group: cert-manager.io
+...

@@ -5,20 +5,10 @@ This example demonstrates an Openshift passthrough route to an ingress gateway t
 ## Install Operators
 
 ```sh
-helm upgrade -i service-mesh-operators -n openshift-operators-redhat helm/service-mesh-operators --create-namespace
-```
-
-## Install Cert Manager for Passthrough route TLS
-
-```sh
-oc new-project istio-system
-helm repo add jetstack https://charts.jetstack.io
-helm repo update
-helm install cert-manager jetstack/cert-manager \
-  --namespace cert-manager \
-  --version v1.10.1 \
-  --create-namespace \
-  --set installCRDs=true
+oc adm new-project openshift-operators-redhat
+oc adm new-project openshift-distributed-tracing
+oc adm new-project openshift-cert-manager-operator
+helm upgrade -i service-mesh-operators -n openshift-operators helm/service-mesh-operators --create-namespace
 ```
 
 ## Setup

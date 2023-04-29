@@ -1,0 +1,193 @@
+Specify a password to be used for database accounts. Oracle recommends that the password entered should be at least 8 characters in length, contain at least 1 uppercase character, 1 lower case character and 1 digit [0-9]. Note that the same password will be used for SYS, SYSTEM and PDBADMIN accounts:
+Confirm the password:
+Configuring Oracle Listener.
+Listener configuration succeeded.
+Configuring Oracle Database FREE.
+Enter SYS user password: 
+********* **
+Enter SYSTEM user password: 
+ **********
+Enter PDBADMIN User Password: 
+******* **
+Prepare for db operation
+7% complete
+Copying database files
+29% complete
+Creating and starting Oracle instance
+30% complete
+33% complete
+36% complete
+39% complete
+43% complete
+Completing Database Creation
+47% complete
+49% complete
+50% complete
+Creating Pluggable Databases
+54% complete
+71% complete
+Executing Post Configuration Actions
+93% complete
+Running Custom Scripts
+100% complete
+Database creation complete. For details check the logfiles at:
+ /opt/oracle/cfgtoollogs/dbca/FREE.
+Database Information:
+Global Database Name:FREE
+System Identifier(SID):FREE
+Look at the log file "/opt/oracle/cfgtoollogs/dbca/FREE/FREE.log" for further details.
+
+Connect to Oracle Database using one of the connect strings:
+     Pluggable database: secure-oracledb-free-69f7ff7f48-s6g4d/FREEPDB1
+     Multitenant container database: secure-oracledb-free-69f7ff7f48-s6g4d
+
+SQL*Plus: Release 23.0.0.0.0 - Developer-Release on Thu Apr 27 23:18:14 2023
+Version 23.2.0.0.0
+
+Copyright (c) 1982, 2023, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 23c Free, Release 23.0.0.0.0 - Developer-Release
+Version 23.2.0.0.0
+
+SQL> 
+System altered.
+
+SQL> 
+System altered.
+
+SQL> 
+Pluggable database altered.
+
+SQL> SQL> 
+Session altered.
+
+SQL> 
+User created.
+
+SQL> 
+Grant succeeded.
+
+SQL> 
+Grant succeeded.
+
+SQL> 
+Grant succeeded.
+
+SQL> 
+User altered.
+
+SQL> SQL> Disconnected from Oracle Database 23c Free, Release 23.0.0.0.0 - Developer-Release
+Version 23.2.0.0.0
+The Oracle base remains unchanged with value /opt/oracle
+
+
+Creating Oracle Wallet for the database server side certificate...
+
+
+
+Configuring Oracle Net service for TCPS...
+
+Oracle PKI Tool Release 23.2.0.0.0 - Production
+Version 23.2.0.0.0
+Copyright (c) 2004, 2023, Oracle and/or its affiliates. All rights reserved.
+
+Enter password:      
+Enter password again:   
+Operation is successfully completed.
+
+Oracle Wallet location: /opt/oracle/oradata/dbconfig/FREE/.tls-wallet
+
+Oracle PKI Tool Release 23.2.0.0.0 - Production
+Version 23.2.0.0.0
+Copyright (c) 2004, 2023, Oracle and/or its affiliates. All rights reserved.
+
+Cannot modify auto-login (sso) wallet
+Enter wallet password:   
+Operation is successfully completed.
+
+LSNRCTL for Linux: Version 23.0.0.0.0 - Developer-Release on 27-APR-2023 23:18:16
+
+Copyright (c) 1991, 2023, Oracle.  All rights reserved.
+
+Connecting to (DESCRIPTION=(ADDRESS=(PROTOCOL=IPC)(KEY=EXTPROC_FOR_FREE)))
+TNS-12541: Cannot connect. No listener at key EXTPROC_FOR_FREE.
+ TNS-12560: Database communication protocol error.
+  TNS-00511: No listener
+   Linux Error: 2: No such file or directory
+Connecting to (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=0.0.0.0)(PORT=1521)))
+The command completed successfully
+
+LSNRCTL for Linux: Version 23.0.0.0.0 - Developer-Release on 27-APR-2023 23:18:16
+
+Copyright (c) 1991, 2023, Oracle.  All rights reserved.
+
+Starting /opt/oracle/product/23c/dbhomeFree/bin/tnslsnr: please wait...
+
+TNSLSNR for Linux: Version 23.0.0.0.0 - Developer-Release
+System parameter file is /opt/oracle/product/23c/dbhomeFree/network/admin/listener.ora
+Log messages written to /opt/oracle/diag/tnslsnr/secure-oracledb-free-69f7ff7f48-s6g4d/listener/alert/log.xml
+Listening on: (DESCRIPTION=(ADDRESS=(PROTOCOL=ipc)(KEY=EXTPROC_FOR_FREE)))
+Listening on: (DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=0.0.0.0)(PORT=1521)))
+Listening on: (DESCRIPTION=(ADDRESS=(PROTOCOL=tcps)(HOST=0.0.0.0)(PORT=6666)))
+
+Connecting to (DESCRIPTION=(ADDRESS=(PROTOCOL=IPC)(KEY=EXTPROC_FOR_FREE)))
+STATUS of the LISTENER
+------------------------
+Alias                     LISTENER
+Version                   TNSLSNR for Linux: Version 23.0.0.0.0 - Developer-Release
+Start Date                27-APR-2023 23:18:16
+Uptime                    0 days 0 hr. 0 min. 0 sec
+Trace Level               off
+Security                  ON: Local OS Authentication
+SNMP                      OFF
+Default Service           FREE
+Listener Parameter File   /opt/oracle/product/23c/dbhomeFree/network/admin/listener.ora
+Listener Log File         /opt/oracle/diag/tnslsnr/secure-oracledb-free-69f7ff7f48-s6g4d/listener/alert/log.xml
+Listening Endpoints Summary...
+  (DESCRIPTION=(ADDRESS=(PROTOCOL=ipc)(KEY=EXTPROC_FOR_FREE)))
+  (DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=0.0.0.0)(PORT=1521)))
+  (DESCRIPTION=(ADDRESS=(PROTOCOL=tcps)(HOST=0.0.0.0)(PORT=6666)))
+Services Summary...
+Service "PLSExtProc" has 1 instance(s).
+  Instance "PLSExtProc", status UNKNOWN, has 1 handler(s) for this service...
+The command completed successfully
+Oracle PKI Tool Release 23.2.0.0.0 - Production
+Version 23.2.0.0.0
+Copyright (c) 2004, 2023, Oracle and/or its affiliates. All rights reserved.
+
+Operation is successfully completed.
+
+
+Setting up Client Wallet in location /opt/oracle/oradata/clientWallet/FREE...
+
+Oracle PKI Tool Release 23.2.0.0.0 - Production
+Version 23.2.0.0.0
+Copyright (c) 2004, 2023, Oracle and/or its affiliates. All rights reserved.
+
+Enter password:   
+Enter password again:   
+Operation is successfully completed.
+Oracle PKI Tool Release 23.2.0.0.0 - Production
+Version 23.2.0.0.0
+Copyright (c) 2004, 2023, Oracle and/or its affiliates. All rights reserved.
+
+Cannot modify auto-login (sso) wallet
+Enter wallet password:   
+Operation is successfully completed.
+The Oracle base remains unchanged with value /opt/oracle
+#########################
+DATABASE IS READY TO USE!
+#########################
+The following output is now a tail of the alert.log:
+
+XDB initialized.
+ALTER PLUGGABLE DATABASE FREEPDB1 SAVE STATE
+Completed: ALTER PLUGGABLE DATABASE FREEPDB1 SAVE STATE
+2023-04-27T23:18:14.527058+00:00
+ALTER SYSTEM SET control_files='/opt/oracle/oradata/FREE/control01.ctl' SCOPE=SPFILE;
+2023-04-27T23:18:14.549650+00:00
+ALTER SYSTEM SET local_listener='' SCOPE=BOTH;
+ALTER PLUGGABLE DATABASE FREEPDB1 SAVE STATE
+Completed: ALTER PLUGGABLE DATABASE FREEPDB1 SAVE STATE

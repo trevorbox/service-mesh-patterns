@@ -1,0 +1,49 @@
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: self-signer
+spec:
+  selfSigned: {}
+...
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "oracledb-free.fullname" . }}-rootca
+spec:
+  secretName: {{ include "oracledb-free.fullname" . }}-rootca
+  issuerRef:
+    kind: Issuer
+    name: self-signer
+  commonName: "ca.self-signer.cert-manager"
+  isCA: true
+...
+---  
+# Create an Issuer that uses the above generated CA certificate to issue certs
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: internal-issuer
+spec:
+  ca:
+    secretName: {{ include "oracledb-free.fullname" . }}-rootca
+...
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "oracledb-free.fullname" . }}-p12-cert
+spec:
+  commonName: {{ include "oracledb-free.fullname" . }}
+  issuerRef:
+    kind: Issuer
+    name: internal-issuer
+  keystores:
+    pkcs12:
+      create: true
+      passwordSecretRef:
+        key: P12_PWD
+        name: {{ include "oracledb-free.fullname" . }}-credentials
+  secretName: {{ include "oracledb-free.fullname" . }}-p12-cert
+...

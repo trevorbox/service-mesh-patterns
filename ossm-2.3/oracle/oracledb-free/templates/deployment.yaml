@@ -1,0 +1,98 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "oracledb-free.fullname" . }}
+  labels:
+    {{- include "oracledb-free.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "oracledb-free.selectorLabels" . | nindent 6 }}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "oracledb-free.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "oracledb-free.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: 1521
+              name: oracle-listener
+            - containerPort: 5500
+              name: oem-express
+            - containerPort: 6666
+              name: tcps
+          volumeMounts:
+            - name: oradata
+              mountPath: /opt/oracle/oradata
+            - name: p12-cert
+              mountPath: /secrets/oracledb-free-cert
+            - name: scripts
+              mountPath: /opt/oracle/configTcps-custom.sh
+              subPath: configTcps.sh
+          readinessProbe:
+            initialDelaySeconds: 60
+            periodSeconds: 60
+            exec:
+              command:
+                - /bin/sh
+                - "-c"
+                - $ORACLE_BASE/$CHECK_DB_FILE
+          livenessProbe:
+            initialDelaySeconds: 300
+            periodSeconds: 60
+            exec:
+              command:
+                - /bin/sh
+                - "-c"
+                - $ORACLE_BASE/$CHECK_DB_FILE
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          envFrom:
+            - configMapRef:
+                name: {{ include "oracledb-free.fullname" . }}-config
+            - secretRef:
+                name: {{ include "oracledb-free.fullname" . }}-credentials
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      volumes:
+        - name: oradata
+          persistentVolumeClaim:
+            claimName: {{ include "oracledb-free.fullname" . }}-oradata
+        - name: p12-cert
+          secret:
+            secretName: {{ include "oracledb-free.fullname" . }}-p12-cert
+        - name: scripts
+          configMap:
+            name: {{ include "oracledb-free.fullname" . }}-scripts
+            defaultMode: 0754

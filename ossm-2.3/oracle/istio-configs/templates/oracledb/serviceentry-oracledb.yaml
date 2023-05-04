@@ -1,0 +1,20 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: oracledb
+spec:
+  hosts:
+  - {{ .Values.oracledb.host }}
+  addresses:
+  - {{ .Values.oracledb.ip }}/32
+  ports:
+  - number: {{ .Values.oracledb.port }}
+    name: tcp
+    protocol: TCP
+  - number: 443
+    name: tls-port-for-egress-gateway
+    protocol: TLS
+  location: MESH_EXTERNAL
+  resolution: STATIC
+  endpoints:
+  - address: {{ .Values.oracledb.ip }}

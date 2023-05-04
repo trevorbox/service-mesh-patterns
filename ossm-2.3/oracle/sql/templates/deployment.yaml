@@ -37,11 +37,11 @@ spec:
           - '-c'
           - >-
             keytool -importkeystore -srckeystore ${JAVA_HOME}/lib/security/cacerts -srcstoretype JKS -destkeystore /keystore/truststore.jks -storepass changeit -srcstorepass changeit &&
-            keytool -import -alias oracledb-free -trustcacerts -keystore /keystore/truststore.jks -file /secrets/ca.crt -storepass changeit -noprompt &&
-            keytool -list -keystore /keystore/truststore.jks -storepass changeit | grep oracledb-free
+            keytool -import -alias mycompany-cabundle -trustcacerts -keystore /keystore/truststore.jks -file /configmaps/mycompany-cabundle/ca-bundle.crt -storepass changeit -noprompt &&
+            keytool -list -keystore /keystore/truststore.jks -storepass changeit | grep mycompany-cabundle
         volumeMounts:
-          - mountPath: /secrets
-            name: p12-cert
+          - mountPath: /configmaps/mycompany-cabundle
+            name: mycompany-cabundle
           - mountPath: /keystore
             name: keystore
       containers:
@@ -79,5 +79,8 @@ spec:
         - name: p12-cert
           secret:
             secretName: secure-oracledb-free-p12-cert
+        - name: mycompany-cabundle
+          configMap:
+            name: mycompany-cabundle
         - emptyDir: {}
           name: keystore

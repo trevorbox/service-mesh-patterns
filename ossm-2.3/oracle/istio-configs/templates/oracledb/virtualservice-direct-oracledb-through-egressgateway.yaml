@@ -1,0 +1,35 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: direct-oracle-through-egress-gateway
+spec:
+  hosts:
+  - {{ .Values.oracledb.host }}
+  gateways:
+  - mesh
+  - istio-egress/oracledb
+  tcp:
+  - match:
+    - gateways:
+      - mesh
+      destinationSubnets:
+      - {{ .Values.oracledb.ip }}/32
+      port: {{ .Values.oracledb.port }}
+    route:
+    - destination:
+        host: {{ .Values.gateways.egress.host }}
+        subset: oracle-mtls
+        port:
+          number: 443
+      weight: 100
+  - match:
+    - gateways:
+      - istio-egress/oracledb
+      port: 443
+    route:
+    - destination:
+        host: {{ .Values.oracledb.host }}
+        subset: oracle-tls
+        port:
+          number: {{ .Values.oracledb.port }}
+      weight: 100

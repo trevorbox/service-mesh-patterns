@@ -1,0 +1,471 @@
+Starting Oracle Net Listener.
+Oracle Net Listener started.
+Starting Oracle Database instance FREE.
+Oracle Database instance FREE started.
+
+The Oracle base remains unchanged with value /opt/oracle
+#########################
+DATABASE IS READY TO USE!
+#########################
+The following output is now a tail of the alert.log:
+2023-05-04T15:26:59.030585+00:00
+FREEPDB1(3):Opening pdb with Resource Manager plan: DEFAULT_PLAN
+Completed: Pluggable database FREEPDB1 opened read write 
+Completed: ALTER DATABASE OPEN
+2023-05-04T15:26:59.606582+00:00
+===========================================================
+Dumping current patch information
+===========================================================
+No patches have been applied
+===========================================================
+2023-05-04T15:33:43.754222+00:00
+Resize operation completed for file# 3, fname /opt/oracle/oradata/FREE/sysaux01.dbf, old size 583680K, new size 604160K
+2023-05-04T22:00:07.482221+00:00
+TABLE SYS.WRI$_OPTSTAT_HISTHEAD_HISTORY: ADDED INTERVAL PARTITION SYS_P567 (45049) VALUES LESS THAN (TO_DATE(' 2023-05-05 00:00:00', 'SYYYY-MM-DD HH24:MI:SS', 'NLS_CALENDAR=GREGORIAN'))
+TABLE SYS.WRI$_OPTSTAT_HISTGRM_HISTORY: ADDED INTERVAL PARTITION SYS_P570 (45049) VALUES LESS THAN (TO_DATE(' 2023-05-05 00:00:00', 'SYYYY-MM-DD HH24:MI:SS', 'NLS_CALENDAR=GREGORIAN'))
+2023-05-04T22:00:09.138739+00:00
+FREEPDB1(3):TABLE SYS.WRI$_OPTSTAT_HISTHEAD_HISTORY: ADDED INTERVAL PARTITION SYS_P542 (45049) VALUES LESS THAN (TO_DATE(' 2023-05-05 00:00:00', 'SYYYY-MM-DD HH24:MI:SS', 'NLS_CALENDAR=GREGORIAN'))
+FREEPDB1(3):TABLE SYS.WRI$_OPTSTAT_HISTGRM_HISTORY: ADDED INTERVAL PARTITION SYS_P545 (45049) VALUES LESS THAN (TO_DATE(' 2023-05-05 00:00:00', 'SYYYY-MM-DD HH24:MI:SS', 'NLS_CALENDAR=GREGORIAN'))
+2023-05-04T22:00:43.914643+00:00
+FREEPDB1(3):cellip.ora not found.
+2023-05-04T22:00:55.412860+00:00
+cellip.ora not found.
+2023-05-04T22:05:13.788648+00:00
+Resize operation completed for file# 3, fname /opt/oracle/oradata/FREE/sysaux01.dbf, old size 604160K, new size 614400K
+2023-05-04T22:08:59.892418+00:00
+FREEPDB1(3):TABLE SYS.ACTIVITY_TABLE$: ADDED INTERVAL PARTITION SYS_P562 (3) VALUES LESS THAN (298)
+2023-05-04T23:04:34.679844+00:00
+
+
+***********************************************************************
+
+Fatal NI connect error 29048, connecting to:
+ (description=(ADDRESS=(PROTOCOL=tcps)(HOST=10.217.0.1)(PORT=31923))(connection_id=v+7btRYBS76sxV3nAs3Z/A==)(service_name=free))
+
+  VERSION INFORMATION:
+	TNS for Linux: Version 23.0.0.0.0 - Developer-Release
+	Oracle Bequeath NT Protocol Adapter for Linux: Version 23.0.0.0.0 - Developer-Release
+	sdp
+  Version 23.2.0.0.0
+  Time: 04-MAY-2023 23:04:34
+  Tracing not turned on. Process Id = 30262
+  Tns error struct:
+    ns main err code: 12560
+    
+TNS-12560: Database communication protocol error.
+    ns secondary err code: 0
+    nt main err code: 542
+    
+TNS-00542: SSL Handshake failed
+    Oracle error 1: 29048
+ORA-29048: Unexpected message received.
+    nt secondary err code: 0
+    nt OS err code: 0
+2023-05-04T23:04:34.683422+00:00
+opiodr aborting process unknown ospid (30262) as a result of ORA-609
+2023-05-04T23:06:16.991779+00:00
+
+
+***********************************************************************
+
+Fatal NI connect error 29048, connecting to:
+ (description=(ADDRESS=(PROTOCOL=tcps)(HOST=10.217.0.1)(PORT=61092))(connection_id=jhlopIbiRUiIOjDvyZ20oQ==)(service_name=free))
+
+  VERSION INFORMATION:
+	TNS for Linux: Version 23.0.0.0.0 - Developer-Release
+	Oracle Bequeath NT Protocol Adapter for Linux: Version 23.0.0.0.0 - Developer-Release
+	sdp
+  Version 23.2.0.0.0
+  Time: 04-MAY-2023 23:06:16
+  Tracing not turned on. Process Id = 30392
+  Tns error struct:
+    ns main err code: 12560
+    
+TNS-12560: Database communication protocol error.
+    ns secondary err code: 0
+    nt main err code: 542
+    
+TNS-00542: SSL Handshake failed
+    Oracle error 1: 29048
+ORA-29048: Unexpected message received.
+    nt secondary err code: 0
+    nt OS err code: 0
+2023-05-04T23:06:16.993526+00:00
+opiodr aborting process unknown ospid (30392) as a result of ORA-609
+2023-05-04T23:08:59.132504+00:00
+
+
+***********************************************************************
+
+Fatal NI connect error 29048, connecting to:
+ (description=(ADDRESS=(PROTOCOL=tcps)(HOST=10.217.0.1)(PORT=43797))(connection_id=hqjvgyVUSw2XOfBjsUxqGQ==)(service_name=free))
+
+  VERSION INFORMATION:
+	TNS for Linux: Version 23.0.0.0.0 - Developer-Release
+	Oracle Bequeath NT Protocol Adapter for Linux: Version 23.0.0.0.0 - Developer-Release
+	sdp
+  Version 23.2.0.0.0
+  Time: 04-MAY-2023 23:08:59
+  Tracing not turned on. Process Id = 30586
+  Tns error struct:
+    ns main err code: 12560
+    
+TNS-12560: Database communication protocol error.
+    ns secondary err code: 0
+    nt main err code: 542
+    
+TNS-00542: SSL Handshake failed
+    Oracle error 1: 29048
+ORA-29048: Unexpected message received.
+    nt secondary err code: 0
+    nt OS err code: 0
+2023-05-04T23:08:59.134221+00:00
+opiodr aborting process unknown ospid (30586) as a result of ORA-609
+2023-05-04T23:09:03.566069+00:00
+
+
+***********************************************************************
+
+Fatal NI connect error 29048, connecting to:
+ (description=(ADDRESS=(PROTOCOL=tcps)(HOST=10.217.0.1)(PORT=10393))(connection_id=F2yHCuznR1auULr6Kw5tGw==)(service_name=free))
+
+  VERSION INFORMATION:
+	TNS for Linux: Version 23.0.0.0.0 - Developer-Release
+	Oracle Bequeath NT Protocol Adapter for Linux: Version 23.0.0.0.0 - Developer-Release
+	sdp
+  Version 23.2.0.0.0
+  Time: 04-MAY-2023 23:09:03
+  Tracing not turned on. Process Id = 30588
+  Tns error struct:
+    ns main err code: 12560
+    
+TNS-12560: Database communication protocol error.
+    ns secondary err code: 0
+    nt main err code: 542
+    
+TNS-00542: SSL Handshake failed
+    Oracle error 1: 29048
+ORA-29048: Unexpected message received.
+    nt secondary err code: 0
+    nt OS err code: 0
+2023-05-04T23:09:03.568068+00:00
+opiodr aborting process unknown ospid (30588) as a result of ORA-609
+2023-05-04T23:09:06.833321+00:00
+
+
+***********************************************************************
+
+Fatal NI connect error 29048, connecting to:
+ (description=(ADDRESS=(PROTOCOL=tcps)(HOST=10.217.0.1)(PORT=9781))(connection_id=ts1b2WQlQYaMMT0TgphUOA==)(service_name=free))
+
+  VERSION INFORMATION:
+	TNS for Linux: Version 23.0.0.0.0 - Developer-Release
+	Oracle Bequeath NT Protocol Adapter for Linux: Version 23.0.0.0.0 - Developer-Release
+	sdp
+  Version 23.2.0.0.0
+  Time: 04-MAY-2023 23:09:06
+  Tracing not turned on. Process Id = 30591
+  Tns error struct:
+    ns main err code: 12560
+    
+TNS-12560: Database communication protocol error.
+    ns secondary err code: 0
+    nt main err code: 542
+    
+TNS-00542: SSL Handshake failed
+    Oracle error 1: 29048
+ORA-29048: Unexpected message received.
+    nt secondary err code: 0
+    nt OS err code: 0
+2023-05-04T23:09:06.835378+00:00
+opiodr aborting process unknown ospid (30591) as a result of ORA-609
+2023-05-04T23:09:10.382156+00:00
+
+
+***********************************************************************
+
+Fatal NI connect error 29048, connecting to:
+ (description=(ADDRESS=(PROTOCOL=tcps)(HOST=10.217.0.1)(PORT=60302))(connection_id=/ivVXAPQR7St7RA+SAJy0w==)(service_name=free))
+
+  VERSION INFORMATION:
+	TNS for Linux: Version 23.0.0.0.0 - Developer-Release
+	Oracle Bequeath NT Protocol Adapter for Linux: Version 23.0.0.0.0 - Developer-Release
+	sdp
+  Version 23.2.0.0.0
+  Time: 04-MAY-2023 23:09:10
+  Tracing not turned on. Process Id = 30593
+  Tns error struct:
+    ns main err code: 12560
+    
+TNS-12560: Database communication protocol error.
+    ns secondary err code: 0
+    nt main err code: 542
+    
+TNS-00542: SSL Handshake failed
+    Oracle error 1: 29048
+ORA-29048: Unexpected message received.
+    nt secondary err code: 0
+    nt OS err code: 0
+2023-05-04T23:09:10.383828+00:00
+opiodr aborting process unknown ospid (30593) as a result of ORA-609
+2023-05-04T23:09:13.848755+00:00
+
+
+***********************************************************************
+
+Fatal NI connect error 29048, connecting to:
+ (description=(ADDRESS=(PROTOCOL=tcps)(HOST=10.217.0.1)(PORT=16835))(connection_id=MefM7SRfSpWeow9mDA1RzA==)(service_name=free))
+
+  VERSION INFORMATION:
+	TNS for Linux: Version 23.0.0.0.0 - Developer-Release
+	Oracle Bequeath NT Protocol Adapter for Linux: Version 23.0.0.0.0 - Developer-Release
+	sdp
+  Version 23.2.0.0.0
+  Time: 04-MAY-2023 23:09:13
+  Tracing not turned on. Process Id = 30596
+  Tns error struct:
+    ns main err code: 12560
+    
+TNS-12560: Database communication protocol error.
+    ns secondary err code: 0
+    nt main err code: 542
+    
+TNS-00542: SSL Handshake failed
+    Oracle error 1: 29048
+ORA-29048: Unexpected message received.
+    nt secondary err code: 0
+    nt OS err code: 0
+2023-05-04T23:09:13.851156+00:00
+opiodr aborting process unknown ospid (30596) as a result of ORA-609
+2023-05-04T23:09:16.904934+00:00
+
+
+***********************************************************************
+
+Fatal NI connect error 29048, connecting to:
+ (description=(ADDRESS=(PROTOCOL=tcps)(HOST=10.217.0.1)(PORT=47312))(connection_id=gEIzlyQBTDe9fSbOMRl2lg==)(service_name=free))
+
+  VERSION INFORMATION:
+	TNS for Linux: Version 23.0.0.0.0 - Developer-Release
+	Oracle Bequeath NT Protocol Adapter for Linux: Version 23.0.0.0.0 - Developer-Release
+	sdp
+  Version 23.2.0.0.0
+  Time: 04-MAY-2023 23:09:16
+  Tracing not turned on. Process Id = 30598
+  Tns error struct:
+    ns main err code: 12560
+    
+TNS-12560: Database communication protocol error.
+    ns secondary err code: 0
+    nt main err code: 542
+    
+TNS-00542: SSL Handshake failed
+    Oracle error 1: 29048
+ORA-29048: Unexpected message received.
+    nt secondary err code: 0
+    nt OS err code: 0
+2023-05-04T23:09:16.908796+00:00
+opiodr aborting process unknown ospid (30598) as a result of ORA-609
+2023-05-04T23:11:18.157925+00:00
+
+
+***********************************************************************
+
+Fatal NI connect error 29048, connecting to:
+ (description=(ADDRESS=(PROTOCOL=tcps)(HOST=10.217.0.1)(PORT=43583))(connection_id=nbzxiXDuSOic2+l7YRmNEA==)(service_name=free))
+
+  VERSION INFORMATION:
+	TNS for Linux: Version 23.0.0.0.0 - Developer-Release
+	Oracle Bequeath NT Protocol Adapter for Linux: Version 23.0.0.0.0 - Developer-Release
+	sdp
+  Version 23.2.0.0.0
+  Time: 04-MAY-2023 23:11:18
+  Tracing not turned on. Process Id = 30729
+  Tns error struct:
+    ns main err code: 12560
+    
+TNS-12560: Database communication protocol error.
+    ns secondary err code: 0
+    nt main err code: 542
+    
+TNS-00542: SSL Handshake failed
+    Oracle error 1: 29048
+ORA-29048: Unexpected message received.
+    nt secondary err code: 0
+    nt OS err code: 0
+2023-05-04T23:11:18.160413+00:00
+opiodr aborting process unknown ospid (30729) as a result of ORA-609
+2023-05-04T23:11:23.697774+00:00
+
+
+***********************************************************************
+
+Fatal NI connect error 29048, connecting to:
+ (description=(ADDRESS=(PROTOCOL=tcps)(HOST=10.217.0.1)(PORT=32798))(connection_id=iQk9+HhdRLSNaBG5eJ6HVw==)(service_name=free))
+
+  VERSION INFORMATION:
+	TNS for Linux: Version 23.0.0.0.0 - Developer-Release
+	Oracle Bequeath NT Protocol Adapter for Linux: Version 23.0.0.0.0 - Developer-Release
+	sdp
+  Version 23.2.0.0.0
+  Time: 04-MAY-2023 23:11:23
+  Tracing not turned on. Process Id = 30732
+  Tns error struct:
+    ns main err code: 12560
+    
+TNS-12560: Database communication protocol error.
+    ns secondary err code: 0
+    nt main err code: 542
+    
+TNS-00542: SSL Handshake failed
+    Oracle error 1: 29048
+ORA-29048: Unexpected message received.
+    nt secondary err code: 0
+    nt OS err code: 0
+2023-05-04T23:11:23.699553+00:00
+opiodr aborting process unknown ospid (30732) as a result of ORA-609
+2023-05-04T23:15:52.906585+00:00
+
+
+***********************************************************************
+
+Fatal NI connect error 29048, connecting to:
+ (description=(ADDRESS=(PROTOCOL=tcps)(HOST=10.217.0.1)(PORT=9412))(connection_id=JZdjMB6fSkie3CVgMK8QDQ==)(service_name=free))
+
+  VERSION INFORMATION:
+	TNS for Linux: Version 23.0.0.0.0 - Developer-Release
+	Oracle Bequeath NT Protocol Adapter for Linux: Version 23.0.0.0.0 - Developer-Release
+	sdp
+  Version 23.2.0.0.0
+  Time: 04-MAY-2023 23:15:52
+  Tracing not turned on. Process Id = 31058
+  Tns error struct:
+    ns main err code: 12560
+    
+TNS-12560: Database communication protocol error.
+    ns secondary err code: 0
+    nt main err code: 542
+    
+TNS-00542: SSL Handshake failed
+    Oracle error 1: 29048
+ORA-29048: Unexpected message received.
+    nt secondary err code: 0
+    nt OS err code: 0
+2023-05-04T23:15:52.908453+00:00
+opiodr aborting process unknown ospid (31058) as a result of ORA-609
+2023-05-04T23:16:01.905073+00:00
+
+
+***********************************************************************
+
+Fatal NI connect error 29048, connecting to:
+ (description=(ADDRESS=(PROTOCOL=tcps)(HOST=10.217.0.1)(PORT=44838))(connection_id=jMjvrTEaRJ2iMOCAtZ96UQ==)(service_name=free))
+
+  VERSION INFORMATION:
+	TNS for Linux: Version 23.0.0.0.0 - Developer-Release
+	Oracle Bequeath NT Protocol Adapter for Linux: Version 23.0.0.0.0 - Developer-Release
+	sdp
+  Version 23.2.0.0.0
+  Time: 04-MAY-2023 23:16:01
+  Tracing not turned on. Process Id = 31061
+  Tns error struct:
+    ns main err code: 12560
+    
+TNS-12560: Database communication protocol error.
+    ns secondary err code: 0
+    nt main err code: 542
+    
+TNS-00542: SSL Handshake failed
+    Oracle error 1: 29048
+ORA-29048: Unexpected message received.
+    nt secondary err code: 0
+    nt OS err code: 0
+2023-05-04T23:16:01.907632+00:00
+opiodr aborting process unknown ospid (31061) as a result of ORA-609
+2023-05-04T23:20:38.382793+00:00
+
+
+***********************************************************************
+
+Fatal NI connect error 29048, connecting to:
+ (description=(ADDRESS=(PROTOCOL=tcps)(HOST=10.217.0.1)(PORT=11553))(connection_id=cbRwK0a1T6GummpLQyoIQQ==)(service_name=free))
+
+  VERSION INFORMATION:
+	TNS for Linux: Version 23.0.0.0.0 - Developer-Release
+	Oracle Bequeath NT Protocol Adapter for Linux: Version 23.0.0.0.0 - Developer-Release
+	sdp
+  Version 23.2.0.0.0
+  Time: 04-MAY-2023 23:20:38
+  Tracing not turned on. Process Id = 31331
+  Tns error struct:
+    ns main err code: 12560
+    
+TNS-12560: Database communication protocol error.
+    ns secondary err code: 0
+    nt main err code: 542
+    
+TNS-00542: SSL Handshake failed
+    Oracle error 1: 29048
+ORA-29048: Unexpected message received.
+    nt secondary err code: 0
+    nt OS err code: 0
+2023-05-04T23:20:38.386147+00:00
+opiodr aborting process unknown ospid (31331) as a result of ORA-609
+2023-05-04T23:20:42.348212+00:00
+
+
+***********************************************************************
+
+Fatal NI connect error 29048, connecting to:
+ (description=(ADDRESS=(PROTOCOL=tcps)(HOST=10.217.0.1)(PORT=45098))(connection_id=IlF9rPVKTP6vNFPNXfW7Cw==)(service_name=free))
+
+  VERSION INFORMATION:
+	TNS for Linux: Version 23.0.0.0.0 - Developer-Release
+	Oracle Bequeath NT Protocol Adapter for Linux: Version 23.0.0.0.0 - Developer-Release
+	sdp
+  Version 23.2.0.0.0
+  Time: 04-MAY-2023 23:20:42
+  Tracing not turned on. Process Id = 31333
+  Tns error struct:
+    ns main err code: 12560
+    
+TNS-12560: Database communication protocol error.
+    ns secondary err code: 0
+    nt main err code: 542
+    
+TNS-00542: SSL Handshake failed
+    Oracle error 1: 29048
+ORA-29048: Unexpected message received.
+    nt secondary err code: 0
+    nt OS err code: 0
+2023-05-04T23:20:42.350208+00:00
+opiodr aborting process unknown ospid (31333) as a result of ORA-609
+2023-05-04T23:20:46.359267+00:00
+
+
+***********************************************************************
+
+Fatal NI connect error 29048, connecting to:
+ (description=(ADDRESS=(PROTOCOL=tcps)(HOST=10.217.0.1)(PORT=42873))(connection_id=94ct1pZRQi+jgAJ5seuhIg==)(service_name=free))
+
+  VERSION INFORMATION:
+	TNS for Linux: Version 23.0.0.0.0 - Developer-Release
+	Oracle Bequeath NT Protocol Adapter for Linux: Version 23.0.0.0.0 - Developer-Release
+	sdp
+  Version 23.2.0.0.0
+  Time: 04-MAY-2023 23:20:46
+  Tracing not turned on. Process Id = 31336
+  Tns error struct:
+    ns main err code: 12560
+    
+TNS-12560: Database communication protocol error.
+    ns secondary err code: 0
+    nt main err code: 542
+    
+TNS-00542: SSL Handshake failed
+    Oracle error 1: 29048
+ORA-29048: Unexpected message received.
+    nt secondary err code: 0
+    nt OS err code: 0
+2023-05-04T23:20:46.361063+00:00
+opiodr aborting process unknown ospid (31336) as a result of ORA-609

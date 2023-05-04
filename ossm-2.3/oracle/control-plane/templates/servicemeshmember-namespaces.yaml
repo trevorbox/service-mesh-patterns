@@ -1,0 +1,21 @@
+﻿{{- range .Values.member.namespaces }}
+---
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: {{ . }}
+  labels:
+    inject-mycompany-cabundle: ''
+...
+---
+apiVersion: maistra.io/v1
+kind: ServiceMeshMember
+metadata:
+  name: default
+  namespace: {{ . }}
+spec:
+  controlPlaneRef:
+    name: full-install
+    namespace: istio-system
+...
+{{- end }}

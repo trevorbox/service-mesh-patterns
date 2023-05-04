@@ -1,0 +1,20 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: mongodb-cert
+spec:
+  # Secret names are always required.
+  secretName: mongodb-cert
+  commonName: {{ .Values.mongodb.service.nameOverride }}.{{ .Release.Namespace }}.svc.cluster.local
+  dnsNames:
+    - {{ .Values.mongodb.service.nameOverride }}.{{ .Release.Namespace }}.svc.cluster.local
+    # - 127.0.0.1
+    # - localhost
+  ipAddresses:
+    - 127.0.0.1
+  usages:
+    - server auth
+    - client auth  
+  issuerRef:
+    kind: ClusterIssuer
+    name: mycompany-intermediaryca-issuer

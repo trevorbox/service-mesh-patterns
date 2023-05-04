@@ -1,0 +1,14 @@
+mongodb:
+  host: whatever.apps-crc.testing
+  ip: 192.168.130.11 
+  port: 30588  
+  # host: my-mongo.tcp.svc
+  # ip: 10.217.5.145
+  # port: 27017
+oracledb:
+  host: oracledb.apps-crc.testing
+  ip: 192.168.130.11
+  port: 32501
+gateways:
+  egress:
+    host: istio-egressgateway.istio-egress.svc.cluster.local

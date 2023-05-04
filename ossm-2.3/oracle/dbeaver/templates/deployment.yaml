@@ -1,0 +1,96 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "dbeaver.fullname" . }}
+  labels:
+    {{- include "dbeaver.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "dbeaver.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "dbeaver.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "dbeaver.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      initContainers:
+        - name: keystore
+          image: registry.access.redhat.com/ubi9/openjdk-11:latest
+          imagePullPolicy: IfNotPresent
+          command:
+            - /bin/bash
+          args:
+            - '-c'
+            - >-
+              keytool -importkeystore -srckeystore ${JAVA_HOME}/lib/security/cacerts -srcstoretype JKS -destkeystore /keystore/truststore.jks -storepass changeit -srcstorepass changeit &&
+              keytool -import -alias oracledb-free -trustcacerts -keystore /keystore/truststore.jks -file /secrets/ca.crt -storepass changeit -noprompt &&
+              keytool -list -keystore /keystore/truststore.jks -storepass changeit | grep oracledb-free
+          volumeMounts:
+            - mountPath: /secrets
+              name: p12-cert
+            - mountPath: /keystore
+              name: keystore
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          env:
+            - name: JAVA_OPTIONS
+              value: -Djavax.net.ssl.trustStore=/keystore/truststore.jks -Djavax.net.ssl.trustStorePassword=changeit -Djavax.net.ssl.trustStoreType=KeychainStore          
+          volumeMounts:
+            - mountPath: /keystore
+              name: keystore
+            # - mountPath: /opt/cloudbeaver/workspace/GlobalConfiguration/.dbeaver/data-sources.json
+            #   subPath: data-sources.json
+            #   name: config
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      volumes:
+        - name: p12-cert
+          secret:
+            secretName: secure-oracledb-free-p12-cert
+        - emptyDir: {}
+          name: keystore
+        - name: config
+          configMap:
+            name: dbeaver-global-config

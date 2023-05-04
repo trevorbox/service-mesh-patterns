@@ -1,0 +1,18 @@
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "oracledb-free.fullname" . }}-p12-cert
+spec:
+  commonName: {{ include "oracledb-free.fullname" . }}
+  issuerRef:
+    kind: ClusterIssuer
+    name: mycompany-intermediaryca-issuer
+  keystores:
+    pkcs12:
+      create: true
+      passwordSecretRef:
+        key: P12_PWD
+        name: {{ include "oracledb-free.fullname" . }}-credentials
+  secretName: {{ include "oracledb-free.fullname" . }}-p12-cert
+...

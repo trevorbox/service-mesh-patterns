@@ -1,0 +1,54 @@
+---
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: mycompany-selfsigned-issuer
+spec:
+  selfSigned: {}
+...
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: mycompany-rootca
+spec:
+  secretName: mycompany-rootca
+  issuerRef:
+    kind: ClusterIssuer
+    name: mycompany-selfsigned-issuer
+  commonName: "mycompany.ca.root"
+  isCA: true
+...
+---  
+# Create an Issuer that uses the above generated CA certificate to issue certs
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: mycompany-rootca-issuer
+spec:
+  ca:
+    secretName: mycompany-rootca
+...
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: mycompany-intermediaryca
+spec:
+  secretName: mycompany-intermediaryca
+  issuerRef:
+    kind: ClusterIssuer
+    name: mycompany-rootca-issuer
+  commonName: "mycompany.ca.intermediary"
+  isCA: true
+...
+---  
+# Create an Issuer that uses the above generated CA certificate to issue certs
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: mycompany-intermediaryca-issuer
+spec:
+  ca:
+    secretName: mycompany-intermediaryca
+...

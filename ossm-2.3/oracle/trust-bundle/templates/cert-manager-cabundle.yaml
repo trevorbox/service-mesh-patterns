@@ -1,0 +1,19 @@
+apiVersion: trust.cert-manager.io/v1alpha1
+kind: Bundle
+metadata:
+  name: mycompany-cabundle
+spec:
+  sources:
+  # - useDefaultCAs: true
+  - secret:
+      name: "mycompany-intermediaryca"
+      key: "tls.crt"
+  - secret:
+      name: "mycompany-intermediaryca"
+      key: "ca.crt"
+  target:
+    configMap:
+      key: "ca-bundle.crt"
+    namespaceSelector:
+      matchLabels:
+        inject-mycompany-cabundle: ''

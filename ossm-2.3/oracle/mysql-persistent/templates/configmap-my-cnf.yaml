@@ -1,0 +1,21 @@
+﻿kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: {{ include "mysql-persistent.fullname" . }}-my-cnf
+data:
+  my.cnf: |-
+    [mysqld]
+
+    # Disabling symbolic-links is recommended to prevent assorted security risks
+    symbolic-links = 0
+
+    # http://www.percona.com/blog/2008/05/31/dns-achilles-heel-mysql-installation/
+    skip_name_resolve
+
+    !includedir /etc/my.cnf.d
+
+    # Require ssl
+    ssl_ca=/secrets/mysql-cert/ca.crt
+    ssl_cert=/secrets/mysql-cert/tls.crt
+    ssl_key=/secrets/mysql-cert/tls.key
+    require_secure_transport=ON

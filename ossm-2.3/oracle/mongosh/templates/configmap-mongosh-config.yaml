@@ -1,0 +1,10 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: mongosh-config
+data:
+  # MONGODB_PORT_NUMBER: "27017"
+  # MONGODB_HOST: mongodb.mongodb.svc.cluster.local
+  MONGODB_HOST: whatever.apps-crc.testing # 192.168.130.11
+  MONGODB_PORT_NUMBER: "30588"
+  # TLS_OPTIONS: '--tls --tlsCAFile=/configmaps/mycompany-cabundle/ca-bundle.crt'

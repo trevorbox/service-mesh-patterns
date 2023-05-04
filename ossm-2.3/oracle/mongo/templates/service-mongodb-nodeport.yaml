@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb-nodeport
+spec:
+  type: NodePort
+  sessionAffinity: None
+  ports:
+    - name: "mongodb"
+      port: 27017
+      targetPort: mongodb
+  selector:
+    app.kubernetes.io/component: mongodb
+    app.kubernetes.io/instance: mongodb
+    app.kubernetes.io/name: mongodb

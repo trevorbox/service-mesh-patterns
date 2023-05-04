@@ -1,11 +1,11 @@
-# Default values for sql.
+# Default values for mysql-persistent.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
 replicaCount: 1
 
 image:
-  repository: container-registry.oracle.com/database/sqlcl
+  repository:  registry.redhat.io/rhel9/mysql-80
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: "latest"
@@ -23,8 +23,7 @@ serviceAccount:
   # If not set and create is true, a name is generated using the fullname template
   name: ""
 
-podAnnotations:
-  sidecar.istio.io/inject: "true"
+podAnnotations: {}
 
 podSecurityContext: {}
   # fsGroup: 2000
@@ -39,7 +38,7 @@ securityContext: {}
 
 service:
   type: ClusterIP
-  port: 80
+  port: 3306
 
 ingress:
   enabled: false
@@ -57,7 +56,7 @@ ingress:
   #    hosts:
   #      - chart-example.local
 
-resources: {}
+resources: 
   # We usually recommend not to specify default resources and to leave this as a conscious
   # choice for the user. This also increases chances charts run on environments with little
   # resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -65,9 +64,9 @@ resources: {}
   # limits:
   #   cpu: 100m
   #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
+  requests:
+    cpu: 400m
+    memory: 512Mi
 
 autoscaling:
   enabled: false
@@ -81,7 +80,3 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
-
-control_plane:
-  name: full-install
-  namespace: istio-system

@@ -1,0 +1,834 @@
+2023-05-04T23:19:39.564365Z	info	citadelclient	Citadel client using custom root cert: var/run/secrets/istio/root-cert.pem
+2023-05-04T23:19:39.589559Z	info	ads	All caches have been synced up in 1.084120836s, marking server ready
+2023-05-04T23:19:39.589872Z	info	sds	SDS server for workload certificates started, listening on "./var/run/secrets/workload-spiffe-uds/socket"
+2023-05-04T23:19:39.589907Z	info	xdsproxy	Initializing with upstream address "istiod-full-install.istio-system.svc:15012" and cluster "Kubernetes"
+2023-05-04T23:19:39.590051Z	info	sds	Starting SDS grpc server
+2023-05-04T23:19:39.659041Z	info	xdsproxy	connected to upstream XDS server: istiod-full-install.istio-system.svc:15012
+2023-05-04T23:19:39.696185Z	info	ads	ADS: new connection for node:istio-egressgateway-9db487fdb-d5wzk.istio-egress-1
+2023-05-04T23:19:39.736684Z	info	ads	ADS: new connection for node:istio-egressgateway-9db487fdb-d5wzk.istio-egress-2
+2023-05-04T23:19:39.920105Z	info	cache	generated new workload certificate	latency=330.003743ms ttl=23h59m59.079905421s
+2023-05-04T23:19:39.920141Z	info	cache	Root cert has changed, start rotating root cert
+2023-05-04T23:19:39.920155Z	info	ads	XDS: Incremental Pushing:0 ConnectedEndpoints:2 Version:
+2023-05-04T23:19:39.920222Z	info	cache	returned workload trust anchor from cache	ttl=23h59m59.079785403s
+2023-05-04T23:19:39.920233Z	info	cache	returned workload certificate from cache	ttl=23h59m59.079790004s
+2023-05-04T23:19:39.920433Z	info	cache	returned workload trust anchor from cache	ttl=23h59m59.079574182s
+2023-05-04T23:19:39.920501Z	info	ads	SDS: PUSH request for node:istio-egressgateway-9db487fdb-d5wzk.istio-egress resources:1 size:4.0kB resource:default
+2023-05-04T23:19:39.920609Z	info	ads	SDS: PUSH request for node:istio-egressgateway-9db487fdb-d5wzk.istio-egress resources:1 size:1.1kB resource:ROOTCA
+2023-05-04T23:19:39.920670Z	info	cache	returned workload trust anchor from cache	ttl=23h59m59.079333646s
+2023-05-04T23:19:39.920707Z	info	ads	SDS: PUSH for node:istio-egressgateway-9db487fdb-d5wzk.istio-egress resources:1 size:1.1kB resource:ROOTCA
+2023-05-04T23:20:25.674833Z	debug	envoy http	[C36][S274560866939213772] encoding headers via codec (end_stream=false):
+':status', '200'
+'content-type', 'text/plain; charset=UTF-8'
+'cache-control', 'no-cache, max-age=0'
+'x-content-type-options', 'nosniff'
+'date', 'Thu, 04 May 2023 23:20:25 GMT'
+'server', 'envoy'
+
+2023-05-04T23:20:25.675537Z	debug	envoy misc	nextChunk: response.length=924 more_data=false end_stream=true
+2023-05-04T23:20:26.355782Z	debug	envoy conn_handler	[C37] new connection from 10.217.0.1:40048
+2023-05-04T23:20:26.355850Z	debug	envoy http	[C37] new stream
+2023-05-04T23:20:26.355940Z	debug	envoy http	[C37][S275446446832892860] request headers complete (end_stream=true):
+':authority', '10.217.1.42:15021'
+':path', '/healthz/ready'
+':method', 'GET'
+'user-agent', 'kube-probe/1.25'
+'accept', '*/*'
+'connection', 'close'
+
+2023-05-04T23:20:26.355959Z	debug	envoy http	[C37][S275446446832892860] request end stream
+2023-05-04T23:20:26.355981Z	debug	envoy connection	[C37] current connecting state: false
+2023-05-04T23:20:26.356026Z	debug	envoy router	[C37][S275446446832892860] cluster 'agent' match for URL '/healthz/ready'
+2023-05-04T23:20:26.356056Z	debug	envoy router	[C37][S275446446832892860] router decoding headers:
+':authority', '10.217.1.42:15021'
+':path', '/healthz/ready'
+':method', 'GET'
+':scheme', 'http'
+'user-agent', 'kube-probe/1.25'
+'accept', '*/*'
+'x-forwarded-proto', 'http'
+'x-request-id', 'affe87df-2002-4699-b21f-5e6550e5c874'
+'x-envoy-expected-rq-timeout-ms', '15000'
+
+2023-05-04T23:20:26.356068Z	debug	envoy pool	[C19] using existing connection
+2023-05-04T23:20:26.356078Z	debug	envoy pool	[C19] creating stream
+2023-05-04T23:20:26.356093Z	debug	envoy router	[C37][S275446446832892860] pool ready
+2023-05-04T23:20:26.356286Z	debug	envoy client	[C19] response complete
+2023-05-04T23:20:26.356300Z	debug	envoy router	[C37][S275446446832892860] upstream headers complete: end_stream=true
+2023-05-04T23:20:26.356324Z	debug	envoy http	[C37][S275446446832892860] closing connection due to connection close header
+2023-05-04T23:20:26.356334Z	debug	envoy http	[C37][S275446446832892860] encoding headers via codec (end_stream=true):
+':status', '200'
+'date', 'Thu, 04 May 2023 23:20:26 GMT'
+'content-length', '0'
+'x-envoy-upstream-service-time', '0'
+'server', 'envoy'
+'connection', 'close'
+
+2023-05-04T23:20:26.356344Z	debug	envoy connection	[C37] closing data_to_write=143 type=0
+2023-05-04T23:20:26.356351Z	debug	envoy connection	[C37] enabling delayed close timer with timeout 1000 ms
+2023-05-04T23:20:26.356360Z	debug	envoy pool	[C19] response complete
+2023-05-04T23:20:26.356365Z	debug	envoy pool	[C19] destroying stream: 0 remaining
+2023-05-04T23:20:26.356419Z	debug	envoy connection	[C37] write flush complete
+2023-05-04T23:20:26.356425Z	debug	envoy connection	[C37] closing socket: 1
+2023-05-04T23:20:26.356668Z	debug	envoy conn_handler	[C37] adding to cleanup list
+2023-05-04T23:20:26.655324Z	debug	envoy connection	[C35] remote close
+2023-05-04T23:20:26.655412Z	debug	envoy connection	[C35] closing socket: 0
+2023-05-04T23:20:26.655482Z	debug	envoy conn_handler	[C35] adding to cleanup list
+2023-05-04T23:20:26.680677Z	debug	envoy connection	[C36] remote close
+2023-05-04T23:20:26.680777Z	debug	envoy connection	[C36] closing socket: 0
+2023-05-04T23:20:26.680855Z	debug	envoy conn_handler	[C36] adding to cleanup list
+2023-05-04T23:20:28.357281Z	debug	envoy conn_handler	[C38] new connection from 10.217.0.1:40050
+2023-05-04T23:20:28.357481Z	debug	envoy http	[C38] new stream
+2023-05-04T23:20:28.357569Z	debug	envoy http	[C38][S15050866155465202020] request headers complete (end_stream=true):
+':authority', '10.217.1.42:15021'
+':path', '/healthz/ready'
+':method', 'GET'
+'user-agent', 'kube-probe/1.25'
+'accept', '*/*'
+'connection', 'close'
+
+2023-05-04T23:20:28.357575Z	debug	envoy http	[C38][S15050866155465202020] request end stream
+2023-05-04T23:20:28.357627Z	debug	envoy connection	[C38] current connecting state: false
+2023-05-04T23:20:28.362746Z	debug	envoy router	[C38][S15050866155465202020] cluster 'agent' match for URL '/healthz/ready'
+2023-05-04T23:20:28.362903Z	debug	envoy router	[C38][S15050866155465202020] router decoding headers:
+':authority', '10.217.1.42:15021'
+':path', '/healthz/ready'
+':method', 'GET'
+':scheme', 'http'
+'user-agent', 'kube-probe/1.25'
+'accept', '*/*'
+'x-forwarded-proto', 'http'
+'x-request-id', 'c916258a-1d6f-4000-ab10-cdc3f48d3743'
+'x-envoy-expected-rq-timeout-ms', '15000'
+
+2023-05-04T23:20:28.362925Z	debug	envoy pool	queueing stream due to no available connections
+2023-05-04T23:20:28.362928Z	debug	envoy pool	trying to create new connection
+2023-05-04T23:20:28.362932Z	debug	envoy pool	creating a new connection
+2023-05-04T23:20:28.363945Z	debug	envoy connection	[C39] current connecting state: true
+2023-05-04T23:20:28.364057Z	debug	envoy client	[C39] connecting
+2023-05-04T23:20:28.364062Z	debug	envoy connection	[C39] connecting to 127.0.0.1:15020
+2023-05-04T23:20:28.364195Z	debug	envoy connection	[C39] connection in progress
+2023-05-04T23:20:28.364290Z	debug	envoy connection	[C39] connected
+2023-05-04T23:20:28.364300Z	debug	envoy client	[C39] connected
+2023-05-04T23:20:28.364309Z	debug	envoy pool	[C39] attaching to next stream
+2023-05-04T23:20:28.364326Z	debug	envoy pool	[C39] creating stream
+2023-05-04T23:20:28.364346Z	debug	envoy router	[C38][S15050866155465202020] pool ready
+2023-05-04T23:20:28.366702Z	debug	envoy client	[C39] response complete
+2023-05-04T23:20:28.366757Z	debug	envoy router	[C38][S15050866155465202020] upstream headers complete: end_stream=true
+2023-05-04T23:20:28.366849Z	debug	envoy http	[C38][S15050866155465202020] closing connection due to connection close header
+2023-05-04T23:20:28.366865Z	debug	envoy http	[C38][S15050866155465202020] encoding headers via codec (end_stream=true):
+':status', '200'
+'date', 'Thu, 04 May 2023 23:20:28 GMT'
+'content-length', '0'
+'x-envoy-upstream-service-time', '2'
+'server', 'envoy'
+'connection', 'close'
+
+2023-05-04T23:20:28.366891Z	debug	envoy connection	[C38] closing data_to_write=143 type=0
+2023-05-04T23:20:28.366903Z	debug	envoy connection	[C38] enabling delayed close timer with timeout 1000 ms
+2023-05-04T23:20:28.366924Z	debug	envoy pool	[C39] response complete
+2023-05-04T23:20:28.366933Z	debug	envoy pool	[C39] destroying stream: 0 remaining
+2023-05-04T23:20:28.367053Z	debug	envoy connection	[C38] write flush complete
+2023-05-04T23:20:28.367064Z	debug	envoy connection	[C38] closing socket: 1
+2023-05-04T23:20:28.367094Z	debug	envoy conn_handler	[C38] adding to cleanup list
+2023-05-04T23:20:28.662568Z	debug	envoy dns	dns resolution for jaeger-collector.istio-system.svc started
+2023-05-04T23:20:28.664166Z	debug	envoy dns	dns resolution for jaeger-collector.istio-system.svc completed with status 0
+2023-05-04T23:20:28.664258Z	debug	envoy upstream	transport socket match, socket default selected for host with address 10.217.5.25:9411
+2023-05-04T23:20:28.664301Z	debug	envoy upstream	DNS refresh rate reset for jaeger-collector.istio-system.svc, refresh rate 5000 ms
+2023-05-04T23:20:29.654678Z	debug	envoy main	flushing stats
+2023-05-04T23:20:30.355370Z	debug	envoy conn_handler	[C40] new connection from 10.217.0.1:40052
+2023-05-04T23:20:30.355435Z	debug	envoy http	[C40] new stream
+2023-05-04T23:20:30.355480Z	debug	envoy http	[C40][S14212482014587047031] request headers complete (end_stream=true):
+':authority', '10.217.1.42:15021'
+':path', '/healthz/ready'
+':method', 'GET'
+'user-agent', 'kube-probe/1.25'
+'accept', '*/*'
+'connection', 'close'
+
+2023-05-04T23:20:30.355488Z	debug	envoy http	[C40][S14212482014587047031] request end stream
+2023-05-04T23:20:30.355502Z	debug	envoy connection	[C40] current connecting state: false
+2023-05-04T23:20:30.355520Z	debug	envoy router	[C40][S14212482014587047031] cluster 'agent' match for URL '/healthz/ready'
+2023-05-04T23:20:30.355544Z	debug	envoy router	[C40][S14212482014587047031] router decoding headers:
+':authority', '10.217.1.42:15021'
+':path', '/healthz/ready'
+':method', 'GET'
+':scheme', 'http'
+'user-agent', 'kube-probe/1.25'
+'accept', '*/*'
+'x-forwarded-proto', 'http'
+'x-request-id', 'cd726605-4db4-4c00-98a3-fa9fa44663ef'
+'x-envoy-expected-rq-timeout-ms', '15000'
+
+2023-05-04T23:20:30.355551Z	debug	envoy pool	[C15] using existing connection
+2023-05-04T23:20:30.355555Z	debug	envoy pool	[C15] creating stream
+2023-05-04T23:20:30.355561Z	debug	envoy router	[C40][S14212482014587047031] pool ready
+2023-05-04T23:20:30.355770Z	debug	envoy client	[C15] response complete
+2023-05-04T23:20:30.355786Z	debug	envoy router	[C40][S14212482014587047031] upstream headers complete: end_stream=true
+2023-05-04T23:20:30.355810Z	debug	envoy http	[C40][S14212482014587047031] closing connection due to connection close header
+2023-05-04T23:20:30.355818Z	debug	envoy http	[C40][S14212482014587047031] encoding headers via codec (end_stream=true):
+':status', '200'
+'date', 'Thu, 04 May 2023 23:20:30 GMT'
+'content-length', '0'
+'x-envoy-upstream-service-time', '0'
+'server', 'envoy'
+'connection', 'close'
+
+2023-05-04T23:20:30.355828Z	debug	envoy connection	[C40] closing data_to_write=143 type=0
+2023-05-04T23:20:30.355832Z	debug	envoy connection	[C40] enabling delayed close timer with timeout 1000 ms
+2023-05-04T23:20:30.355840Z	debug	envoy pool	[C15] response complete
+2023-05-04T23:20:30.355842Z	debug	envoy pool	[C15] destroying stream: 0 remaining
+2023-05-04T23:20:30.355894Z	debug	envoy connection	[C40] write flush complete
+2023-05-04T23:20:30.355902Z	debug	envoy connection	[C40] closing socket: 1
+2023-05-04T23:20:30.355925Z	debug	envoy conn_handler	[C40] adding to cleanup list
+2023-05-04T23:20:32.354885Z	debug	envoy conn_handler	[C41] new connection from 10.217.0.1:40056
+2023-05-04T23:20:32.355066Z	debug	envoy http	[C41] new stream
+2023-05-04T23:20:32.355182Z	debug	envoy http	[C41][S14626227677824690987] request headers complete (end_stream=true):
+':authority', '10.217.1.42:15021'
+':path', '/healthz/ready'
+':method', 'GET'
+'user-agent', 'kube-probe/1.25'
+'accept', '*/*'
+'connection', 'close'
+
+2023-05-04T23:20:32.355243Z	debug	envoy http	[C41][S14626227677824690987] request end stream
+2023-05-04T23:20:32.355289Z	debug	envoy connection	[C41] current connecting state: false
+2023-05-04T23:20:32.355339Z	debug	envoy router	[C41][S14626227677824690987] cluster 'agent' match for URL '/healthz/ready'
+2023-05-04T23:20:32.355414Z	debug	envoy router	[C41][S14626227677824690987] router decoding headers:
+':authority', '10.217.1.42:15021'
+':path', '/healthz/ready'
+':method', 'GET'
+':scheme', 'http'
+'user-agent', 'kube-probe/1.25'
+'accept', '*/*'
+'x-forwarded-proto', 'http'
+'x-request-id', 'ec68fe72-f8de-41eb-8dc1-f00c6d0995fd'
+'x-envoy-expected-rq-timeout-ms', '15000'
+
+2023-05-04T23:20:32.355470Z	debug	envoy pool	[C39] using existing connection
+2023-05-04T23:20:32.355492Z	debug	envoy pool	[C39] creating stream
+2023-05-04T23:20:32.355536Z	debug	envoy router	[C41][S14626227677824690987] pool ready
+2023-05-04T23:20:32.356108Z	debug	envoy client	[C39] response complete
+2023-05-04T23:20:32.356294Z	debug	envoy router	[C41][S14626227677824690987] upstream headers complete: end_stream=true
+2023-05-04T23:20:32.356551Z	debug	envoy http	[C41][S14626227677824690987] closing connection due to connection close header
+2023-05-04T23:20:32.356758Z	debug	envoy http	[C41][S14626227677824690987] encoding headers via codec (end_stream=true):
+':status', '200'
+'date', 'Thu, 04 May 2023 23:20:32 GMT'
+'content-length', '0'
+'x-envoy-upstream-service-time', '0'
+'server', 'envoy'
+'connection', 'close'
+
+2023-05-04T23:20:32.356826Z	debug	envoy connection	[C41] closing data_to_write=143 type=0
+2023-05-04T23:20:32.357217Z	debug	envoy connection	[C41] enabling delayed close timer with timeout 1000 ms
+2023-05-04T23:20:32.357275Z	debug	envoy pool	[C39] response complete
+2023-05-04T23:20:32.357319Z	debug	envoy pool	[C39] destroying stream: 0 remaining
+2023-05-04T23:20:32.357427Z	debug	envoy connection	[C41] write flush complete
+2023-05-04T23:20:32.357479Z	debug	envoy connection	[C41] closing socket: 1
+2023-05-04T23:20:32.357711Z	debug	envoy conn_handler	[C41] adding to cleanup list
+2023-05-04T23:20:33.324617Z	debug	envoy http	[C11] new stream
+2023-05-04T23:20:33.324697Z	debug	envoy http	[C11][S10585271667781868267] request headers complete (end_stream=true):
+':authority', 'localhost:15090'
+':path', '/stats/prometheus'
+':method', 'GET'
+'user-agent', 'Prometheus/2.23.0'
+'accept', 'application/openmetrics-text; version=0.0.1,text/plain;version=0.0.4;q=0.5,*/*;q=0.1'
+'x-prometheus-scrape-timeout-seconds', '10.000000'
+'accept-encoding', 'gzip'
+
+2023-05-04T23:20:33.324703Z	debug	envoy http	[C11][S10585271667781868267] request end stream
+2023-05-04T23:20:33.324720Z	debug	envoy connection	[C11] current connecting state: false
+2023-05-04T23:20:33.324750Z	debug	envoy router	[C11][S10585271667781868267] cluster 'prometheus_stats' match for URL '/stats/prometheus'
+2023-05-04T23:20:33.324778Z	debug	envoy router	[C11][S10585271667781868267] router decoding headers:
+':authority', 'localhost:15090'
+':path', '/stats/prometheus'
+':method', 'GET'
+':scheme', 'http'
+'user-agent', 'Prometheus/2.23.0'
+'accept', 'application/openmetrics-text; version=0.0.1,text/plain;version=0.0.4;q=0.5,*/*;q=0.1'
+'x-prometheus-scrape-timeout-seconds', '10.000000'
+'accept-encoding', 'gzip'
+'x-forwarded-proto', 'http'
+'x-request-id', 'b205f146-7835-4a13-bb2d-50fc2dcc2d56'
+'x-envoy-expected-rq-timeout-ms', '15000'
+
+2023-05-04T23:20:33.324792Z	debug	envoy pool	[C12] using existing connection
+2023-05-04T23:20:33.324796Z	debug	envoy pool	[C12] creating stream
+2023-05-04T23:20:33.324804Z	debug	envoy router	[C11][S10585271667781868267] pool ready
+2023-05-04T23:20:33.324890Z	debug	envoy http	[C13] new stream
+2023-05-04T23:20:33.325046Z	debug	envoy http	[C13][S2025513698048525441] request headers complete (end_stream=true):
+':authority', 'localhost:15090'
+':path', '/stats/prometheus'
+':method', 'GET'
+'user-agent', 'Prometheus/2.23.0'
+'accept', 'application/openmetrics-text; version=0.0.1,text/plain;version=0.0.4;q=0.5,*/*;q=0.1'
+'x-prometheus-scrape-timeout-seconds', '10.000000'
+'accept-encoding', 'gzip'
+'x-forwarded-proto', 'http'
+'x-request-id', 'b205f146-7835-4a13-bb2d-50fc2dcc2d56'
+'x-envoy-expected-rq-timeout-ms', '15000'
+
+2023-05-04T23:20:33.325173Z	debug	envoy http	[C13][S2025513698048525441] request end stream
+2023-05-04T23:20:33.325206Z	debug	envoy connection	[C13] current connecting state: false
+2023-05-04T23:20:33.325709Z	debug	envoy admin	[C13][S2025513698048525441] request complete: path: /stats/prometheus
+2023-05-04T23:20:33.327581Z	debug	envoy http	[C13][S2025513698048525441] encoding headers via codec (end_stream=false):
+':status', '200'
+'content-type', 'text/plain; charset=UTF-8'
+'cache-control', 'no-cache, max-age=0'
+'x-content-type-options', 'nosniff'
+'date', 'Thu, 04 May 2023 23:20:33 GMT'
+'server', 'envoy'
+
+2023-05-04T23:20:33.327658Z	debug	envoy misc	nextChunk: response.length=30711 more_data=false end_stream=true
+2023-05-04T23:20:33.327822Z	debug	envoy router	[C11][S10585271667781868267] upstream headers complete: end_stream=false
+2023-05-04T23:20:33.327856Z	debug	envoy http	[C11][S10585271667781868267] encoding headers via codec (end_stream=false):
+':status', '200'
+'content-type', 'text/plain; charset=UTF-8'
+'cache-control', 'no-cache, max-age=0'
+'x-content-type-options', 'nosniff'
+'date', 'Thu, 04 May 2023 23:20:33 GMT'
+'server', 'envoy'
+'x-envoy-upstream-service-time', '3'
+
+2023-05-04T23:20:33.327873Z	debug	envoy client	[C12] response complete
+2023-05-04T23:20:33.327888Z	debug	envoy pool	[C12] response complete
+2023-05-04T23:20:33.327891Z	debug	envoy pool	[C12] destroying stream: 0 remaining
+2023-05-04T23:20:33.664624Z	debug	envoy dns	dns resolution for jaeger-collector.istio-system.svc started
+2023-05-04T23:20:33.666014Z	debug	envoy dns	dns resolution for jaeger-collector.istio-system.svc completed with status 0
+2023-05-04T23:20:33.666118Z	debug	envoy upstream	transport socket match, socket default selected for host with address 10.217.5.25:9411
+2023-05-04T23:20:33.666160Z	debug	envoy upstream	DNS refresh rate reset for jaeger-collector.istio-system.svc, refresh rate 5000 ms
+2023-05-04T23:20:34.355795Z	debug	envoy conn_handler	[C42] new connection from 10.217.0.1:60986
+2023-05-04T23:20:34.355885Z	debug	envoy http	[C42] new stream
+2023-05-04T23:20:34.356040Z	debug	envoy http	[C42][S3272340979590140235] request headers complete (end_stream=true):
+':authority', '10.217.1.42:15021'
+':path', '/healthz/ready'
+':method', 'GET'
+'user-agent', 'kube-probe/1.25'
+'accept', '*/*'
+'connection', 'close'
+
+2023-05-04T23:20:34.356058Z	debug	envoy http	[C42][S3272340979590140235] request end stream
+2023-05-04T23:20:34.356081Z	debug	envoy connection	[C42] current connecting state: false
+2023-05-04T23:20:34.356106Z	debug	envoy router	[C42][S3272340979590140235] cluster 'agent' match for URL '/healthz/ready'
+2023-05-04T23:20:34.356142Z	debug	envoy router	[C42][S3272340979590140235] router decoding headers:
+':authority', '10.217.1.42:15021'
+':path', '/healthz/ready'
+':method', 'GET'
+':scheme', 'http'
+'user-agent', 'kube-probe/1.25'
+'accept', '*/*'
+'x-forwarded-proto', 'http'
+'x-request-id', '4b8ea308-6976-4f21-8909-4d2a86943d9f'
+'x-envoy-expected-rq-timeout-ms', '15000'
+
+2023-05-04T23:20:34.356152Z	debug	envoy pool	[C8] using existing connection
+2023-05-04T23:20:34.356156Z	debug	envoy pool	[C8] creating stream
+2023-05-04T23:20:34.356164Z	debug	envoy router	[C42][S3272340979590140235] pool ready
+2023-05-04T23:20:34.356785Z	debug	envoy client	[C8] response complete
+2023-05-04T23:20:34.356808Z	debug	envoy router	[C42][S3272340979590140235] upstream headers complete: end_stream=true
+2023-05-04T23:20:34.356902Z	debug	envoy http	[C42][S3272340979590140235] closing connection due to connection close header
+2023-05-04T23:20:34.356987Z	debug	envoy http	[C42][S3272340979590140235] encoding headers via codec (end_stream=true):
+':status', '200'
+'date', 'Thu, 04 May 2023 23:20:34 GMT'
+'content-length', '0'
+'x-envoy-upstream-service-time', '0'
+'server', 'envoy'
+'connection', 'close'
+
+2023-05-04T23:20:34.357108Z	debug	envoy connection	[C42] closing data_to_write=143 type=0
+2023-05-04T23:20:34.357124Z	debug	envoy connection	[C42] enabling delayed close timer with timeout 1000 ms
+2023-05-04T23:20:34.357214Z	debug	envoy pool	[C8] response complete
+2023-05-04T23:20:34.357240Z	debug	envoy pool	[C8] destroying stream: 0 remaining
+2023-05-04T23:20:34.357422Z	debug	envoy connection	[C42] write flush complete
+2023-05-04T23:20:34.357436Z	debug	envoy connection	[C42] closing socket: 1
+2023-05-04T23:20:34.357546Z	debug	envoy conn_handler	[C42] adding to cleanup list
+2023-05-04T23:20:34.655309Z	debug	envoy main	flushing stats
+2023-05-04T23:20:36.354984Z	debug	envoy conn_handler	[C43] new connection from 10.217.0.1:60996
+2023-05-04T23:20:36.355129Z	debug	envoy http	[C43] new stream
+2023-05-04T23:20:36.355207Z	debug	envoy http	[C43][S6643443991772386289] request headers complete (end_stream=true):
+':authority', '10.217.1.42:15021'
+':path', '/healthz/ready'
+':method', 'GET'
+'user-agent', 'kube-probe/1.25'
+'accept', '*/*'
+'connection', 'close'
+
+2023-05-04T23:20:36.355245Z	debug	envoy http	[C43][S6643443991772386289] request end stream
+2023-05-04T23:20:36.355279Z	debug	envoy connection	[C43] current connecting state: false
+2023-05-04T23:20:36.355315Z	debug	envoy router	[C43][S6643443991772386289] cluster 'agent' match for URL '/healthz/ready'
+2023-05-04T23:20:36.355359Z	debug	envoy router	[C43][S6643443991772386289] router decoding headers:
+':authority', '10.217.1.42:15021'
+':path', '/healthz/ready'
+':method', 'GET'
+':scheme', 'http'
+'user-agent', 'kube-probe/1.25'
+'accept', '*/*'
+'x-forwarded-proto', 'http'
+'x-request-id', '705a029b-166e-473f-ac7c-12dea8d05544'
+'x-envoy-expected-rq-timeout-ms', '15000'
+
+2023-05-04T23:20:36.355402Z	debug	envoy pool	[C39] using existing connection
+2023-05-04T23:20:36.355424Z	debug	envoy pool	[C39] creating stream
+2023-05-04T23:20:36.355445Z	debug	envoy router	[C43][S6643443991772386289] pool ready
+2023-05-04T23:20:36.355845Z	debug	envoy client	[C39] response complete
+2023-05-04T23:20:36.355887Z	debug	envoy router	[C43][S6643443991772386289] upstream headers complete: end_stream=true
+2023-05-04T23:20:36.355945Z	debug	envoy http	[C43][S6643443991772386289] closing connection due to connection close header
+2023-05-04T23:20:36.355993Z	debug	envoy http	[C43][S6643443991772386289] encoding headers via codec (end_stream=true):
+':status', '200'
+'date', 'Thu, 04 May 2023 23:20:36 GMT'
+'content-length', '0'
+'x-envoy-upstream-service-time', '0'
+'server', 'envoy'
+'connection', 'close'
+
+2023-05-04T23:20:36.356051Z	debug	envoy connection	[C43] closing data_to_write=143 type=0
+2023-05-04T23:20:36.356086Z	debug	envoy connection	[C43] enabling delayed close timer with timeout 1000 ms
+2023-05-04T23:20:36.356112Z	debug	envoy pool	[C39] response complete
+2023-05-04T23:20:36.356132Z	debug	envoy pool	[C39] destroying stream: 0 remaining
+2023-05-04T23:20:36.356218Z	debug	envoy connection	[C43] write flush complete
+2023-05-04T23:20:36.356245Z	debug	envoy connection	[C43] closing socket: 1
+2023-05-04T23:20:36.356299Z	debug	envoy conn_handler	[C43] adding to cleanup list
+2023-05-04T23:20:37.071743Z	debug	envoy filter	tls inspector: new connection accepted
+2023-05-04T23:20:37.072989Z	debug	envoy filter	tls:onServerName(), requestedServerName: oracledb.apps-crc.testing
+2023-05-04T23:20:37.073986Z	debug	envoy filter	[C44] new tcp proxy session
+2023-05-04T23:20:37.074078Z	debug	envoy filter	[C44] Creating connection to cluster outbound|32501|oracle-tls|oracledb.apps-crc.testing
+2023-05-04T23:20:37.074108Z	debug	envoy misc	Allocating TCP conn pool
+2023-05-04T23:20:37.074124Z	debug	envoy pool	trying to create new connection
+2023-05-04T23:20:37.074127Z	debug	envoy pool	creating a new connection
+2023-05-04T23:20:37.074632Z	debug	envoy connection	[C45] connecting to 192.168.130.11:32501
+2023-05-04T23:20:37.075093Z	debug	envoy connection	[C45] connection in progress
+2023-05-04T23:20:37.075123Z	debug	envoy conn_handler	[C44] new connection from 10.217.1.34:48950
+2023-05-04T23:20:37.078304Z	debug	envoy connection	[C45] connected
+2023-05-04T23:20:37.083633Z	debug	envoy pool	[C45] attaching to next stream
+2023-05-04T23:20:37.083664Z	debug	envoy pool	[C45] creating stream
+2023-05-04T23:20:37.083691Z	debug	envoy filter	[C44] TCP:onUpstreamEvent(), requestedServerName: oracledb.apps-crc.testing
+2023-05-04T23:20:38.356178Z	debug	envoy conn_handler	[C46] new connection from 10.217.0.1:32778
+2023-05-04T23:20:38.356252Z	debug	envoy http	[C46] new stream
+2023-05-04T23:20:38.356316Z	debug	envoy http	[C46][S14324515221176203403] request headers complete (end_stream=true):
+':authority', '10.217.1.42:15021'
+':path', '/healthz/ready'
+':method', 'GET'
+'user-agent', 'kube-probe/1.25'
+'accept', '*/*'
+'connection', 'close'
+
+2023-05-04T23:20:38.356324Z	debug	envoy http	[C46][S14324515221176203403] request end stream
+2023-05-04T23:20:38.356340Z	debug	envoy connection	[C46] current connecting state: false
+2023-05-04T23:20:38.356359Z	debug	envoy router	[C46][S14324515221176203403] cluster 'agent' match for URL '/healthz/ready'
+2023-05-04T23:20:38.356390Z	debug	envoy router	[C46][S14324515221176203403] router decoding headers:
+':authority', '10.217.1.42:15021'
+':path', '/healthz/ready'
+':method', 'GET'
+':scheme', 'http'
+'user-agent', 'kube-probe/1.25'
+'accept', '*/*'
+'x-forwarded-proto', 'http'
+'x-request-id', '7cd1c912-b1a0-4cc8-9fa5-7766386361a7'
+'x-envoy-expected-rq-timeout-ms', '15000'
+
+2023-05-04T23:20:38.356405Z	debug	envoy pool	[C15] using existing connection
+2023-05-04T23:20:38.356408Z	debug	envoy pool	[C15] creating stream
+2023-05-04T23:20:38.356415Z	debug	envoy router	[C46][S14324515221176203403] pool ready
+2023-05-04T23:20:38.357059Z	debug	envoy client	[C15] response complete
+2023-05-04T23:20:38.357124Z	debug	envoy router	[C46][S14324515221176203403] upstream headers complete: end_stream=true
+2023-05-04T23:20:38.357177Z	debug	envoy http	[C46][S14324515221176203403] closing connection due to connection close header
+2023-05-04T23:20:38.357214Z	debug	envoy http	[C46][S14324515221176203403] encoding headers via codec (end_stream=true):
+':status', '200'
+'date', 'Thu, 04 May 2023 23:20:38 GMT'
+'content-length', '0'
+'x-envoy-upstream-service-time', '0'
+'server', 'envoy'
+'connection', 'close'
+
+2023-05-04T23:20:38.357254Z	debug	envoy connection	[C46] closing data_to_write=143 type=0
+2023-05-04T23:20:38.357275Z	debug	envoy connection	[C46] enabling delayed close timer with timeout 1000 ms
+2023-05-04T23:20:38.357319Z	debug	envoy pool	[C15] response complete
+2023-05-04T23:20:38.357340Z	debug	envoy pool	[C15] destroying stream: 0 remaining
+2023-05-04T23:20:38.357424Z	debug	envoy connection	[C46] write flush complete
+2023-05-04T23:20:38.357452Z	debug	envoy connection	[C46] closing socket: 1
+2023-05-04T23:20:38.357526Z	debug	envoy conn_handler	[C46] adding to cleanup list
+2023-05-04T23:20:38.382127Z	debug	envoy connection	[C45] SSL shutdown: rc=0
+2023-05-04T23:20:38.382882Z	debug	envoy connection	[C45] errno:0:Success:TLS error: 336130491:SSL routines:ssl3_get_record:bad record type
+2023-05-04T23:20:38.382939Z	debug	envoy connection	[C45] remote close
+2023-05-04T23:20:38.382970Z	debug	envoy connection	[C45] closing socket: 0
+2023-05-04T23:20:38.383095Z	debug	envoy pool	[C45] client disconnected, failure reason: TLS error: 336130491:SSL routines:ssl3_get_record:bad record type
+2023-05-04T23:20:38.383154Z	debug	envoy pool	invoking idle callbacks - is_draining_for_deletion_=false
+2023-05-04T23:20:38.383183Z	debug	envoy pool	[C45] destroying stream: 0 remaining
+2023-05-04T23:20:38.383207Z	debug	envoy pool	invoking idle callbacks - is_draining_for_deletion_=false
+2023-05-04T23:20:38.383451Z	debug	envoy connection	[C44] closing data_to_write=0 type=0
+2023-05-04T23:20:38.383479Z	debug	envoy connection	[C44] closing socket: 1
+2023-05-04T23:20:38.383734Z	debug	envoy connection	[C44] SSL shutdown: rc=1
+2023-05-04T23:20:38.385067Z	debug	envoy wasm	wasm log stats_outbound tcp_stats_outbound: [extensions/stats/plugin.cc:664]::report() metricKey cache miss istio_tcp_connections_closed_total , stat=12, recurrent=0
+2023-05-04T23:20:38.386523Z	debug	envoy wasm	wasm log stats_outbound tcp_stats_outbound: [extensions/stats/plugin.cc:664]::report() metricKey cache miss istio_tcp_received_bytes_total , stat=16, recurrent=1
+2023-05-04T23:20:38.387820Z	debug	envoy wasm	wasm log stats_outbound tcp_stats_outbound: [extensions/stats/plugin.cc:664]::report() metricKey cache miss istio_tcp_sent_bytes_total , stat=20, recurrent=1
+2023-05-04T23:20:38.389067Z	debug	envoy wasm	wasm log stats_outbound tcp_stats_outbound: [extensions/stats/plugin.cc:664]::report() metricKey cache miss istio_tcp_connections_opened_total , stat=24, recurrent=1
+2023-05-04T23:20:38.389242Z	debug	envoy conn_handler	[C44] adding to cleanup list
+[2023-05-04T23:20:37.071Z] "- - -" 0 - - - "-" 266 8 1317 - "-" "-" "-" "-" "192.168.130.11:32501" outbound|32501|oracle-tls|oracledb.apps-crc.testing 10.217.1.42:38132 10.217.1.42:8443 10.217.1.34:48950 oracledb.apps-crc.testing -
+2023-05-04T23:20:38.666844Z	debug	envoy dns	dns resolution for jaeger-collector.istio-system.svc started
+2023-05-04T23:20:38.667897Z	debug	envoy dns	dns resolution for jaeger-collector.istio-system.svc completed with status 0
+2023-05-04T23:20:38.667924Z	debug	envoy upstream	transport socket match, socket default selected for host with address 10.217.5.25:9411
+2023-05-04T23:20:38.667942Z	debug	envoy upstream	DNS refresh rate reset for jaeger-collector.istio-system.svc, refresh rate 5000 ms
+2023-05-04T23:20:39.655568Z	debug	envoy main	flushing stats
+2023-05-04T23:20:39.940518Z	info	envoy main	shutting down parent after drain
+2023-05-04T23:20:40.355632Z	debug	envoy conn_handler	[C47] new connection from 10.217.0.1:32786
+2023-05-04T23:20:40.355840Z	debug	envoy http	[C47] new stream
+2023-05-04T23:20:40.355965Z	debug	envoy http	[C47][S16638606897308625725] request headers complete (end_stream=true):
+':authority', '10.217.1.42:15021'
+':path', '/healthz/ready'
+':method', 'GET'
+'user-agent', 'kube-probe/1.25'
+'accept', '*/*'
+'connection', 'close'
+
+2023-05-04T23:20:40.356009Z	debug	envoy http	[C47][S16638606897308625725] request end stream
+2023-05-04T23:20:40.356045Z	debug	envoy connection	[C47] current connecting state: false
+2023-05-04T23:20:40.356080Z	debug	envoy router	[C47][S16638606897308625725] cluster 'agent' match for URL '/healthz/ready'
+2023-05-04T23:20:40.356146Z	debug	envoy router	[C47][S16638606897308625725] router decoding headers:
+':authority', '10.217.1.42:15021'
+':path', '/healthz/ready'
+':method', 'GET'
+':scheme', 'http'
+'user-agent', 'kube-probe/1.25'
+'accept', '*/*'
+'x-forwarded-proto', 'http'
+'x-request-id', '55b36d32-436e-46d4-bdd0-168832dfea95'
+'x-envoy-expected-rq-timeout-ms', '15000'
+
+2023-05-04T23:20:40.356192Z	debug	envoy pool	[C3] using existing connection
+2023-05-04T23:20:40.356223Z	debug	envoy pool	[C3] creating stream
+2023-05-04T23:20:40.356245Z	debug	envoy router	[C47][S16638606897308625725] pool ready
+2023-05-04T23:20:40.356900Z	debug	envoy client	[C3] response complete
+2023-05-04T23:20:40.357107Z	debug	envoy router	[C47][S16638606897308625725] upstream headers complete: end_stream=true
+2023-05-04T23:20:40.357175Z	debug	envoy http	[C47][S16638606897308625725] closing connection due to connection close header
+2023-05-04T23:20:40.357234Z	debug	envoy http	[C47][S16638606897308625725] encoding headers via codec (end_stream=true):
+':status', '200'
+'date', 'Thu, 04 May 2023 23:20:40 GMT'
+'content-length', '0'
+'x-envoy-upstream-service-time', '0'
+'server', 'envoy'
+'connection', 'close'
+
+2023-05-04T23:20:40.357271Z	debug	envoy connection	[C47] closing data_to_write=143 type=0
+2023-05-04T23:20:40.357292Z	debug	envoy connection	[C47] enabling delayed close timer with timeout 1000 ms
+2023-05-04T23:20:40.357318Z	debug	envoy pool	[C3] response complete
+2023-05-04T23:20:40.357339Z	debug	envoy pool	[C3] destroying stream: 0 remaining
+2023-05-04T23:20:40.357447Z	debug	envoy connection	[C47] write flush complete
+2023-05-04T23:20:40.357475Z	debug	envoy connection	[C47] closing socket: 1
+2023-05-04T23:20:40.357550Z	debug	envoy conn_handler	[C47] adding to cleanup list
+2023-05-04T23:20:41.021908Z	debug	envoy filter	tls inspector: new connection accepted
+2023-05-04T23:20:41.022004Z	debug	envoy filter	tls:onServerName(), requestedServerName: oracledb.apps-crc.testing
+2023-05-04T23:20:41.022072Z	debug	envoy filter	[C48] new tcp proxy session
+2023-05-04T23:20:41.022102Z	debug	envoy filter	[C48] Creating connection to cluster outbound|32501|oracle-tls|oracledb.apps-crc.testing
+2023-05-04T23:20:41.022119Z	debug	envoy misc	Allocating TCP conn pool
+2023-05-04T23:20:41.022129Z	debug	envoy pool	trying to create new connection
+2023-05-04T23:20:41.022131Z	debug	envoy pool	creating a new connection
+2023-05-04T23:20:41.022177Z	debug	envoy connection	[C49] connecting to 192.168.130.11:32501
+2023-05-04T23:20:41.022909Z	debug	envoy connection	[C49] connection in progress
+2023-05-04T23:20:41.022932Z	debug	envoy conn_handler	[C48] new connection from 10.217.1.34:48954
+2023-05-04T23:20:41.023916Z	debug	envoy connection	[C49] connected
+2023-05-04T23:20:41.028138Z	debug	envoy pool	[C49] attaching to next stream
+2023-05-04T23:20:41.028158Z	debug	envoy pool	[C49] creating stream
+2023-05-04T23:20:41.028180Z	debug	envoy filter	[C48] TCP:onUpstreamEvent(), requestedServerName: oracledb.apps-crc.testing
+2023-05-04T23:20:42.347652Z	debug	envoy connection	[C49] SSL shutdown: rc=0
+2023-05-04T23:20:42.347811Z	debug	envoy connection	[C49] errno:0:Success:TLS error: 336130491:SSL routines:ssl3_get_record:bad record type
+2023-05-04T23:20:42.347822Z	debug	envoy connection	[C49] remote close
+2023-05-04T23:20:42.347824Z	debug	envoy connection	[C49] closing socket: 0
+2023-05-04T23:20:42.347868Z	debug	envoy pool	[C49] client disconnected, failure reason: TLS error: 336130491:SSL routines:ssl3_get_record:bad record type
+2023-05-04T23:20:42.347885Z	debug	envoy pool	invoking idle callbacks - is_draining_for_deletion_=false
+2023-05-04T23:20:42.347894Z	debug	envoy pool	[C49] destroying stream: 0 remaining
+2023-05-04T23:20:42.347897Z	debug	envoy pool	invoking idle callbacks - is_draining_for_deletion_=false
+2023-05-04T23:20:42.347900Z	debug	envoy connection	[C48] closing data_to_write=0 type=0
+2023-05-04T23:20:42.347903Z	debug	envoy connection	[C48] closing socket: 1
+2023-05-04T23:20:42.347972Z	debug	envoy connection	[C48] SSL shutdown: rc=1
+2023-05-04T23:20:42.348074Z	debug	envoy wasm	wasm log stats_outbound tcp_stats_outbound: [extensions/stats/plugin.cc:645]::report() metricKey cache hit , stat=12
+2023-05-04T23:20:42.348080Z	debug	envoy wasm	wasm log stats_outbound tcp_stats_outbound: [extensions/stats/plugin.cc:645]::report() metricKey cache hit , stat=16
+2023-05-04T23:20:42.348082Z	debug	envoy wasm	wasm log stats_outbound tcp_stats_outbound: [extensions/stats/plugin.cc:645]::report() metricKey cache hit , stat=20
+2023-05-04T23:20:42.348083Z	debug	envoy wasm	wasm log stats_outbound tcp_stats_outbound: [extensions/stats/plugin.cc:645]::report() metricKey cache hit , stat=24
+2023-05-04T23:20:42.348088Z	debug	envoy conn_handler	[C48] adding to cleanup list
+2023-05-04T23:20:42.355614Z	debug	envoy conn_handler	[C50] new connection from 10.217.0.1:32800
+2023-05-04T23:20:42.355678Z	debug	envoy http	[C50] new stream
+2023-05-04T23:20:42.355735Z	debug	envoy http	[C50][S4581719422011449318] request headers complete (end_stream=true):
+':authority', '10.217.1.42:15021'
+':path', '/healthz/ready'
+':method', 'GET'
+'user-agent', 'kube-probe/1.25'
+'accept', '*/*'
+'connection', 'close'
+
+2023-05-04T23:20:42.355739Z	debug	envoy http	[C50][S4581719422011449318] request end stream
+2023-05-04T23:20:42.355753Z	debug	envoy connection	[C50] current connecting state: false
+2023-05-04T23:20:42.355773Z	debug	envoy router	[C50][S4581719422011449318] cluster 'agent' match for URL '/healthz/ready'
+2023-05-04T23:20:42.355805Z	debug	envoy router	[C50][S4581719422011449318] router decoding headers:
+':authority', '10.217.1.42:15021'
+':path', '/healthz/ready'
+':method', 'GET'
+':scheme', 'http'
+'user-agent', 'kube-probe/1.25'
+'accept', '*/*'
+'x-forwarded-proto', 'http'
+'x-request-id', 'f1f3e645-4f1f-4d6c-812f-6f485a373e28'
+'x-envoy-expected-rq-timeout-ms', '15000'
+
+2023-05-04T23:20:42.355818Z	debug	envoy pool	[C15] using existing connection
+2023-05-04T23:20:42.355821Z	debug	envoy pool	[C15] creating stream
+2023-05-04T23:20:42.355827Z	debug	envoy router	[C50][S4581719422011449318] pool ready
+2023-05-04T23:20:42.356149Z	debug	envoy client	[C15] response complete
+2023-05-04T23:20:42.356167Z	debug	envoy router	[C50][S4581719422011449318] upstream headers complete: end_stream=true
+2023-05-04T23:20:42.356196Z	debug	envoy http	[C50][S4581719422011449318] closing connection due to connection close header
+2023-05-04T23:20:42.356204Z	debug	envoy http	[C50][S4581719422011449318] encoding headers via codec (end_stream=true):
+':status', '200'
+'date', 'Thu, 04 May 2023 23:20:42 GMT'
+'content-length', '0'
+'x-envoy-upstream-service-time', '0'
+'server', 'envoy'
+'connection', 'close'
+
+2023-05-04T23:20:42.356216Z	debug	envoy connection	[C50] closing data_to_write=143 type=0
+2023-05-04T23:20:42.356220Z	debug	envoy connection	[C50] enabling delayed close timer with timeout 1000 ms
+2023-05-04T23:20:42.356229Z	debug	envoy pool	[C15] response complete
+2023-05-04T23:20:42.356232Z	debug	envoy pool	[C15] destroying stream: 0 remaining
+2023-05-04T23:20:42.356302Z	debug	envoy connection	[C50] write flush complete
+2023-05-04T23:20:42.356309Z	debug	envoy connection	[C50] closing socket: 1
+2023-05-04T23:20:42.356334Z	debug	envoy conn_handler	[C50] adding to cleanup list
+[2023-05-04T23:20:41.021Z] "- - -" 0 - - - "-" 266 8 1326 - "-" "-" "-" "-" "192.168.130.11:32501" outbound|32501|oracle-tls|oracledb.apps-crc.testing 10.217.1.42:38148 10.217.1.42:8443 10.217.1.34:48954 oracledb.apps-crc.testing -
+2023-05-04T23:20:43.667598Z	debug	envoy dns	dns resolution for jaeger-collector.istio-system.svc started
+2023-05-04T23:20:43.668521Z	debug	envoy dns	dns resolution for jaeger-collector.istio-system.svc completed with status 0
+2023-05-04T23:20:43.668548Z	debug	envoy upstream	transport socket match, socket default selected for host with address 10.217.5.25:9411
+2023-05-04T23:20:43.668565Z	debug	envoy upstream	DNS refresh rate reset for jaeger-collector.istio-system.svc, refresh rate 5000 ms
+2023-05-04T23:20:44.355015Z	debug	envoy conn_handler	[C51] new connection from 10.217.0.1:54840
+2023-05-04T23:20:44.355086Z	debug	envoy http	[C51] new stream
+2023-05-04T23:20:44.355132Z	debug	envoy http	[C51][S10359693378804949191] request headers complete (end_stream=true):
+':authority', '10.217.1.42:15021'
+':path', '/healthz/ready'
+':method', 'GET'
+'user-agent', 'kube-probe/1.25'
+'accept', '*/*'
+'connection', 'close'
+
+2023-05-04T23:20:44.355137Z	debug	envoy http	[C51][S10359693378804949191] request end stream
+2023-05-04T23:20:44.355152Z	debug	envoy connection	[C51] current connecting state: false
+2023-05-04T23:20:44.355170Z	debug	envoy router	[C51][S10359693378804949191] cluster 'agent' match for URL '/healthz/ready'
+2023-05-04T23:20:44.355195Z	debug	envoy router	[C51][S10359693378804949191] router decoding headers:
+':authority', '10.217.1.42:15021'
+':path', '/healthz/ready'
+':method', 'GET'
+':scheme', 'http'
+'user-agent', 'kube-probe/1.25'
+'accept', '*/*'
+'x-forwarded-proto', 'http'
+'x-request-id', '48f354cb-28f2-46ac-9410-ff360accd3c1'
+'x-envoy-expected-rq-timeout-ms', '15000'
+
+2023-05-04T23:20:44.355202Z	debug	envoy pool	[C10] using existing connection
+2023-05-04T23:20:44.355205Z	debug	envoy pool	[C10] creating stream
+2023-05-04T23:20:44.355211Z	debug	envoy router	[C51][S10359693378804949191] pool ready
+2023-05-04T23:20:44.355421Z	debug	envoy client	[C10] response complete
+2023-05-04T23:20:44.355431Z	debug	envoy router	[C51][S10359693378804949191] upstream headers complete: end_stream=true
+2023-05-04T23:20:44.355453Z	debug	envoy http	[C51][S10359693378804949191] closing connection due to connection close header
+2023-05-04T23:20:44.355461Z	debug	envoy http	[C51][S10359693378804949191] encoding headers via codec (end_stream=true):
+':status', '200'
+'date', 'Thu, 04 May 2023 23:20:44 GMT'
+'content-length', '0'
+'x-envoy-upstream-service-time', '0'
+'server', 'envoy'
+'connection', 'close'
+
+2023-05-04T23:20:44.355471Z	debug	envoy connection	[C51] closing data_to_write=143 type=0
+2023-05-04T23:20:44.355474Z	debug	envoy connection	[C51] enabling delayed close timer with timeout 1000 ms
+2023-05-04T23:20:44.355481Z	debug	envoy pool	[C10] response complete
+2023-05-04T23:20:44.355484Z	debug	envoy pool	[C10] destroying stream: 0 remaining
+2023-05-04T23:20:44.355546Z	debug	envoy connection	[C51] write flush complete
+2023-05-04T23:20:44.355550Z	debug	envoy connection	[C51] closing socket: 1
+2023-05-04T23:20:44.355573Z	debug	envoy conn_handler	[C51] adding to cleanup list
+2023-05-04T23:20:44.655909Z	debug	envoy main	flushing stats
+2023-05-04T23:20:45.115716Z	debug	envoy filter	tls inspector: new connection accepted
+2023-05-04T23:20:45.116011Z	debug	envoy filter	tls:onServerName(), requestedServerName: oracledb.apps-crc.testing
+2023-05-04T23:20:45.116088Z	debug	envoy filter	[C52] new tcp proxy session
+2023-05-04T23:20:45.116105Z	debug	envoy filter	[C52] Creating connection to cluster outbound|32501|oracle-tls|oracledb.apps-crc.testing
+2023-05-04T23:20:45.116121Z	debug	envoy misc	Allocating TCP conn pool
+2023-05-04T23:20:45.116131Z	debug	envoy pool	trying to create new connection
+2023-05-04T23:20:45.116133Z	debug	envoy pool	creating a new connection
+2023-05-04T23:20:45.116187Z	debug	envoy connection	[C53] connecting to 192.168.130.11:32501
+2023-05-04T23:20:45.116370Z	debug	envoy connection	[C53] connection in progress
+2023-05-04T23:20:45.116382Z	debug	envoy conn_handler	[C52] new connection from 10.217.1.34:57184
+2023-05-04T23:20:45.116704Z	debug	envoy connection	[C53] connected
+2023-05-04T23:20:45.122280Z	debug	envoy pool	[C53] attaching to next stream
+2023-05-04T23:20:45.122310Z	debug	envoy pool	[C53] creating stream
+2023-05-04T23:20:45.122338Z	debug	envoy filter	[C52] TCP:onUpstreamEvent(), requestedServerName: oracledb.apps-crc.testing
+2023-05-04T23:20:46.355313Z	debug	envoy conn_handler	[C54] new connection from 10.217.0.1:54844
+2023-05-04T23:20:46.355388Z	debug	envoy http	[C54] new stream
+2023-05-04T23:20:46.355436Z	debug	envoy http	[C54][S5355752078526288012] request headers complete (end_stream=true):
+':authority', '10.217.1.42:15021'
+':path', '/healthz/ready'
+':method', 'GET'
+'user-agent', 'kube-probe/1.25'
+'accept', '*/*'
+'connection', 'close'
+
+2023-05-04T23:20:46.355444Z	debug	envoy http	[C54][S5355752078526288012] request end stream
+2023-05-04T23:20:46.355460Z	debug	envoy connection	[C54] current connecting state: false
+2023-05-04T23:20:46.355485Z	debug	envoy router	[C54][S5355752078526288012] cluster 'agent' match for URL '/healthz/ready'
+2023-05-04T23:20:46.355514Z	debug	envoy router	[C54][S5355752078526288012] router decoding headers:
+':authority', '10.217.1.42:15021'
+':path', '/healthz/ready'
+':method', 'GET'
+':scheme', 'http'
+'user-agent', 'kube-probe/1.25'
+'accept', '*/*'
+'x-forwarded-proto', 'http'
+'x-request-id', 'afb09ab0-e26e-484d-8c3f-dd32017288b3'
+'x-envoy-expected-rq-timeout-ms', '15000'
+
+2023-05-04T23:20:46.355525Z	debug	envoy pool	[C39] using existing connection
+2023-05-04T23:20:46.355529Z	debug	envoy pool	[C39] creating stream
+2023-05-04T23:20:46.355535Z	debug	envoy router	[C54][S5355752078526288012] pool ready
+2023-05-04T23:20:46.356368Z	debug	envoy client	[C39] response complete
+2023-05-04T23:20:46.356392Z	debug	envoy router	[C54][S5355752078526288012] upstream headers complete: end_stream=true
+2023-05-04T23:20:46.356455Z	debug	envoy http	[C54][S5355752078526288012] closing connection due to connection close header
+2023-05-04T23:20:46.356466Z	debug	envoy http	[C54][S5355752078526288012] encoding headers via codec (end_stream=true):
+':status', '200'
+'date', 'Thu, 04 May 2023 23:20:46 GMT'
+'content-length', '0'
+'x-envoy-upstream-service-time', '0'
+'server', 'envoy'
+'connection', 'close'
+
+2023-05-04T23:20:46.356479Z	debug	envoy connection	[C54] closing data_to_write=143 type=0
+2023-05-04T23:20:46.356483Z	debug	envoy connection	[C54] enabling delayed close timer with timeout 1000 ms
+2023-05-04T23:20:46.356494Z	debug	envoy pool	[C39] response complete
+2023-05-04T23:20:46.356497Z	debug	envoy pool	[C39] destroying stream: 0 remaining
+2023-05-04T23:20:46.356608Z	debug	envoy connection	[C54] write flush complete
+2023-05-04T23:20:46.356619Z	debug	envoy connection	[C54] closing socket: 1
+2023-05-04T23:20:46.356649Z	debug	envoy conn_handler	[C54] adding to cleanup list
+2023-05-04T23:20:46.358634Z	debug	envoy connection	[C53] SSL shutdown: rc=0
+2023-05-04T23:20:46.359302Z	debug	envoy connection	[C53] errno:0:Success:TLS error: 336130491:SSL routines:ssl3_get_record:bad record type
+2023-05-04T23:20:46.359320Z	debug	envoy connection	[C53] remote close
+2023-05-04T23:20:46.359324Z	debug	envoy connection	[C53] closing socket: 0
+2023-05-04T23:20:46.359356Z	debug	envoy pool	[C53] client disconnected, failure reason: TLS error: 336130491:SSL routines:ssl3_get_record:bad record type
+2023-05-04T23:20:46.359493Z	debug	envoy pool	invoking idle callbacks - is_draining_for_deletion_=false
+2023-05-04T23:20:46.359513Z	debug	envoy pool	[C53] destroying stream: 0 remaining
+2023-05-04T23:20:46.359519Z	debug	envoy pool	invoking idle callbacks - is_draining_for_deletion_=false
+2023-05-04T23:20:46.359527Z	debug	envoy connection	[C52] closing data_to_write=0 type=0
+2023-05-04T23:20:46.359531Z	debug	envoy connection	[C52] closing socket: 1
+2023-05-04T23:20:46.360354Z	debug	envoy connection	[C52] SSL shutdown: rc=1
+2023-05-04T23:20:46.360773Z	debug	envoy wasm	wasm log stats_outbound tcp_stats_outbound: [extensions/stats/plugin.cc:645]::report() metricKey cache hit , stat=12
+2023-05-04T23:20:46.360786Z	debug	envoy wasm	wasm log stats_outbound tcp_stats_outbound: [extensions/stats/plugin.cc:645]::report() metricKey cache hit , stat=16
+2023-05-04T23:20:46.360790Z	debug	envoy wasm	wasm log stats_outbound tcp_stats_outbound: [extensions/stats/plugin.cc:645]::report() metricKey cache hit , stat=20
+2023-05-04T23:20:46.360793Z	debug	envoy wasm	wasm log stats_outbound tcp_stats_outbound: [extensions/stats/plugin.cc:645]::report() metricKey cache hit , stat=24
+2023-05-04T23:20:46.360799Z	debug	envoy conn_handler	[C52] adding to cleanup list
+[2023-05-04T23:20:45.115Z] "- - -" 0 - - - "-" 266 8 1245 - "-" "-" "-" "-" "192.168.130.11:32501" outbound|32501|oracle-tls|oracledb.apps-crc.testing 10.217.1.42:33436 10.217.1.42:8443 10.217.1.34:57184 oracledb.apps-crc.testing -
+2023-05-04T23:20:48.324323Z	debug	envoy http	[C11] new stream
+2023-05-04T23:20:48.324417Z	debug	envoy http	[C11][S16831276013771216663] request headers complete (end_stream=true):
+':authority', 'localhost:15090'
+':path', '/stats/prometheus'
+':method', 'GET'
+'user-agent', 'Prometheus/2.23.0'
+'accept', 'application/openmetrics-text; version=0.0.1,text/plain;version=0.0.4;q=0.5,*/*;q=0.1'
+'x-prometheus-scrape-timeout-seconds', '10.000000'
+'accept-encoding', 'gzip'
+
+2023-05-04T23:20:48.324426Z	debug	envoy http	[C11][S16831276013771216663] request end stream
+2023-05-04T23:20:48.324471Z	debug	envoy connection	[C11] current connecting state: false
+2023-05-04T23:20:48.324505Z	debug	envoy router	[C11][S16831276013771216663] cluster 'prometheus_stats' match for URL '/stats/prometheus'
+2023-05-04T23:20:48.324592Z	debug	envoy router	[C11][S16831276013771216663] router decoding headers:
+':authority', 'localhost:15090'
+':path', '/stats/prometheus'
+':method', 'GET'
+':scheme', 'http'
+'user-agent', 'Prometheus/2.23.0'
+'accept', 'application/openmetrics-text; version=0.0.1,text/plain;version=0.0.4;q=0.5,*/*;q=0.1'
+'x-prometheus-scrape-timeout-seconds', '10.000000'
+'accept-encoding', 'gzip'
+'x-forwarded-proto', 'http'
+'x-request-id', '1979dcfb-b839-429b-857f-84037c0227a2'
+'x-envoy-expected-rq-timeout-ms', '15000'
+
+2023-05-04T23:20:48.324862Z	debug	envoy pool	[C12] using existing connection
+2023-05-04T23:20:48.324900Z	debug	envoy pool	[C12] creating stream
+2023-05-04T23:20:48.324931Z	debug	envoy router	[C11][S16831276013771216663] pool ready
+2023-05-04T23:20:48.325143Z	debug	envoy http	[C13] new stream
+2023-05-04T23:20:48.325191Z	debug	envoy http	[C13][S1977350477710211948] request headers complete (end_stream=true):
+':authority', 'localhost:15090'
+':path', '/stats/prometheus'
+':method', 'GET'
+'user-agent', 'Prometheus/2.23.0'
+'accept', 'application/openmetrics-text; version=0.0.1,text/plain;version=0.0.4;q=0.5,*/*;q=0.1'
+'x-prometheus-scrape-timeout-seconds', '10.000000'
+'accept-encoding', 'gzip'
+'x-forwarded-proto', 'http'
+'x-request-id', '1979dcfb-b839-429b-857f-84037c0227a2'
+'x-envoy-expected-rq-timeout-ms', '15000'
+
+2023-05-04T23:20:48.325195Z	debug	envoy http	[C13][S1977350477710211948] request end stream
+2023-05-04T23:20:48.325209Z	debug	envoy connection	[C13] current connecting state: false
+2023-05-04T23:20:48.325218Z	debug	envoy admin	[C13][S1977350477710211948] request complete: path: /stats/prometheus
+2023-05-04T23:20:48.327722Z	debug	envoy http	[C13][S1977350477710211948] encoding headers via codec (end_stream=false):
+':status', '200'
+'content-type', 'text/plain; charset=UTF-8'
+'cache-control', 'no-cache, max-age=0'
+'x-content-type-options', 'nosniff'
+'date', 'Thu, 04 May 2023 23:20:48 GMT'
+'server', 'envoy'
+
+2023-05-04T23:20:48.327754Z	debug	envoy misc	nextChunk: response.length=34186 more_data=false end_stream=true
+2023-05-04T23:20:48.328036Z	debug	envoy router	[C11][S16831276013771216663] upstream headers complete: end_stream=false
+2023-05-04T23:20:48.328070Z	debug	envoy http	[C11][S16831276013771216663] encoding headers via codec (end_stream=false):
+':status', '200'
+'content-type', 'text/plain; charset=UTF-8'
+'cache-control', 'no-cache, max-age=0'
+'x-content-type-options', 'nosniff'
+'date', 'Thu, 04 May 2023 23:20:48 GMT'
+'server', 'envoy'
+'x-envoy-upstream-service-time', '3'
+
+2023-05-04T23:20:48.328106Z	debug	envoy client	[C12] response complete
+2023-05-04T23:20:48.328121Z	debug	envoy pool	[C12] response complete
+2023-05-04T23:20:48.328124Z	debug	envoy pool	[C12] destroying stream: 0 remaining
+2023-05-04T23:20:48.355595Z	debug	envoy conn_handler	[C55] new connection from 10.217.0.1:54850
+2023-05-04T23:20:48.355656Z	debug	envoy http	[C55] new stream
+2023-05-04T23:20:48.355946Z	debug	envoy http	[C55][S2254065565273596256] request headers complete (end_stream=true):
+':authority', '10.217.1.42:15021'
+':path', '/healthz/ready'
+':method', 'GET'
+'user-agent', 'kube-probe/1.25'
+'accept', '*/*'
+'connection', 'close'
+
+2023-05-04T23:20:48.355968Z	debug	envoy http	[C55][S2254065565273596256] request end stream
+2023-05-04T23:20:48.355991Z	debug	envoy connection	[C55] current connecting state: false
+2023-05-04T23:20:48.356029Z	debug	envoy router	[C55][S2254065565273596256] cluster 'agent' match for URL '/healthz/ready'
+2023-05-04T23:20:48.356059Z	debug	envoy router	[C55][S2254065565273596256] router decoding headers:
+':authority', '10.217.1.42:15021'
+':path', '/healthz/ready'
+':method', 'GET'
+':scheme', 'http'
+'user-agent', 'kube-probe/1.25'
+'accept', '*/*'
+'x-forwarded-proto', 'http'
+'x-request-id', '87722c8a-9c9c-4b51-827a-8a8cb371b92e'
+'x-envoy-expected-rq-timeout-ms', '15000'
+
+2023-05-04T23:20:48.356068Z	debug	envoy pool	[C15] using existing connection
+2023-05-04T23:20:48.356070Z	debug	envoy pool	[C15] creating stream
+2023-05-04T23:20:48.356078Z	debug	envoy router	[C55][S2254065565273596256] pool ready
+2023-05-04T23:20:48.356349Z	debug	envoy client	[C15] response complete
+2023-05-04T23:20:48.356601Z	debug	envoy router	[C55][S2254065565273596256] upstream headers complete: end_stream=true
+2023-05-04T23:20:48.357055Z	debug	envoy http	[C55][S2254065565273596256] closing connection due to connection close header
+2023-05-04T23:20:48.357073Z	debug	envoy http	[C55][S2254065565273596256] encoding headers via codec (end_stream=true):
+':status', '200'
+'date', 'Thu, 04 May 2023 23:20:48 GMT'
+'content-length', '0'
+'x-envoy-upstream-service-time', '0'
+'server', 'envoy'
+'connection', 'close'
+
+2023-05-04T23:20:48.357087Z	debug	envoy connection	[C55] closing data_to_write=143 type=0
+2023-05-04T23:20:48.357092Z	debug	envoy connection	[C55] enabling delayed close timer with timeout 1000 ms
+2023-05-04T23:20:48.357104Z	debug	envoy pool	[C15] response complete
+2023-05-04T23:20:48.357119Z	debug	envoy pool	[C15] destroying stream: 0 remaining
+2023-05-04T23:20:48.357266Z	debug	envoy connection	[C55] write flush complete
+2023-05-04T23:20:48.357273Z	debug	envoy connection	[C55] closing socket: 1
+2023-05-04T23:20:48.357366Z	debug	envoy conn_handler	[C55] adding to cleanup list
+2023-05-04T23:20:48.670600Z	debug	envoy dns	dns resolution for jaeger-collector.istio-system.svc started
+2023-05-04T23:20:48.671681Z	debug	envoy dns	dns resolution for jaeger-collector.istio-system.svc completed with status 0
+2023-05-04T23:20:48.671719Z	debug	envoy upstream	transport socket match, socket default selected for host with address 10.217.5.25:9411
+2023-05-04T23:20:48.671746Z	debug	envoy upstream	DNS refresh rate reset for jaeger-collector.istio-system.svc, refresh rate 5000 ms

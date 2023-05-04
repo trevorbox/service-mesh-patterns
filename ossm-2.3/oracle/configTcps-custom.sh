@@ -30,13 +30,13 @@ ${WALLET_PWD}
 ${WALLET_PWD}
 EOF
 
-    # Add the /tmp/ca.self-signer.cert-manager-certificate.crt certificate
-    orapki wallet add -wallet "${CLIENT_WALLET_LOC}" -trusted_cert -cert /tmp/ca.self-signer.cert-manager-certificate.crt <<EOF
+    # Add the /tmp/mycompany.ca.root-certificate.crt certificate
+    orapki wallet add -wallet "${CLIENT_WALLET_LOC}" -trusted_cert -cert /tmp/mycompany.ca.root-certificate.crt <<EOF
 ${WALLET_PWD}
 EOF
 
     # Removing cert from /tmp location
-    rm /tmp/ca.self-signer.cert-manager-certificate.crt
+    rm /tmp/mycompany.ca.root-certificate.crt
 
     # Generate tnsnames.ora and sqlnet.ora for the consumption by the client
     echo "${ORACLE_SID}=
@@ -171,14 +171,16 @@ orapki wallet import_pkcs12 -wallet "${WALLET_LOC}" -pwd ${WALLET_PWD} -pkcs12fi
 
 echo -e "\nOracle Wallet location: ${WALLET_LOC}\n"
 
+orapki wallet display -wallet "${WALLET_LOC}"
+
 # Reconfigure listener to enable TCPS (Reload wouldn't work here)
 reconfigure_listener
 
-orapki wallet export -wallet "${WALLET_LOC}" -dn "CN=ca.self-signer.cert-manager" -cert /tmp/ca.self-signer.cert-manager-certificate.crt <<EOF
+orapki wallet export -wallet "${WALLET_LOC}" -dn "CN=mycompany.ca.root" -cert /tmp/mycompany.ca.root-certificate.crt <<EOF
 ${WALLET_PWD}
 EOF
 
-cat /tmp/ca.self-signer.cert-manager-certificate.crt
+cat /tmp/mycompany.ca.root-certificate.crt
 
 # Update the client wallet
 setupClientWallet

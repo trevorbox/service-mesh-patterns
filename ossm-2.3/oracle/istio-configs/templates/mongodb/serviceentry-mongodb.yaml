@@ -1,0 +1,20 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: mongodb
+spec:
+  hosts:
+  - {{ .Values.mongodb.host }}
+  addresses:
+  - {{ .Values.mongodb.ip }}/32
+  ports:
+  - number: {{ .Values.mongodb.port }}
+    name: tcp
+    protocol: TCP
+  - number: 443
+    name: tls-port-for-egress-gateway
+    protocol: TLS
+  location: MESH_EXTERNAL
+  resolution: STATIC
+  endpoints:
+  - address: {{ .Values.mongodb.ip }}

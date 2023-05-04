@@ -1,0 +1,78 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: dbeaver-global-config
+data:
+  data-sources.json: |-
+    {
+        "folders": {},
+        "connections": {
+                "postgresql-template-1": {
+                        "provider": "postgresql",
+                        "driver": "postgres-jdbc",
+                        "name": "PostgreSQL (Template)",
+                        "template": true,
+                        "read-only": true,
+                        "configuration": {
+                                "host": "localhost",
+                                "port": "5432",
+                                "database": "postgres",
+                                "url": "jdbc:postgresql://localhost:5432/postgres",
+                                "configurationType": "MANUAL",
+                                "type": "dev",
+                                "provider-properties": {
+                                        "@dbeaver-show-non-default-db@": "false"
+                                }
+                        }
+                },
+                "mysql8-187d8abd7b0-46d12bdc3e2ea28d": {
+                        "provider": "mysql",
+                        "driver": "mysql8",
+                        "name": "user@mysql-persistent.mysql.svc.cluster.local",
+                        "save-password": true,
+                        "configuration": {
+                                "host": "mysql-persistent.mysql.svc.cluster.local",
+                                "port": "3306",
+                                "database": "testdb",
+                                "url": "jdbc:mysql://mysql-persistent.mysql.svc.cluster.local:3306/testdb",
+                                "configurationType": "MANUAL",
+                                "type": "dev",
+                                "properties": {
+                                        "sslMode": "REQUIRED"
+                                },
+                                "auth-model": "native"
+                        }
+                },
+                "oracle_thin-187d91fc4da-7e1fe43eae91c636": {
+                        "provider": "oracle",
+                        "driver": "oracle_thin",
+                        "name": "secure-oracledb-free.oracledb-free.svc.cluster.local",
+                        "save-password": true,
+                        "configuration": {
+                                "url": "jdbc:oracle:thin:@(description\u003d(address\u003d(protocol\u003dtcps)(port\u003d6666)(host\u003dsecure-oracledb-free.oracledb-free.svc.cluster.local))(connect_data\u003d(service_name\u003dFREE))(security\u003d(ssl_server_dn_match\u003dno)))",
+                                "configurationType": "URL",
+                                "type": "dev",
+                                "properties": {
+                                        "javax.net.ssl.trustStore": "/keystore/truststore.jks",
+                                        "javax.net.ssl.trustStorePassword": "changeit"
+                                },
+                                "provider-properties": {
+                                        "@dbeaver-sid-service@": "SID",
+                                        "oracle.logon-as": "Normal"
+                                },
+                                "auth-model": "oracle_native"
+                        }
+                }
+        },
+        "connection-types": {
+                "dev": {
+                        "name": "Development",
+                        "color": "255,255,255",
+                        "description": "Regular development database",
+                        "auto-commit": true,
+                        "confirm-execute": false,
+                        "confirm-data-change": false,
+                        "auto-close-transactions": false
+                }
+        }
+    }

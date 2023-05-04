@@ -1,0 +1,5 @@
+member:
+  namespaces:
+    - istio-ingress
+    - test
+    - istio-egress

@@ -94,16 +94,32 @@ P12_PWD="123passwd"
 orapki wallet import_pkcs12 -wallet "${WALLET_LOC}" -pwd ${WALLET_PWD} -pkcs12file /secrets/oracledb-free-cert/keystore.p12 -pkcs12pwd ${P12_PWD}
 ```
 
-```sh
-oc new-app --template=mysql-persistent --namespace=openshift --name mysql-persistent MYSQL_USER=user MYSQL_ROOT_PASSWORD=pass MYSQL_PASSWORD=pass MYSQL_DATABASE=testdb -l db=mysql-persistent -o yaml
-
-
-```
-
 ## mysql
 
 ```sh
+
 helm upgrade -i mysql-persistent mysql-persistent/ -n mysql --create-namespace
+oc label namespace mysql inject-mycompany-cabundle=''
+
+# login as root
+mysql -u root
+ Host      | User             | Select_priv | Insert_priv | Update_priv | Delete_priv | Create_priv | Drop_priv | Reload_priv | Shutdown_priv | Process_priv | File_priv | Grant_priv | References_priv | Index_priv | Alter_priv | Show_db_priv | Super_priv | Create_tmp_table_priv | Lock_tables_priv | Execute_priv | Repl_slave_priv | Repl_client_priv | Create_view_priv | Show_view_priv | Create_routine_priv | Alter_routine_priv | Create_user_priv | Event_priv | Trigger_priv | Create_tablespace_priv | ssl_type | ssl_cipher             | x509_issuer              | x509_subject               | max_questions | max_updates | max_connections | max_user_connections | plugin                | authentication_string                                                  | password_expired | password_last_changed | password_lifetime | account_locked | Create_role_priv | Drop_role_priv | Password_reuse_history | Password_reuse_time | Password_require_current | User_attributes
+
+select Host,User,ssl_type from mysql.user;
+
+
+MYSQL_PWD="$MYSQL_PASSWORD" mysql -h mysql-persistent.mysql.svc.cluster.local -u $MYSQL_USER
+
+CREATE TABLE testdb.Persons (
+    PersonID int,
+    LastName varchar(255),
+    FirstName varchar(255),
+    Address varchar(255),
+    City varchar(255)
+);
+INSERT testdb.Persons (PersonID, LastName,  FirstName, Address, City)
+VALUES (1, 'Man', 'Muffin', 'Skagen 21 Stavanger 4006', 'Norway');
+
 ```
 
 ## Install Operators

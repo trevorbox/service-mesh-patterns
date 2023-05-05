@@ -15,7 +15,7 @@ data:
     !includedir /etc/my.cnf.d
 
     # Require ssl
-    ssl_ca=/secrets/mysql-cert/ca.crt
+    ssl_ca=/configmaps/mycompany-cabundle/ca-bundle.crt
     ssl_cert=/secrets/mysql-cert/tls.crt
     ssl_key=/secrets/mysql-cert/tls.key
     require_secure_transport=ON

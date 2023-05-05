@@ -1,0 +1,16 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: mysql-community-client-scripts
+data:
+  ping-mysql-loop.sh: |
+    #!/bin/bash
+
+    while true
+    do
+      MYSQL_PWD="$MYSQL_PASSWORD" mysql -h $MYSQL_HOST -P $MYSQL_PORT_NUMBER -u $MYSQL_USER <<EOF
+    status
+    exit
+    EOF
+      sleep 5
+    done

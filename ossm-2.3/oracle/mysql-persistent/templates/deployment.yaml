@@ -70,6 +70,8 @@ spec:
               name: mysql-cnf
             - mountPath: /secrets/mysql-cert
               name: mysql-cert
+            - mountPath: /configmaps/mycompany-cabundle
+              name: mycompany-cabundle
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -91,4 +93,7 @@ spec:
             name: {{ include "mysql-persistent.fullname" . }}-my-cnf
         - name: mysql-cert
           secret:
-            secretName: {{ include "mysql-persistent.fullname" . }}-cert    
+            secretName: {{ include "mysql-persistent.fullname" . }}-cert
+        - name: mycompany-cabundle
+          configMap:
+            name: mycompany-cabundle

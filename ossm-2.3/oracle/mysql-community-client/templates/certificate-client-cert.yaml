@@ -1,0 +1,16 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "mysql-community-client.fullname" . }}-cert
+  # namespace: istio-egress
+spec:
+  # Secret names are always required.
+  secretName: {{ include "mysql-community-client.fullname" . }}-cert
+  commonName: "testclient"
+  usages:
+    - server auth
+    - client auth  
+  issuerRef:
+    kind: ClusterIssuer
+    name: mycompany-intermediaryca-issuer
+    # name: mycompany-rootca-issuer

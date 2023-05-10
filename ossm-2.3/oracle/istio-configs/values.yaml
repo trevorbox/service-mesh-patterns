@@ -9,6 +9,10 @@ oracledb:
   host: oracledb.apps-crc.testing
   ip: 192.168.130.11
   port: 32501
+mysqldb:
+  host: mysqldb.apps-crc.testing
+  ip: 192.168.130.11
+  port: 32096
 gateways:
   egress:
     host: istio-egressgateway.istio-egress.svc.cluster.local

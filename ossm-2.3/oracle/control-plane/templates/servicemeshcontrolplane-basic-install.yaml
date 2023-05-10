@@ -60,9 +60,9 @@ spec:
       container:
         resources: {} # opting to use LimitRange instead since oauth sidecars don't get the defaults
   gateways:
-    enabled: true
+    enabled: false
     egress:
-      enabled: true
+      enabled: false
     ingress:   
       enabled: false
     # additionalIngress:

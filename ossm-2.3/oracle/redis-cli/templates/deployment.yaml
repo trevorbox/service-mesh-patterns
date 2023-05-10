@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "mysql-community-client.fullname" . }}
+  name: {{ include "redis-cli.fullname" . }}
   labels:
-    {{- include "mysql-community-client.labels" . | nindent 4 }}
+    {{- include "redis-cli.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "mysql-community-client.selectorLabels" . | nindent 6 }}
+      {{- include "redis-cli.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -18,13 +18,13 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "mysql-community-client.selectorLabels" . | nindent 8 }}
+        {{- include "redis-cli.selectorLabels" . | nindent 8 }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "mysql-community-client.serviceAccountName" . }}
+      serviceAccountName: {{ include "redis-cli.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
@@ -33,22 +33,8 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          envFrom:
-            - configMapRef:
-                name: mysql-community-client-config
-            - secretRef:
-                name: mysql-community-client-credentials
-          command:
-            - /configmaps/scripts/ping-mysql-loop.sh          
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
-          volumeMounts:
-            - mountPath: /configmaps/mycompany-cabundle
-              name: mycompany-cabundle
-            - mountPath: /configmaps/scripts
-              name: scripts
-            - mountPath: /secrets/client-cert
-              name: client-cert
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -61,15 +47,3 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      volumes:
-        - name: mycompany-cabundle
-          configMap:
-            name: mycompany-cabundle
-        - name: scripts
-          configMap:
-            name: mysql-community-client-scripts
-            defaultMode: 360
-        - name: client-cert
-          secret:
-            secretName: {{ include "mysql-community-client.fullname" . }}-cert
-          

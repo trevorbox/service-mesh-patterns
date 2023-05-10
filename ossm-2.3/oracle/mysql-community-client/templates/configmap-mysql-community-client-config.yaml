@@ -5,6 +5,8 @@ metadata:
 data:
   # MONGODB_PORT_NUMBER: "27017"
   # MONGODB_HOST: mongodb.mongodb.svc.cluster.local
-  MYSQL_HOST: mysql.apps-crc.testing # 192.168.130.11
-  MYSQL_PORT_NUMBER: "30237"
-  # TLS_OPTIONS: '--tls --tlsCAFile=/configmaps/mycompany-cabundle/ca-bundle.crt'
+  MYSQL_HOST: mysqldb.apps-crc.testing # 192.168.130.11
+  MYSQL_PORT_NUMBER: "32096"
+  # https://dev.mysql.com/doc/refman/8.0/en/connection-options.html#option_general_ssl-mode
+  # the host must match the CN entry of the certificate for VERIFY_IDENTITY
+  TLS_OPTIONS: '--ssl-mode=VERIFY_IDENTITY --ssl-cert=/secrets/client-cert/tls.crt --ssl-key=/secrets/client-cert/tls.key --ssl-ca=/secrets/client-cert/ca.crt'

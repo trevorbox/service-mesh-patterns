@@ -1,0 +1,20 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: originate-tls-for-mysqldb
+  namespace: istio-egress
+spec:
+  host: {{ .Values.mysqldb.host }}
+  subsets:
+  - name: mysql-tls
+    trafficPolicy:
+      loadBalancer:
+        simple: ROUND_ROBIN
+      portLevelSettings:
+      - port:
+          number: {{ .Values.mysqldb.port }}
+        tls:
+          mode: SIMPLE
+        # tls:
+        #   credentialName: mysql-community-client-cert
+        #   mode: MUTUAL

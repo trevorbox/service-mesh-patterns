@@ -5,10 +5,10 @@ metadata:
 data:
   ping-mysql-loop.sh: |
     #!/bin/bash
-
+    set -x
     while true
     do
-      MYSQL_PWD="$MYSQL_PASSWORD" mysql -h $MYSQL_HOST -P $MYSQL_PORT_NUMBER -u $MYSQL_USER <<EOF
+      MYSQL_PWD="$MYSQL_PASSWORD" mysql -h $MYSQL_HOST -P $MYSQL_PORT_NUMBER -u $MYSQL_USER $TLS_OPTIONS <<EOF
     status
     exit
     EOF

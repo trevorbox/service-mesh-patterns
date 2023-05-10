@@ -19,3 +19,11 @@ data:
     ssl_cert=/secrets/mysql-cert/tls.crt
     ssl_key=/secrets/mysql-cert/tls.key
     require_secure_transport=ON
+
+    log_error = /var/log/mysql/mysql_error.log
+    general_log_file = /var/log/mysql/mysql.log
+    general_log = 1
+
+    [mysqld_safe]
+
+    log_error=/var/log/mysql/mysql_error.log

@@ -72,6 +72,8 @@ spec:
               name: mysql-cert
             - mountPath: /configmaps/mycompany-cabundle
               name: mycompany-cabundle
+            - mountPath: /var/log/mysql
+              name: logs
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -97,3 +99,5 @@ spec:
         - name: mycompany-cabundle
           configMap:
             name: mycompany-cabundle
+        - name: logs
+          emptyDir: {}

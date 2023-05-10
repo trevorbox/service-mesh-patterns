@@ -5,12 +5,14 @@ metadata:
 spec:
   # Secret names are always required.
   secretName: {{ include "mysql-persistent.fullname" . }}-cert
-  commonName: {{ include "mysql-persistent.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
-  dnsNames:
-    - {{ include "mysql-persistent.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
+  commonName: mysqldb.apps-crc.testing
+  # dnsNames:
+  #   - {{ include "mysql-persistent.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
+  #   - {{ include "mysql-persistent.fullname" . }}
   usages:
     - server auth
     - client auth  
   issuerRef:
     kind: ClusterIssuer
     name: mycompany-intermediaryca-issuer
+    # name: mycompany-rootca-issuer

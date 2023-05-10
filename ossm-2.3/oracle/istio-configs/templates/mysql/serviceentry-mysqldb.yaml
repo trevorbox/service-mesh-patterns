@@ -1,0 +1,20 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: mysqldb
+spec:
+  hosts:
+  - {{ .Values.mysqldb.host }}
+  addresses:
+  - {{ .Values.mysqldb.ip }}/32
+  ports:
+  - number: {{ .Values.mysqldb.port }}
+    name: tcp
+    protocol: TCP
+  - number: 443
+    name: tls-port-for-egress-gateway
+    protocol: TLS
+  location: MESH_EXTERNAL
+  resolution: STATIC
+  endpoints:
+  - address: {{ .Values.mysqldb.ip }}

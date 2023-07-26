@@ -1,0 +1,7 @@
+members:
+  - bookinfo
+  - nginx-echo-headers
+  - istio-ingress
+smcp:
+  name: full-install
+  namespace: istio-system

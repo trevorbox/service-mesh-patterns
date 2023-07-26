@@ -1,0 +1,7 @@
+grafana: 
+  enabled: true
+prometheus: 
+  enabled: true
+kiali: 
+  enabled: true
+isRosa: false

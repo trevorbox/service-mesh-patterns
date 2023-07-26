@@ -1,0 +1,18 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: istiod-monitor
+  namespace: istio-system 
+spec:
+  targetLabels:
+  - app
+  selector:
+    matchLabels:
+      istio: pilot
+  endpoints:
+  - port: http-monitoring
+    interval: 30s
+    relabelings:
+    - action: replace
+      replacement: {{ printf "%s/%s" .Values.smcp.namespace .Values.smcp.name }}
+      targetLabel: mesh_id

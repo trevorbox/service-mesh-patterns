@@ -74,8 +74,19 @@ curl -ik https://api-${istio_ingress_namespace}.$(oc get ingress.config.openshif
 
 <https://61854--docspreview.netlify.app/openshift-enterprise/latest/service_mesh/v2x/ossm-observability.html#ossm-integrating-with-user-workload-monitoring_observability>
 
+This solution includes custom kiali configuration to use openshift-monitoring prometheus.
+TODO: Grafana should use openshift prometheus as well, however authentication options are limited for GrafanaDataSources.
+
 ```sh
 oc apply -f configmap-cluster-monitoring-config.yaml -n openshift-monitoring
 helm upgrade --create-namespace -i control-plane -n ${istio_system_namespace} helm/control-plane -f helm/control-plane/values-user-monitoring.yaml
 helm upgrade -i user-workload-monitoring helm/user-workload-monitoring -n ${istio_system_namespace}
+```
+
+testing prometheus auth notes...
+
+```sh
+export token=
+curl -G -s -k -H "Authorization: Bearer $token" 'https://federate-openshift-user-workload-monitoring.apps.july26.vqqh.p1.openshiftapps.com/federate' --data-urlencode 'match[]=istio_requests_total'
+curl -G -s -k -H "Authorization: Bearer $token" 'https://thanos-querier.openshift-monitoring.svc.cluster.local:9091/api/v1/status/config' --data-urlencode 'match[]=istio_requests_total'
 ```

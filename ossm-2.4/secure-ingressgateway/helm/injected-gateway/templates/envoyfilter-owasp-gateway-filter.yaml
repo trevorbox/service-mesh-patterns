@@ -32,44 +32,42 @@ spec:
                 request_handle:streamInfo():dynamicMetadata():set("envoy.lua.owaspfilter", "path", request_handle:headers():get(":path"))
               end
               function envoy_on_response(response_handle)
-                  if response_handle:headers():get("ETag") then
-                    response_handle:headers():remove("ETag");
+                if response_handle:headers():get("ETag") then
+                  response_handle:headers():remove("ETag");
+                end
+                if response_handle:headers():get("Server") then
+                  response_handle:headers():remove("Server");
+                end
+                if response_handle:headers():get("X-Powered-By") then
+                  response_handle:headers():remove("X-Powered-By");
+                end                  
+                response_handle:headers():replace("X-XSS-Protection", "1; mode=block");
+                response_handle:headers():replace("X-Content-Type-Options", "nosniff");
+                response_handle:headers():replace("Strict-Transport-Security", "max-age=63072000;includeSubDomains;preload");
+                if response_handle:headers():get("Set-Cookie") then
+                  local cookies = response_handle:headers():get("Set-Cookie")
+                  response_handle:headers():remove("Set-Cookie")
+                  -- need to split the resulting cookie values since many Set-Cookie headers could be used
+                  for cookie_val in string.gmatch(cookies, "([^,]+)") do
+                    response_handle:logInfo("cookie: "..cookie_val)
+                    response_handle:headers():add("Set-Cookie",cookie_val.."; HTTPOnly; Secure;")
                   end
-                  if response_handle:headers():get("Server") then
-                    response_handle:headers():remove("Server");
-                  end
-                  if response_handle:headers():get("X-Powered-By") then
-                    response_handle:headers():remove("X-Powered-By");
-                  end                  
-                  response_handle:headers():replace("X-XSS-Protection", "1; mode=block");
-                  response_handle:headers():replace("X-Content-Type-Options", "nosniff");
-                  response_handle:headers():replace("Strict-Transport-Security", "max-age=63072000;includeSubDomains;preload");
-                  if response_handle:headers():get("Set-Cookie") then
-                    local cookies = response_handle:headers():get("Set-Cookie")
-                    response_handle:headers():remove("Set-Cookie")
-                    -- need to split the resulting cookie values since many Set-Cookie headers could be used
-                    for cookie_val in string.gmatch(cookies, "([^,]+)") do
-                      response_handle:logInfo("cookie: "..cookie_val)
-                      response_handle:headers():add("Set-Cookie",cookie_val.."; HTTPOnly; Secure;")
-                    end
-                  end
-                  --[[ 
-                    TODO regarding X-Frame-Options and Content-Security-Policy, perhaps the dynamicMetadata in the original request can be updated based on a whitelisted domain and path, then simply check the metadata.
-                  --]]
-                  response_handle:headers():replace("X-Frame-Options", "DENY");
-                  response_handle:headers():replace("Content-Security-Policy", "upgrade-insecure-requests; base-uri 'self'; frame-ancestors 'none'; script-src 'self'; form-action 'self'; frame-src 'none'; font-src 'none'; style-src 'self'; manifest-src 'none'; worker-src 'none'; media-src 'none'; object-src 'none';");
-                  response_handle:headers():replace("Referrer-Policy", "no-referrer");
-                  local path = response_handle:streamInfo():dynamicMetadata():get("envoy.lua.owaspfilter")["path"]
-                  response_handle:logInfo("envoy.lua.owaspfilter: "..path)
-                  --[[
-                    TODO verify this logic...DO NOT cache images, css, etc. OK to cache anything else except Set-Cookie, and Authorization.
-                  --]]
-                  if (not path:match"%.css$" and not path:match"%.js$" and not path:match"%.ico$" and not path:match"%.pdf$" and not path:match"%.flv$" and not path:match"%.jpg$" and not path:match"%.jpeg$" and not path:match"%.png$" and not path:match"%.gif$" and not path:match"%.swf$" and not path:match"%.bmp$") then
-                    response_handle:logInfo("this IS cacheable")
-                    response_handle:headers():replace("Cache-Control", "no-cache=\"Set-Cookie,Authorization\"");
-                  else
-                    response_handle:logInfo("this should NOT be cacheable")
-                    response_handle:headers():replace("Cache-Control", "no-store, no-cache");
-                  end
+                end
+                --[[ 
+                  TODO regarding X-Frame-Options and Content-Security-Policy, perhaps the dynamicMetadata in the original request can be updated based on a whitelisted domain and path, then simply check the metadata.
+                --]]
+                response_handle:headers():replace("X-Frame-Options", "DENY");
+                response_handle:headers():replace("Content-Security-Policy", "upgrade-insecure-requests; base-uri 'self'; frame-ancestors 'none'; script-src 'self'; form-action 'self'; frame-src 'none'; font-src 'none'; style-src 'self'; manifest-src 'none'; worker-src 'none'; media-src 'none'; object-src 'none';");
+                response_handle:headers():replace("Referrer-Policy", "no-referrer");
+                local path = response_handle:streamInfo():dynamicMetadata():get("envoy.lua.owaspfilter")["path"]
+                response_handle:logInfo("envoy.lua.owaspfilter: "..path)
+                --[[
+                  TODO verify this logic... if its not static content, then set no-cache for Set-Cookie and Authorization, else no-store, no-cache
+                --]]
+                if (not path:match"%.css$" and not path:match"%.js$" and not path:match"%.ico$" and not path:match"%.pdf$" and not path:match"%.flv$" and not path:match"%.jpg$" and not path:match"%.jpeg$" and not path:match"%.png$" and not path:match"%.gif$" and not path:match"%.swf$" and not path:match"%.bmp$") then
+                  response_handle:headers():replace("Cache-Control", "no-cache=\"Set-Cookie,Authorization\"");
+                else
+                  response_handle:headers():replace("Cache-Control", "no-store, no-cache");
+                end
               end
 ...

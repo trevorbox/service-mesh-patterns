@@ -31,4 +31,12 @@ spec:
         host: nginx-echo-headers.nginx-echo-headers.svc.cluster.local
         port:
           number: 8080
+  - match:
+    - uri:
+        exact: /golang-ex
+    route:
+    - destination:
+        host: golang-ex.golang-ex.svc.cluster.local
+        port:
+          number: 8080
 ...

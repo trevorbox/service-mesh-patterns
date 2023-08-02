@@ -70,6 +70,24 @@ helm upgrade --create-namespace -i nginx-echo-headers helm/nginx-echo-headers -n
 curl -ik https://api-${istio_ingress_namespace}.$(oc get ingress.config.openshift.io cluster -o jsonpath={.spec.domain})/nginx-echo-headers
 ```
 
+## Install golang-ex Istio Configs
+
+```sh
+helm upgrade --create-namespace -i golang-ex-istio helm/golang-ex-istio -n golang-ex
+```
+
+## Install golang-ex
+
+```sh
+helm upgrade --create-namespace -i golang-ex helm/golang-ex -n golang-ex
+```
+
+## Test golang-ex
+
+```sh
+curl -ik https://api-${istio_ingress_namespace}.$(oc get ingress.config.openshift.io cluster -o jsonpath={.spec.domain})/golang-ex
+```
+
 ## user monitoring
 
 <https://61854--docspreview.netlify.app/openshift-enterprise/latest/service_mesh/v2x/ossm-observability.html#ossm-integrating-with-user-workload-monitoring_observability>

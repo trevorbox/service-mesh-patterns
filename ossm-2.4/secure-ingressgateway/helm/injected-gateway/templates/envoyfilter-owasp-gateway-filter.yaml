@@ -49,7 +49,7 @@ spec:
                   response_handle:headers():remove("Set-Cookie")
                   -- need to split the resulting cookie values since many Set-Cookie headers could be used
                   for cookie_val in string.gmatch(cookies, "([^,]+)") do
-                    response_handle:logInfo("cookie: "..cookie_val)
+                    response_handle:logDebug("cookie: "..cookie_val)
                     response_handle:headers():add("Set-Cookie",cookie_val.."; HTTPOnly; Secure;")
                   end
                 end
@@ -61,7 +61,7 @@ spec:
                 response_handle:headers():replace("Referrer-Policy", "no-referrer");                
                 if response_handle:streamInfo():dynamicMetadata():get("envoy.lua.owaspfilter") then
                   local path = response_handle:streamInfo():dynamicMetadata():get("envoy.lua.owaspfilter")["path"]
-                  response_handle:logInfo("envoy.lua.owaspfilter: "..path)
+                  response_handle:logDebug("envoy.lua.owaspfilter: "..path)
                   --[[
                     TODO verify this logic... if its not static content, then set no-cache for Set-Cookie and Authorization, else no-store, no-cache
                   --]]

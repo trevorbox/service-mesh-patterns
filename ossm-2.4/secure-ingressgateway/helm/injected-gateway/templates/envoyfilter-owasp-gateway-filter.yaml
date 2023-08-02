@@ -58,16 +58,18 @@ spec:
                 --]]
                 response_handle:headers():replace("X-Frame-Options", "DENY");
                 response_handle:headers():replace("Content-Security-Policy", "upgrade-insecure-requests; base-uri 'self'; frame-ancestors 'none'; script-src 'self'; form-action 'self'; frame-src 'none'; font-src 'none'; style-src 'self'; manifest-src 'none'; worker-src 'none'; media-src 'none'; object-src 'none';");
-                response_handle:headers():replace("Referrer-Policy", "no-referrer");
-                local path = response_handle:streamInfo():dynamicMetadata():get("envoy.lua.owaspfilter")["path"]
-                response_handle:logInfo("envoy.lua.owaspfilter: "..path)
-                --[[
-                  TODO verify this logic... if its not static content, then set no-cache for Set-Cookie and Authorization, else no-store, no-cache
-                --]]
-                if (not path:match"%.css$" and not path:match"%.js$" and not path:match"%.ico$" and not path:match"%.pdf$" and not path:match"%.flv$" and not path:match"%.jpg$" and not path:match"%.jpeg$" and not path:match"%.png$" and not path:match"%.gif$" and not path:match"%.swf$" and not path:match"%.bmp$") then
-                  response_handle:headers():replace("Cache-Control", "no-cache=\"Set-Cookie,Authorization\"");
-                else
-                  response_handle:headers():replace("Cache-Control", "no-store, no-cache");
+                response_handle:headers():replace("Referrer-Policy", "no-referrer");                
+                if response_handle:streamInfo():dynamicMetadata():get("envoy.lua.owaspfilter") then
+                  local path = response_handle:streamInfo():dynamicMetadata():get("envoy.lua.owaspfilter")["path"]
+                  response_handle:logInfo("envoy.lua.owaspfilter: "..path)
+                  --[[
+                    TODO verify this logic... if its not static content, then set no-cache for Set-Cookie and Authorization, else no-store, no-cache
+                  --]]
+                  if (not path:match"%.css$" and not path:match"%.js$" and not path:match"%.ico$" and not path:match"%.pdf$" and not path:match"%.flv$" and not path:match"%.jpg$" and not path:match"%.jpeg$" and not path:match"%.png$" and not path:match"%.gif$" and not path:match"%.swf$" and not path:match"%.bmp$") then
+                    response_handle:headers():replace("Cache-Control", "no-cache=\"Set-Cookie,Authorization\"");
+                  else
+                    response_handle:headers():replace("Cache-Control", "no-store, no-cache");
+                  end
                 end
               end
 ...

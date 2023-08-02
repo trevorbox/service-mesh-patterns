@@ -7,6 +7,10 @@ data:
     {
         "headers": [
             {
+                "key": "ETag",
+                "value": "W/\"0815\""
+            },
+            {
                 "key": "X-Powered-By",
                 "value": "Go"
             },

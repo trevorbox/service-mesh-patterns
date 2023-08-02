@@ -108,3 +108,36 @@ export token=
 curl -G -s -k -H "Authorization: Bearer $token" 'https://federate-openshift-user-workload-monitoring.apps.july26.vqqh.p1.openshiftapps.com/federate' --data-urlencode 'match[]=istio_requests_total'
 curl -G -s -k -H "Authorization: Bearer $token" 'https://thanos-querier.openshift-monitoring.svc.cluster.local:9091/api/v1/status/config' --data-urlencode 'match[]=istio_requests_total'
 ```
+
+## gateway header filter
+
+With inspiration from <https://www.alibabacloud.com/help/en/alibaba-cloud-service-mesh/latest/use-envoyfilter-to-add-http-response-headers-in-asm>
+
+debugging...
+
+Verify envoyfilter lua config is applied to only the ingress gateway
+
+```sh
+istioctl ps
+istioctl pc all istio-ingressgateway-84956f445d-lbd9x.istio-ingress -o json > out.json
+```
+
+out.json
+
+```json
+...
+             {
+              "name": "envoy.lua.owaspfilter",
+              "typed_config": {
+               "@type": "type.googleapis.com/envoy.extensions.filters.http.lua.v3.Lua",
+               "default_source_code": {
+                "inline_string": "function envoy_on_request(request_handle)..."
+               }
+              }
+             }
+...
+```
+
+```sh
+istioctl pc log istio-ingressgateway-84956f445d-lbd9x.istio-ingress --level debug
+```

@@ -5,7 +5,7 @@
 # done
 
 oc get configmap -n istio-system -o name | egrep istio-grafana-configuration-dashboards- | while read configmap; do 
-  oc extract $configmap -n istio-system --to=helm/sre-admin-tasks/dashboards/istio-system --confirm
+  oc extract $configmap -n istio-system --to=helm/grafana/dashboards/istio-system --confirm
 done
 
 exit 0

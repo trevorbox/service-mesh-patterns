@@ -90,7 +90,7 @@ curl -ik https://api-${istio_ingress_namespace}.$(oc get ingress.config.openshif
 
 ## user monitoring
 
-<https://61854--docspreview.netlify.app/openshift-enterprise/latest/service_mesh/v2x/ossm-observability.html#ossm-integrating-with-user-workload-monitoring_observability>
+<https://docs.openshift.com/container-platform/4.13/service_mesh/v2x/ossm-observability.html#ossm-integrating-with-user-workload-monitoring_observability>
 
 This solution includes custom kiali configuration to use openshift-monitoring prometheus.
 TODO: Grafana should use openshift prometheus as well, however authentication options are limited for GrafanaDataSources.
@@ -101,12 +101,29 @@ helm upgrade --create-namespace -i control-plane -n ${istio_system_namespace} he
 helm upgrade -i user-workload-monitoring helm/user-workload-monitoring -n ${istio_system_namespace}
 ```
 
+grafana...
+
+```sh
+helm upgrade -i grafana-operator -n openshift-operators helm/grafana-operator
+helm upgrade -i grafana-operator oci://ghcr.io/grafana-operator/helm-charts/grafana-operator --version v5.3.0
+helm upgrade -i grafana -n ${istio_system_namespace} helm/grafana
+
+oc create token grafana-serviceaccount --duration=8760h -n ${istio_system_namespace}
+
+helm upgrade -i grafana -n ${istio_system_namespace} helm/grafana --set grafana.token=$()
+
+```
+
 testing prometheus auth notes...
 
 ```sh
 export token=
 curl -G -s -k -H "Authorization: Bearer $token" 'https://federate-openshift-user-workload-monitoring.apps.july26.vqqh.p1.openshiftapps.com/federate' --data-urlencode 'match[]=istio_requests_total'
 curl -G -s -k -H "Authorization: Bearer $token" 'https://thanos-querier.openshift-monitoring.svc.cluster.local:9091/api/v1/status/config' --data-urlencode 'match[]=istio_requests_total'
+```
+
+```sh
+kubectl apply -f https://raw.githubusercontent.com/istio/istio/release-1.16/samples/addons/grafana.yaml
 ```
 
 ## gateway header filter

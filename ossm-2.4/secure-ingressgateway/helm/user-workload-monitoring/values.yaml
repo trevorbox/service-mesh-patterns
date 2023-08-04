@@ -2,6 +2,7 @@ members:
   - bookinfo
   - nginx-echo-headers
   - istio-ingress
+  - golang-ex
 smcp:
   name: full-install
   namespace: istio-system

@@ -1,0 +1,35 @@
+apiVersion: templates.gatekeeper.sh/v1beta1
+kind: ConstraintTemplate
+metadata:
+  name: uniquevservicehostname
+spec:
+  crd:
+    spec:
+      names:
+        kind: UniqueVserviceHostname
+  targets:
+    - rego: |
+        package istio.uniquevservicehostname
+
+        violation[{"msg":msg}] {
+            newvs := input.review.object
+            oldvs := data.inventory.namespace[newvs.metadata.namespace]["networking.istio.io/v1beta1"]["VirtualService"][_]
+            
+            newvs != oldvs
+
+            newhosts := { nh | newvs.spec.hosts[nh] }
+            oldhosts := { oh | oldvs.spec.hosts[oh] }
+            
+            host_overlap := newhosts & oldhosts
+            count(host_overlap) > 0
+                        
+            newmatch := { nm | nm := newvs.spec.http[_]["match"][_]["uri"][_] }
+            oldmatch := { om | om := oldvs.spec.http[_]["match"][_]["uri"][_] }
+            
+            uri_overlap := newmatch & oldmatch
+            count(uri_overlap) > 0
+
+            msg := sprintf("%v %v contains conflicting URIs (%v) with %v %v",
+              [newvs.kind, newvs.metadata.name, uri_overlap, oldvs.kind, oldvs.metadata.name])
+        }
+      target: admission.k8s.gatekeeper.sh

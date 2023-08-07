@@ -162,3 +162,12 @@ istioctl pc log istio-ingressgateway-84956f445d-lbd9x.istio-ingress --level debu
 ```sh
 siege -c 10 -r 100 https://api-${istio_ingress_namespace}.$(oc get ingress.config.openshift.io cluster -o jsonpath={.spec.domain})/golang-ex
 ```
+
+## gatekeeper policies
+
+```sh
+helm upgrade -i gatekeeper-operator helm/gatekeeper-operator -n openshift-operators
+helm upgrade -i gatekeeper helm/gatekeeper -n openshift-gatekeeper-system --create-namespace
+helm upgrade -i gatekeeper-constrainttemplates helm/gatekeeper-constrainttemplates -n openshift-gatekeeper-system
+helm upgrade -i gatekeeper-constraints helm/gatekeeper-constraints -n openshift-gatekeeper-system
+```

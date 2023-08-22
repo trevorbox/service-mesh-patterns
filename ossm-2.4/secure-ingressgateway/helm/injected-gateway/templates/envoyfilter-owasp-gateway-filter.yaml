@@ -8,6 +8,28 @@ spec:
     labels:
       istio: ingressgateway
   configPatches:
+  # This section is needed to remove the server and x-envoy-upstream-service-time headers
+  # taken from https://github.com/istio/istio/issues/13861
+  - applyTo: NETWORK_FILTER 
+    match:
+      listener:
+        filterChain:
+          filter:
+            name: "envoy.filters.network.http_connection_manager"
+    patch:
+      operation: MERGE
+      value:
+        typed_config:
+          "@type": "type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager"
+          server_header_transformation: PASS_THROUGH
+  - applyTo: ROUTE_CONFIGURATION
+    patch:
+      operation: MERGE
+      value:
+        response_headers_to_remove:
+        - "x-envoy-upstream-service-time"
+        - "server"
+  # this section provides other header manipulation
   - applyTo: HTTP_FILTER
     match:
       context: GATEWAY
@@ -22,7 +44,6 @@ spec:
     patch:
       operation: INSERT_BEFORE
       value:
-        # name: envoy.filters.http.lua
         name: envoy.lua.owaspfilter
         typed_config:
           "@type": type.googleapis.com/envoy.extensions.filters.http.lua.v3.Lua
@@ -34,9 +55,6 @@ spec:
               function envoy_on_response(response_handle)
                 if response_handle:headers():get("ETag") then
                   response_handle:headers():remove("ETag");
-                end
-                if response_handle:headers():get("Server") then
-                  response_handle:headers():remove("Server");
                 end
                 if response_handle:headers():get("X-Powered-By") then
                   response_handle:headers():remove("X-Powered-By");

@@ -19,6 +19,11 @@ spec:
     accessLogging:
       file:
         name: /dev/stdout
+    networking:
+      trafficControl:
+        outbound:
+          policy: REGISTRY_ONLY
+          # policy: ALLOW_ANY
   {{- if .Values.isRosa }}
   policy:
     type: Istiod

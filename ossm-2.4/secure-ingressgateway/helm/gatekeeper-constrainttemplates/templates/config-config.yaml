@@ -4,6 +4,21 @@ metadata:
   name: config
   namespace: openshift-gatekeeper-system
 spec:
+  # taken from https://github.com/open-cluster-management-io/policy-collection/blob/main/community/CM-Configuration-Management/policy-gatekeeper-config-exclude-namespaces.yaml
+  match:
+    - excludedNamespaces:
+        - ansible-automation-platform
+        - hive
+        - kube-*
+        - local-quay
+        - multicluster-engine
+        - open-cluster-management
+        - open-cluster-management-*
+        - openshift-*
+        - rhacs-operator
+        - stackrox
+      processes:
+        - '*'
   sync:
     syncOnly:
       - group: ''

@@ -33,6 +33,10 @@ data:
             {
                 "key": "Test",
                 "value": "test"
+            },
+            {
+                "key": "Content-Type",
+                "value": "text/plain"
             }
         ]
     }

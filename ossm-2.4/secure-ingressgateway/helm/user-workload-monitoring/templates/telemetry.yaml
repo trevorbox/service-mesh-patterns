@@ -1,0 +1,12 @@
+apiVersion: telemetry.istio.io/v1alpha1
+kind: Telemetry
+metadata:
+  name: enable-prometheus-metrics
+  namespace: istio-system 
+spec:
+#   selector: 
+#     matchLabels:
+#       app: {{ . }}
+  metrics:
+  - providers:
+    - name: prometheus

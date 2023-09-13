@@ -1,0 +1,12 @@
+---
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: service-mesh
+spec:
+  hard:
+    requests.cpu: '7'
+    requests.memory: 25Gi
+    requests.storage: 200Gi
+    services.loadbalancers: '2'
+...

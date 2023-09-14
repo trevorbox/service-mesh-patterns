@@ -74,7 +74,7 @@ spec:
                 response_handle:headers():replace("Referrer-Policy", "no-referrer");
                 
                 local contentType = response_handle:headers():get("Content-Type")
-                if (contentType=="application/ecmascript" or contentType=="application/javascript" or contentType=="text/css" or contentType:match"^font/" or contentType:match"^image/") then
+                if (contentType and (contentType=="application/ecmascript" or contentType=="application/javascript" or contentType=="text/css" or contentType:match"^font/" or contentType:match"^image/")) then
                   response_handle:headers():replace("Cache-Control", "no-cache=\"Set-Cookie,Authorization\"");
                 else
                   response_handle:headers():replace("Cache-Control", "no-store, no-cache");

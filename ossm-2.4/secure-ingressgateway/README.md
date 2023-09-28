@@ -1,6 +1,12 @@
 # Secure Ingress Gateway
 
-This example demonstrates an Openshift passthrough route to an ingress gateway that presents a cert-manager certificate using SDS.
+This example demonstrates:
+
+- An Openshift passthrough route to an ingress gateway that presents a cert-manager certificate using SDS.
+- Deploying an ingress gateway using gateway injection
+- A possible production Service Mesh deployment configuration that uses openshift-monitoing to store metrics for use by Kiali and Grafana
+- Deploying OPA Gatekeeper to require sidecar annotation in pods in mesh member namespaces
+- Deploying an EnvoyFilter to enforce OWASP response header manipulation requirements
 
 ## Install Operators
 
@@ -77,6 +83,8 @@ helm upgrade --create-namespace -i golang-ex-istio helm/golang-ex-istio -n golan
 ```
 
 ## Install golang-ex
+
+This application allows us to test the EnvoyFilter response header manipulation on the ingress gateway. The headers returned by the application may be changed in the deployment's response-headers configmap.
 
 ```sh
 helm upgrade --create-namespace -i golang-ex helm/golang-ex -n golang-ex

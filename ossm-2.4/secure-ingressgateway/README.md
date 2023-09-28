@@ -138,6 +138,8 @@ kubectl apply -f https://raw.githubusercontent.com/istio/istio/release-1.16/samp
 
 With inspiration from <https://www.alibabacloud.com/help/en/alibaba-cloud-service-mesh/latest/use-envoyfilter-to-add-http-response-headers-in-asm>
 
+The [owasp-gateway-filter](./helm/injected-gateway/templates/envoyfilter-owasp-gateway-filter.yaml) was previously deployed from the injected-gateway chart...
+
 debugging...
 
 Verify envoyfilter lua config is applied to only the ingress gateway

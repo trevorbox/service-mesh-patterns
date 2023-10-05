@@ -45,10 +45,6 @@ service:
   # Type of service. Set to "None" to disable the service entirely
   type: ClusterIP
   ports:
-  - name: status-port
-    protocol: TCP
-    port: 15021
-    targetPort: 15021
   - name: http2
     protocol: TCP
     port: 80

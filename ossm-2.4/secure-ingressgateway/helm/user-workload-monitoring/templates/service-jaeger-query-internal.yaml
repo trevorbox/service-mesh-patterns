@@ -1,0 +1,19 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: jaeger-query-internal
+  namespace: istio-system
+spec:
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 16686
+  type: ClusterIP
+  selector:
+    app: jaeger
+    app.kubernetes.io/component: all-in-one
+    app.kubernetes.io/instance: jaeger
+    app.kubernetes.io/managed-by: jaeger-operator
+    app.kubernetes.io/name: jaeger
+    app.kubernetes.io/part-of: jaeger

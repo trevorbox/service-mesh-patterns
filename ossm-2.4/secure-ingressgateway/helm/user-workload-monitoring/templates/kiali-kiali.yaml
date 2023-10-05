@@ -21,9 +21,7 @@ spec:
     strategy: openshift
   deployment:
     accessible_namespaces:
-      - bookinfo
-      - istio-ingress
-      - nginx-echo-headers
+      {{- .Values.members | toYaml | nindent 6}}
     image_pull_policy: ''
     ingress:
       enabled: true
@@ -42,12 +40,12 @@ spec:
     grafana:
       auth:
         password: {{ .Values.htpasswd }}
-        type: basic
+        type: none
         use_kiali_token: false
         username: internal
       enabled: true
-      in_cluster_url: 'https://grafana.istio-system.svc:3000'
-      url: 'https://grafana-istio-system.apps.july26.vqqh.p1.openshiftapps.com'
+      in_cluster_url: 'http://grafana-instance-service.istio-system.svc:3000'
+      url: {{ .Values.kiali.grafana.url }}
     istio:
       config_map_name: istio-full-install
       istio_sidecar_injector_config_map_name: istio-sidecar-injector-full-install
@@ -68,10 +66,10 @@ spec:
         use_kiali_token: false
         username: internal
       enabled: true
-      in_cluster_url: 'https://jaeger-query.istio-system.svc'
+      in_cluster_url: http://jaeger-query-internal.istio-system.svc.cluster.local
       namespace: istio-system
       service: ''
-      url: 'https://jaeger-istio-system.apps.july26.vqqh.p1.openshiftapps.com'
+      url: {{ .Values.kiali.jaeger.url }}
       use_grpc: false
   installation_tag: 'Kiali [istio-system]'
   istio_namespace: istio-system

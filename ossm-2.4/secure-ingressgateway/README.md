@@ -101,25 +101,21 @@ curl -ik https://api-${istio_ingress_namespace}.$(oc get ingress.config.openshif
 <https://docs.openshift.com/container-platform/4.13/service_mesh/v2x/ossm-observability.html#ossm-integrating-with-user-workload-monitoring_observability>
 
 This solution includes custom kiali configuration to use openshift-monitoring prometheus.
-TODO: Grafana should use openshift prometheus as well, however authentication options are limited for GrafanaDataSources.
+Grafana also uses openshift prometheus.
 
 ```sh
 oc apply -f configmap-cluster-monitoring-config.yaml -n openshift-monitoring
 helm upgrade --create-namespace -i control-plane -n ${istio_system_namespace} helm/control-plane -f helm/control-plane/values-user-monitoring.yaml
-helm upgrade -i user-workload-monitoring helm/user-workload-monitoring -n ${istio_system_namespace}
+helm upgrade -i user-workload-monitoring helm/user-workload-monitoring -n ${istio_system_namespace} \
+  --set kiali.jaeger.url=https://$(oc get route jaeger -n ${istio_system_namespace} -o jsonpath={.spec.host}) \
+  --set kiali.grafana.url=https://$(oc get route grafana-instance-route -n ${istio_system_namespace} -o jsonpath={.spec.host})
 ```
 
 grafana...
 
 ```sh
 helm upgrade -i grafana-operator -n openshift-operators helm/grafana-operator
-helm upgrade -i grafana-operator oci://ghcr.io/grafana-operator/helm-charts/grafana-operator --version v5.3.0
 helm upgrade -i grafana -n ${istio_system_namespace} helm/grafana
-
-oc create token grafana-serviceaccount --duration=8760h -n ${istio_system_namespace}
-
-helm upgrade -i grafana -n ${istio_system_namespace} helm/grafana --set grafana.token=$()
-
 ```
 
 testing prometheus auth notes...

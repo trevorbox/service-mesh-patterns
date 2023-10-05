@@ -4,4 +4,4 @@ prometheus:
   enabled: false
 kiali: 
   enabled: false
-isRosa: true
+isRosa: false

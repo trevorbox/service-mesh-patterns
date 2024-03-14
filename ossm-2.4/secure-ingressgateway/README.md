@@ -7,6 +7,7 @@ This example demonstrates:
 - A possible production Service Mesh deployment configuration that uses openshift-monitoing to store metrics for use by Kiali and Grafana
 - Deploying OPA Gatekeeper to require sidecar annotation in pods in mesh member namespaces
 - Deploying an EnvoyFilter to enforce OWASP response header manipulation requirements
+- Deploying a [WASM Plugin](https://github.com/corazawaf/coraza-proxy-wasm/tree/main/example/istio#at-ingress-gateway-for-all-incoming-traffic) to enforce OWASP CRS <https://github.com/coreruleset/coreruleset> for all traffic entering through the ingress gateway
 
 ## Install Operators
 
@@ -168,6 +169,23 @@ istioctl pc log istio-ingressgateway-84956f445d-lbd9x.istio-ingress --level debu
 
 ```sh
 siege -c 10 -r 100 https://api-${istio_ingress_namespace}.$(oc get ingress.config.openshift.io cluster -o jsonpath={.spec.domain})/golang-ex
+```
+
+## Test [Coraza WASM plugin](https://github.com/corazawaf/coraza-proxy-wasm/tree/main/example/istio#at-ingress-gateway-for-all-incoming-traffic)
+
+```sh
+curl -ik https://api-${istio_ingress_namespace}.$(oc get ingress.config.openshift.io cluster -o jsonpath={.spec.domain})/nginx-echo-headers?arg=\<script\>alert\(0\)\</script\>
+```
+
+log output from ingress gateway pod...
+
+```txt
+2024-03-14T00:01:33.101867Z critical envoy wasm wasm log istio-ingress.coraza-ingressgateway: [client "10.217.0.1"] Coraza: Warning. XSS Attack Detected via libinjection [file "@owasp_crs/REQUEST-941-APPLICATION-ATTACK-XSS.conf"] [line "7663"] [id "941100"] [rev ""] [msg "XSS Attack Detected via libinjection"] [data "Matched Data: XSS data found within ARGS_GET:arg: <script>alert(0)</script>"] [severity "critical"] [ver "OWASP_CRS/4.0.0-rc2"] [maturity "0"] [accuracy "0"] [tag "application-multi"] [tag "language-multi"] [tag "platform-multi"] [tag "attack-xss"] [tag "paranoia-level/1"] [tag "OWASP_CRS"] [tag "capec/1000/152/242"] [hostname "10.217.1.29"] [uri "/nginx-echo-headers?arg=<script>alert(0)</script>"] [unique_id "AEvaZrZNqmkUTKzKVTy"]
+2024-03-14T00:01:33.102310Z critical envoy wasm wasm log istio-ingress.coraza-ingressgateway: [client "10.217.0.1"] Coraza: Warning. XSS Filter - Category 1: Script Tag Vector [file "@owasp_crs/REQUEST-941-APPLICATION-ATTACK-XSS.conf"] [line "7689"] [id "941110"] [rev ""] [msg "XSS Filter - Category 1: Script Tag Vector"] [data "Matched Data: <script> found within ARGS_GET:arg: <script>alert(0)</script>"] [severity "critical"] [ver "OWASP_CRS/4.0.0-rc2"] [maturity "0"] [accuracy "0"] [tag "application-multi"] [tag "language-multi"] [tag "platform-multi"] [tag "attack-xss"] [tag "paranoia-level/1"] [tag "OWASP_CRS"] [tag "capec/1000/152/242"] [hostname "10.217.1.29"] [uri "/nginx-echo-headers?arg=<script>alert(0)</script>"] [unique_id "AEvaZrZNqmkUTKzKVTy"]
+2024-03-14T00:01:33.104775Z critical envoy wasm wasm log istio-ingress.coraza-ingressgateway: [client "10.217.0.1"] Coraza: Warning. NoScript XSS InjectionChecker: HTML Injection [file "@owasp_crs/REQUEST-941-APPLICATION-ATTACK-XSS.conf"] [line "7778"] [id "941160"] [rev ""] [msg "NoScript XSS InjectionChecker: HTML Injection"] [data "Matched Data: <script found within ARGS_GET:arg: <script>alert(0)</script>"] [severity "critical"] [ver "OWASP_CRS/4.0.0-rc2"] [maturity "0"] [accuracy "0"] [tag "application-multi"] [tag "language-multi"] [tag "platform-multi"] [tag "attack-xss"] [tag "paranoia-level/1"] [tag "OWASP_CRS"] [tag "capec/1000/152/242"] [hostname "10.217.1.29"] [uri "/nginx-echo-headers?arg=<script>alert(0)</script>"] [unique_id "AEvaZrZNqmkUTKzKVTy"]
+2024-03-14T00:01:33.108100Z critical envoy wasm wasm log istio-ingress.coraza-ingressgateway: [client "10.217.0.1"] Coraza: Warning. Javascript method detected [file "@owasp_crs/REQUEST-941-APPLICATION-ATTACK-XSS.conf"] [line "8272"] [id "941390"] [rev ""] [msg "Javascript method detected"] [data "Matched Data: alert( found within ARGS_GET:arg: <script>alert(0)</script>"] [severity "critical"] [ver "OWASP_CRS/4.0.0-rc2"] [maturity "0"] [accuracy "0"] [tag "application-multi"] [tag "language-multi"] [tag "attack-xss"] [tag "paranoia-level/1"] [tag "OWASP_CRS"] [tag "capec/1000/152/242"] [hostname "10.217.1.29"] [uri "/nginx-echo-headers?arg=<script>alert(0)</script>"] [unique_id "AEvaZrZNqmkUTKzKVTy"]
+2024-03-14T00:01:33.110860Z critical envoy wasm wasm log istio-ingress.coraza-ingressgateway: [client "10.217.0.1"] Coraza: Access denied (phase 1). Inbound Anomaly Score Exceeded in phase 1 (Total Score: 20) [file "@owasp_crs/REQUEST-949-BLOCKING-EVALUATION.conf"] [line "11347"] [id "949111"] [rev ""] [msg "Inbound Anomaly Score Exceeded in phase 1 (Total Score: 20)"] [data ""] [severity "emergency"] [ver "OWASP_CRS/4.0.0-rc2"] [maturity "0"] [accuracy "0"] [tag "anomaly-evaluation"] [hostname "10.217.1.29"] [uri "/nginx-echo-headers?arg=<script>alert(0)</script>"] [unique_id "AEvaZrZNqmkUTKzKVTy"]
+[2024-03-14T00:01:33.092Z] "GET /nginx-echo-headers?arg=<script>alert(0)</script> HTTP/2" 403 - - "-" 0 0 19 - "10.217.0.1" "curl/8.0.1" "066505bf-0b0d-9ac4-a0f1-348ada628034" "api-istio-ingress.apps-crc.testing" "-" outbound|8080||nginx-echo-headers.nginx-echo-headers.svc.cluster.local - 10.217.1.29:8443 10.217.0.1:51776 api-istio-ingress.apps-crc.testing -
 ```
 
 ## gatekeeper policies

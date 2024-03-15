@@ -1,3 +1,4 @@
+# Inspiration from https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: EnvoyFilter
@@ -49,35 +50,118 @@ spec:
           "@type": type.googleapis.com/envoy.extensions.filters.http.lua.v3.Lua
           defaultSourceCode:
             inlineString: |
+              
               function envoy_on_response(response_handle)
-                if response_handle:headers():get("ETag") then
-                  response_handle:headers():remove("ETag");
+                local function setHeaderIfNotEquals(headerName,expectedVal,link)
+                  local headerVal = response_handle:headers():get(headerName)
+                  if (headerVal==nil) then
+                    response_handle:logWarn("ADD "..headerName..", see "..link)
+                    response_handle:headers():add(headerName, expectedVal);
+                    return
+                  end
+                  if (headerVal~=expectedVal) then
+                    response_handle:logWarn("REPLACE "..headerName..", see "..link)
+                    response_handle:headers():replace(headerName, expectedVal);
+                    return
+                  end             
                 end
-                if response_handle:headers():get("X-Powered-By") then
-                  response_handle:headers():remove("X-Powered-By");
-                end                  
-                response_handle:headers():replace("X-XSS-Protection", "1; mode=block");
-                response_handle:headers():replace("X-Content-Type-Options", "nosniff");
-                response_handle:headers():replace("Strict-Transport-Security", "max-age=63072000;includeSubDomains;preload");
-                if response_handle:headers():get("Set-Cookie") then
-                  local cookies = response_handle:headers():get("Set-Cookie")
-                  response_handle:headers():remove("Set-Cookie")
+
+                local function removeHeader(headerName,link)
+                  if (response_handle:headers():get(headerName)~=nil) then
+                    response_handle:logWarn("REMOVE "..headerName..", see "..link)
+                    response_handle:headers():remove(headerName);
+                  end
+                end
+
+                local function setHeaderIfUnset(headerName,defaultVal,link)
+                  if (response_handle:headers():get(headerName)==nil) then
+                    response_handle:logWarn("ADD "..headerName..", see "..link)
+                    response_handle:headers():add(headerName, defaultVal);
+                  end
+                end
+
+                -- https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html#x-frame-options
+                setHeaderIfNotEquals("X-Frame-Options","DENY","https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html#x-frame-options")
+
+                -- https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html#x-xss-protection
+                setHeaderIfNotEquals("X-XSS-Protection","1; mode=block","https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html#x-xss-protection")
+
+                -- https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html#x-content-type-options
+                setHeaderIfNotEquals("X-Content-Type-Options","nosniff","https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html#x-content-type-options")
+
+                -- https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html#referrer-policy
+                setHeaderIfNotEquals("Referrer-Policy","strict-origin-when-cross-origin","https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html#referrer-policy")
+                
+                -- https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html#content-type
+                setHeaderIfUnset("Content-Type","text/plain; charset=utf-8","https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html#content-type")
+
+                -- https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html#set-cookie
+                local cookies = response_handle:headers():get("Set-Cookie")
+                if (cookies~=nil) then
+                  removeHeader("Set-Cookie","https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html#set-cookie")
                   -- need to split the resulting cookie values since many Set-Cookie headers could be used
                   for cookie_val in string.gmatch(cookies, "([^,]+)") do
-                    response_handle:logDebug("cookie: "..cookie_val)
+                    -- response_handle:logDebug("cookie: "..cookie_val)
+                    response_handle:logWarn("ADD Set-Cookie, see https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html#set-cookie")
                     response_handle:headers():add("Set-Cookie",cookie_val.."; HTTPOnly; Secure;")
                   end
                 end
 
-                response_handle:headers():replace("X-Frame-Options", "DENY");
-                response_handle:headers():replace("Content-Security-Policy", "upgrade-insecure-requests; base-uri 'self'; frame-ancestors 'none'; script-src 'self'; form-action 'self'; frame-src 'none'; font-src 'none'; style-src 'self'; manifest-src 'none'; worker-src 'none'; media-src 'none'; object-src 'none';");
-                response_handle:headers():replace("Referrer-Policy", "no-referrer");
+                -- https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html#strict-transport-security-hsts
+                setHeaderIfNotEquals("Strict-Transport-Security","max-age=63072000;includeSubDomains;preload", "https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html#strict-transport-security-hsts")
                 
+                -- https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html#expect-ct
+                removeHeader("Expect-CT","https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html#expect-ct")
+                
+                -- https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html#content-security-policy-csp
+                setHeaderIfNotEquals("Content-Security-Policy","upgrade-insecure-requests; base-uri 'self'; frame-ancestors 'none'; script-src 'self'; form-action 'self'; frame-src 'none'; font-src 'none'; style-src 'self'; manifest-src 'none'; worker-src 'none'; media-src 'none'; object-src 'none';","https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html#content-security-policy-csp")
+                
+                -- https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html#access-control-allow-origin
+                local allowOrigin = response_handle:headers():get("Access-Control-Allow-Origin")
+                if (allowOrigin=="*") then
+                    removeHeader("Access-Control-Allow-Origin","https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html#access-control-allow-origin")
+                end
+                
+                -- https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html#cross-origin-opener-policy-coop
+                setHeaderIfNotEquals("Cross-Origin-Opener-Policy","same-origin","https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html#cross-origin-opener-policy-coop")
+
+                -- https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html#cross-origin-embedder-policy-coep
+                setHeaderIfNotEquals("Cross-Origin-Embedder-Policy","require-corp","https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html#cross-origin-embedder-policy-coep")
+
+                -- https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html#cross-origin-resource-policy-corp
+                setHeaderIfNotEquals("Cross-Origin-Resource-Policy", "same-site","https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html#cross-origin-resource-policy-corp")
+
+                -- https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html#permissions-policy-formerly-feature-policy, https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html#floc-federated-learning-of-cohorts
+                setHeaderIfNotEquals("Permissions-Policy", "geolocation=(), camera=(), microphone=(), interest-cohort=()","https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html#permissions-policy-formerly-feature-policy, https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html#floc-federated-learning-of-cohorts")
+                
+                -- https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html#server
+                removeHeader("Server","https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html#server")
+                
+                -- https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html#x-powered-by
+                removeHeader("X-Powered-By","https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html#x-powered-by")
+
+                -- https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html#x-aspnet-version
+                removeHeader("X-AspNet-Version","https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html#x-aspnet-version")
+                
+                -- https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html#x-aspnetmvc-version
+                removeHeader("X-AspNetMvc-Version","https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html#x-aspnetmvc-version")
+
+                -- https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html#x-dns-prefetch-control
+                setHeaderIfNotEquals("X-DNS-Prefetch-Control","off","https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html#x-dns-prefetch-control")
+
+                -- https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html#public-key-pins-hpkp
+                removeHeader("Public-Key-Pins","https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html#public-key-pins-hpkp")             
+
+                -- others
+                -- https://owasp.org/www-community/attacks/Cache_Poisoning
+                removeHeader("ETag","https://owasp.org/www-community/attacks/Cache_Poisoning")   
+                
+                -- https://owasp.org/www-project-secure-headers/#cache-control
                 local contentType = response_handle:headers():get("Content-Type")
                 if (contentType and (contentType=="application/ecmascript" or contentType=="application/javascript" or contentType=="text/css" or contentType:match"^font/" or contentType:match"^image/")) then
-                  response_handle:headers():replace("Cache-Control", "no-cache=\"Set-Cookie,Authorization\"");
+                  setHeaderIfNotEquals("Cache-Control","no-cache=\"Set-Cookie,Authorization\"","https://owasp.org/www-project-secure-headers/#cache-control")
                 else
-                  response_handle:headers():replace("Cache-Control", "no-store, no-cache");
+                  setHeaderIfNotEquals("Cache-Control","no-store, no-cache","https://owasp.org/www-project-secure-headers/#cache-control")
                 end
               end
 ...

@@ -1,4 +1,4 @@
-# Inspiration from https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html
+# Inspiration from OWASP Secure Headers Project https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: EnvoyFilter

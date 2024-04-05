@@ -1,0 +1,21 @@
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: K8sRequiredAnnotations
+metadata:
+  name: require-sidecar-injection-annotation
+spec:
+  match:
+    kinds:
+      - apiGroups: [""]
+        kinds: ["Pod"]
+    namespaceSelector:
+      matchExpressions:
+        - key: maistra.io/member-of
+          operator: Exists
+    excludedNamespaces:
+      - istio-system
+  parameters:
+    message: "Service mesh member namespace Pods must have a `sidecar.istio.io/inject` annotation with a value of `true`."
+    annotations:
+      - key: sidecar.istio.io/inject
+        # Matches email address or github user
+        allowedRegex: ^true$

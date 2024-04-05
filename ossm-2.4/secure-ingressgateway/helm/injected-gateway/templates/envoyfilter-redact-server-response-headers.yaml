@@ -1,0 +1,35 @@
+{{ if .Values.includeEnvoyFilters.redactServerResponseHeaders }}
+# Inspiration from OWASP Secure Headers Project https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: EnvoyFilter
+metadata:
+  name: redact-server-response-headers
+spec:
+  workloadSelector:
+    labels:
+      istio: ingressgateway
+  configPatches:
+  # This section is needed to remove the server and x-envoy-upstream-service-time headers
+  # taken from https://github.com/istio/istio/issues/13861
+  - applyTo: NETWORK_FILTER 
+    match:
+      listener:
+        filterChain:
+          filter:
+            name: "envoy.filters.network.http_connection_manager"
+    patch:
+      operation: MERGE
+      value:
+        typed_config:
+          "@type": "type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager"
+          server_header_transformation: PASS_THROUGH
+  - applyTo: ROUTE_CONFIGURATION
+    patch:
+      operation: MERGE
+      value:
+        response_headers_to_remove:
+        - "x-envoy-upstream-service-time"
+        - "server"
+...
+{{ end }}

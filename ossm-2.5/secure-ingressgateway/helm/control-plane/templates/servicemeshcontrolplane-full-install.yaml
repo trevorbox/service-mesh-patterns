@@ -1,0 +1,136 @@
+---
+apiVersion: maistra.io/v2
+kind: ServiceMeshControlPlane
+metadata:
+  name: full-install
+spec:
+  version: v2.5
+  security:
+    dataPlane:
+      mtls: true
+      automtls: true
+    controlPlane:
+      mtls: true
+    {{- if .Values.isRosa }}
+    identity:
+      type: ThirdParty  #required setting for ROSA
+    {{- end }}
+  proxy:
+    accessLogging:
+      file:
+        name: /dev/stdout
+    networking:
+      trafficControl:
+        outbound:
+          policy: REGISTRY_ONLY
+          # policy: ALLOW_ANY
+  {{- if .Values.isRosa }}
+  policy:
+    type: Istiod
+  telemetry:
+    type: Istiod
+  {{- end }}
+  runtime:
+    components:
+      grafana: # working without defaults
+        container:
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+      prometheus: # working without defaults
+        container:
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi      
+      kiali: # not working
+        container:
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+      tracing.jaeger.elasticsearch: # working regardless of defaults
+        container:
+          resources:
+            requests:
+              cpu: '1'
+              memory: 4Gi
+            limits:
+              cpu: '1'
+              memory: 4Gi
+      tracing.jaeger.collector:
+        container:
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+      tracing.jaeger.query:
+        container:
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+    defaults: # merged into any component specific overrides. component specific overrides take precedence
+      container:
+        resources: {} # opting to use LimitRange instead since oauth sidecars don't get the defaults
+  gateways:
+    enabled: false
+    egress:
+      enabled: false
+    ingress:   
+      enabled: false
+    # additionalIngress:
+    #   custom-ingressgateway:
+    #     enabled: true
+    #     service:
+    #       type: ClusterIP
+    #       metadata:
+    #         labels:
+    #           istio: ingressgateway # Do not change this - required since only one networkpolicy is created for ingress with this label
+    #           app: custom-ingressgateway
+    #     runtime:
+    #       container:
+    #         resources:
+    #           requests:
+    #             cpu: 10m
+    #             memory: 128Mi
+    #           limits: {}
+    #       deployment:
+    #         autoScaling:
+    #           enabled: false
+    openshiftRoute:
+      enabled: false
+  tracing:
+    # change to None to disable tracing
+    type: Jaeger
+    sampling: 10000
+  addons:
+    jaeger:
+      name: jaeger
+      install:
+        storage:
+          type: Memory
+          # type: Elasticsearch
+          # elasticsearch:
+          #   indexCleaner:
+          #     enabled: true
+          #     numberOfDays: 2
+          #     schedule: "55 23 * * *"
+          #   nodeCount: 3
+          #   redundancyPolicy: "SingleRedundancy"
+          #   storage:
+          #     storageClassName: gp2
+          #     size: 50Gi
+          #   # resource requests/limits specified in spec.runtime
+    grafana:
+      enabled: {{ .Values.grafana.enabled }}
+      install: {}
+    kiali:
+      name: kiali
+      enabled: {{ .Values.kiali.enabled }}
+      # we want maistra to create the kiali resource
+      install: {}
+    prometheus:
+      enabled: {{ .Values.prometheus.enabled }}
+...

@@ -1,0 +1,42 @@
+apiVersion: config.gatekeeper.sh/v1alpha1
+kind: Config
+metadata:
+  name: config
+  namespace: openshift-gatekeeper-system
+spec:
+  # taken from https://github.com/open-cluster-management-io/policy-collection/blob/main/community/CM-Configuration-Management/policy-gatekeeper-config-exclude-namespaces.yaml
+  match:
+    - excludedNamespaces:
+        - ansible-automation-platform
+        - hive
+        - kube-*
+        - local-quay
+        - multicluster-engine
+        - open-cluster-management
+        - open-cluster-management-*
+        - openshift-*
+        - rhacs-operator
+        - stackrox
+      processes:
+        - '*'
+  sync:
+    syncOnly:
+      - group: ''
+        kind: Namespace
+        version: v1
+      - group: ''
+        kind: Pod
+        version: v1
+      - group: ''
+        kind: Service
+        version: v1
+      - group: networking.istio.io
+        kind: Gateway
+        version: v1beta1
+      - group: networking.istio.io
+        kind: VirtualService
+        version: v1beta1
+      - group: networking.istio.io
+        kind: DestinationRule
+        version: v1beta1
+

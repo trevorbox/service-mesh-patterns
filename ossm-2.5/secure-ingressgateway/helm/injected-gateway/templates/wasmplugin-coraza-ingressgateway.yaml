@@ -1,0 +1,22 @@
+apiVersion: extensions.istio.io/v1alpha1
+kind: WasmPlugin
+metadata:
+  name: coraza-ingressgateway
+  namespace: istio-ingress
+spec:
+  imagePullPolicy: IfNotPresent
+  phase: AUTHN
+  pluginConfig:
+    default_directives: default
+    directives_map:
+      default:
+      - Include @demo-conf
+      - SecDebugLogLevel 9
+      - SecRuleEngine On
+      - Include @crs-setup-conf
+      - Include @owasp_crs/*.conf
+  selector:
+    matchLabels:
+      app: istio-ingressgateway
+      istio: ingressgateway
+  url: oci://ghcr.io/corazawaf/coraza-proxy-wasm

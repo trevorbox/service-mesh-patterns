@@ -1,0 +1,42 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: response-headers
+data:
+  RESPONSE_HEADERS: |-
+    {
+        "headers": [
+            {
+                "key": "ETag",
+                "value": "W/\"0815\""
+            },
+            {
+                "key": "X-Powered-By",
+                "value": "Go"
+            },
+            {
+                "key": "X-XSS-Protection",
+                "value": "0"
+            },
+            {
+                "key": "X-Content-Type-Options",
+                "value": ""
+            },
+            {
+                "key": "Set-Cookie",
+                "value": "id=a3fWa; Max-Age=2592000"
+            },
+            {
+                "key": "Set-Cookie",
+                "value": "id=b3fWa; Max-Age=3592000"
+            },
+            {
+                "key": "Test",
+                "value": "test"
+            },
+            {
+                "key": "Content-Type",
+                "value": "text/plain"
+            }
+        ]
+    }

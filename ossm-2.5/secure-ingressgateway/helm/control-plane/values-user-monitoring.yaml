@@ -3,5 +3,8 @@ grafana:
 prometheus: 
   enabled: false
 kiali: 
+  name: kiali-user-workload-monitoring
+  enabled: false
+jaeger:
   enabled: false
 isRosa: false

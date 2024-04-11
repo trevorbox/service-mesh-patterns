@@ -1,0 +1,35 @@
+console:
+  securityContext: 
+    runAsNonRoot: true
+    seccompProfile:
+      type: RuntimeDefault
+    fsGroup: null
+    runAsGroup: null
+    runAsUser: null
+  containerSecurityContext: 
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - ALL
+    runAsGroup: null
+    runAsUser: null
+operator:
+  securityContext: 
+    runAsNonRoot: true
+    seccompProfile:
+      type: RuntimeDefault
+    fsGroup: null
+    runAsGroup: null
+    runAsUser: null
+  containerSecurityContext: 
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - ALL
+    runAsGroup: null
+    runAsUser: null
+  env:
+    - name: MINIO_OPERATOR_RUNTIME
+      value: "OpenShift" 
+    - name: OPERATOR_STS_ENABLED
+      value: "on"

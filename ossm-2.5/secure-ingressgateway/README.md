@@ -1,5 +1,7 @@
 # Secure Ingress Gateway
 
+> new: https://www.redhat.com/en/blog/preparing-openshift-service-mesh-3?channel=/en/blog/channel/hybrid-cloud-infrastructure
+
 This example demonstrates:
 
 - An Openshift passthrough route to an ingress gateway that presents a cert-manager certificate using SDS.
@@ -34,7 +36,7 @@ helm upgrade -i --create-namespace -n ${istio_ingress_namespace} cert-manager-ce
 ## Install Control Plane
 
 ```sh
-helm upgrade --create-namespace -i control-plane -n ${istio_system_namespace} helm/control-plane
+helm upgrade --create-namespace -i control-plane -n ${istio_system_namespace} helm/control-plane -f helm/control-plane/values-user-monitoring.yaml
 ```
 
 ## Helmchart for istio gateway injection
@@ -44,7 +46,7 @@ helm upgrade --create-namespace -i control-plane -n ${istio_system_namespace} he
 # helm repo add istio https://istio-release.storage.googleapis.com/charts
 # helm repo update
 # helm install istio-ingressgateway istio/gateway -n istio-ingress
-helm upgrade -i istio-ingressgateway helm/injected-gateway -n ${istio_ingress_namespace}
+helm upgrade -i istio-ingressgateway helm/gateway -n ${istio_ingress_namespace}
 ```
 
 ## Install Bookinfo Istio Configs
@@ -196,3 +198,45 @@ helm upgrade -i gatekeeper helm/gatekeeper -n openshift-gatekeeper-system --crea
 helm upgrade -i gatekeeper-constrainttemplates helm/gatekeeper-constrainttemplates -n openshift-gatekeeper-system
 helm upgrade -i gatekeeper-constraints helm/gatekeeper-constraints -n openshift-gatekeeper-system
 ```
+
+
+## Tempo
+
+Jaeger deprecated notice:
+https://docs.openshift.com/container-platform/4.15/observability/distr_tracing/distr_tracing_jaeger/distr-tracing-jaeger-removing.html
+
+Use Kiali to view traces. https://docs.openshift.com/container-platform/4.15/observability/distr_tracing/distr_tracing_arch/distr-tracing-architecture.html#distr-tracing-features_distributed-tracing-architecture 
+
+Temp grafana: TODO - link
+
+https://docs.openshift.com/container-platform/4.15/observability/distr_tracing/distr_tracing_tempo/distr-tracing-tempo-installing.html
+
+## minio
+
+https://min.io/docs/minio/kubernetes/upstream/operations/install-deploy-manage/deploy-operator-helm.html
+
+```sh
+helm repo add minio-operator https://operator.min.io
+helm repo update
+helm upgrade -i minio-operator -f helm/minio-operator/values.yaml -n minio-operator --create-namespace minio-operator/operator
+
+helm install \
+  --namespace minio-tenant-1 \
+  --create-namespace \
+  minio-tenant-1 minio-operator/tenant
+```
+
+```sh
+helm upgrade -i minio-dev helm/minio-dev -n minio-dev --create-namespace
+helm upgrade -i tempo-operator helm/tempo-operator -n openshift-tempo-operator --create-namespace
+
+
+helm upgrade -i tempo-dev helm/tempo -n tempo-dev --create-namespace
+
+# https://min.io/docs/minio/linux/reference/minio-mc.html#mc-install
+mc alias set k8s-minio-dev http://minio-minio-dev.$(oc get ingress.config.openshift.io cluster -o jsonpath={.spec.domain}) minioadmin minioadmin
+mc admin info k8s-minio-dev
+mc mb k8s-minio-dev/tempo 
+
+```
+

@@ -1,0 +1,6 @@
+includeEnvoyFilters:
+  redactServerResponseHeaders: true
+  owaspGatewayFilter: false
+
+coraza: 
+  enabled: false

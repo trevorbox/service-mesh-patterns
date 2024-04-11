@@ -3,5 +3,8 @@ grafana:
 prometheus: 
   enabled: true
 kiali: 
+  name: kiali
+  enabled: true
+jaeger:
   enabled: true
 isRosa: false

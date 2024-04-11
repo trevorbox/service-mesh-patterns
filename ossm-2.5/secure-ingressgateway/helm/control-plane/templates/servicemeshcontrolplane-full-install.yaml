@@ -5,12 +5,31 @@ metadata:
   name: full-install
 spec:
   version: v2.5
+  mode: ClusterWide
+  {{- if not .Values.jaeger.enabled }}
+  # Configuring the distributed tracing platform (Tempo)
+  meshConfig:
+    extensionProviders:
+      # - name: prometheus
+      #   prometheus: {}
+      - name: tempo
+        zipkin:
+          service: tempo-minio-dev-distributor.tempo-dev.svc.cluster.local
+          port: 9411
+  {{- end }}
+  tracing:
+    sampling: 10000
+    {{- if .Values.jaeger.enabled  }}
+    type: Jaeger
+    {{- else }}
+    type: None
+    {{- end }}
   security:
-    dataPlane:
-      mtls: true
-      automtls: true
-    controlPlane:
-      mtls: true
+    # dataPlane:
+    #   mtls: true
+    #   automtls: true
+    # controlPlane:
+    #   mtls: true
     {{- if .Values.isRosa }}
     identity:
       type: ThirdParty  #required setting for ROSA
@@ -101,12 +120,9 @@ spec:
     #           enabled: false
     openshiftRoute:
       enabled: false
-  tracing:
-    # change to None to disable tracing
-    type: Jaeger
-    sampling: 10000
   addons:
     jaeger:
+      enabled: {{ .Values.jaeger.enabled }}
       name: jaeger
       install:
         storage:
@@ -126,10 +142,10 @@ spec:
     grafana:
       enabled: {{ .Values.grafana.enabled }}
       install: {}
+    # kiali could be created separately
     kiali:
-      name: kiali
+      name: {{ .Values.kiali.name }}
       enabled: {{ .Values.kiali.enabled }}
-      # we want maistra to create the kiali resource
       install: {}
     prometheus:
       enabled: {{ .Values.prometheus.enabled }}

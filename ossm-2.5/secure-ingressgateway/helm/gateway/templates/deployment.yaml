@@ -22,6 +22,7 @@ spec:
       {{- end }}
       labels:
         sidecar.istio.io/inject: "true"
+        maistra.io/expose-route: "true"
         {{- with .Values.revision }}
         istio.io/rev: {{ . }}
         {{- end }}
@@ -87,6 +88,12 @@ spec:
           - containerPort: 15090
             protocol: TCP
             name: http-envoy-prom
+          - name: http2
+            containerPort: 8080
+            protocol: TCP
+          - name: https
+            containerPort: 8443
+            protocol: TCP
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}

@@ -1,6 +1,6 @@
 members:
-  - bookinfo
-  - nginx-echo-headers
+  # - bookinfo
+  # - nginx-echo-headers
   - istio-ingress
   - golang-ex
 smcp:

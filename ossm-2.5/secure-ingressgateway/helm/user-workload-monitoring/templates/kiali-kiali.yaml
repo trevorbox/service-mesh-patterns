@@ -60,17 +60,22 @@ spec:
         mesh_id: istio-system/full-install
       url: 'https://thanos-querier.openshift-monitoring.svc.cluster.local:9091'
     tracing:
-      auth:
-        password: {{ .Values.htpasswd }}
-        type: basic
-        use_kiali_token: false
-        username: internal
+      query_timeout: 30
       enabled: true
-      in_cluster_url: http://jaeger-query-internal.istio-system.svc.cluster.local
-      namespace: istio-system
-      service: ''
+      in_cluster_url: 'http://tempo-minio-dev-query-frontend.tempo-dev.svc.cluster.local:16685'
       url: {{ .Values.kiali.jaeger.url }}
-      use_grpc: false
+      use_grpc: true
+      # auth:
+      #   password: {{ .Values.htpasswd }}
+      #   type: basic
+      #   use_kiali_token: false
+      #   username: internal
+      # enabled: true
+      # in_cluster_url: http://jaeger-query-internal.istio-system.svc.cluster.local
+      # namespace: istio-system
+      # service: ''
+      # url: {{ .Values.kiali.jaeger.url }}
+      # use_grpc: false
   installation_tag: 'Kiali [istio-system]'
   istio_namespace: istio-system
   version: v1.65

@@ -1,6 +1,10 @@
+{{- range $path, $_ :=  .Files.Glob  "dashboards/import/**.json" }}    
+---
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: istio-workload-dashboard
+  name: {{ $path | trimPrefix "dashboards/import/" | trimSuffix ".json" }}
 data:
-  json: {{ .Files.Get "dashboards/istio-system/istio-workload-dashboard.json" | toPrettyJson }}
+  json: {{ $.Files.Get $path | toPrettyJson }}
+...
+{{ end }}

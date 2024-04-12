@@ -5,7 +5,7 @@ metadata:
   namespace: openshift-tempo-operator
 spec:
   channel: stable
-  installPlanApproval: Automatic
+  installPlanApproval: {{ .Values.approval_strategy }}
   name: tempo-product
   source: redhat-operators
   sourceNamespace: openshift-marketplace

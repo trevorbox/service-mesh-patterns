@@ -14,7 +14,7 @@ spec:
       #   prometheus: {}
       - name: tempo
         zipkin:
-          service: tempo-minio-dev-distributor.tempo-dev.svc.cluster.local
+          service: tempo-minio-dev-distributor.tempo-system.svc.cluster.local
           port: 9411
   {{- end }}
   tracing:

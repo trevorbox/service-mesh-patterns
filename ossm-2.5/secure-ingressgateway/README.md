@@ -231,7 +231,7 @@ helm upgrade -i minio-dev helm/minio-dev -n minio-dev --create-namespace
 helm upgrade -i tempo-operator helm/tempo-operator -n openshift-tempo-operator --create-namespace
 
 
-helm upgrade -i tempo-dev helm/tempo -n tempo-dev --create-namespace
+helm upgrade -i tempo-system helm/tempo -n tempo-system --create-namespace
 
 # https://min.io/docs/minio/linux/reference/minio-mc.html#mc-install
 mc alias set k8s-minio-dev http://minio-minio-dev.$(oc get ingress.config.openshift.io cluster -o jsonpath={.spec.domain}) minioadmin minioadmin

@@ -1,0 +1,24 @@
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: bookinfo-cert
+  namespace: {{ .Values.ingressgateway.namespace }}
+spec:
+  # Secret names are always required.
+  secretName: bookinfo-cert
+  commonName: bookinfo
+  dnsNames:
+    - {{ .Values.ingressgateway.host }}
+  usages:
+    - server auth
+    - client auth  
+  issuerRef:
+    name: internal-issuer
+    # We can reference ClusterIssuers by changing the kind here.
+    # The default value is Issuer (i.e. a locally namespaced Issuer)
+    kind: Issuer
+    # This is optional since cert-manager will default to this value however
+    # if you are using an external issuer, change this to that issuer group.
+    group: cert-manager.io
+...

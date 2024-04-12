@@ -2,7 +2,8 @@
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
-  name: api
+  name: nginx-echo-headers
+  namespace: {{ .Values.ingressgateway.namespace }}
 spec:
   port:
     targetPort: https
@@ -10,7 +11,7 @@ spec:
     termination: passthrough
   to:
     kind: Service
-    name: {{ include "gateway.name" . }}
+    name: istio-ingressgateway
     weight: 100
   wildcardPolicy: None
 ...

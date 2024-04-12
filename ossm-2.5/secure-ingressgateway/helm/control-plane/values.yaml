@@ -1,10 +1,10 @@
 grafana: 
-  enabled: true
+  enabled: false
 prometheus: 
-  enabled: true
+  enabled: false
 kiali: 
-  name: kiali
-  enabled: true
+  name: kiali-user-workload-monitoring
+  enabled: false
 jaeger:
-  enabled: true
+  enabled: false
 isRosa: false

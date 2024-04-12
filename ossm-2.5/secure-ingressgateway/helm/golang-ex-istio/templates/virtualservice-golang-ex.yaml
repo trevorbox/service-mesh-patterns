@@ -5,14 +5,11 @@ metadata:
   name: golang-ex
 spec:
   gateways:
-  - {{ .Values.ingressgateway.namespace }}/default
+  - {{ .Values.ingressgateway.namespace }}/golang-ex
   hosts:
   - {{ .Values.ingressgateway.host }}
   http:
-  - match:
-    - uri:
-        exact: /golang-ex
-    route:
+  - route:
     - destination:
         host: golang-ex.golang-ex.svc.cluster.local
         port:

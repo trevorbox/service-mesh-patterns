@@ -62,8 +62,8 @@ spec:
     tracing:
       query_timeout: 30
       enabled: true
-      in_cluster_url: 'http://tempo-minio-dev-query-frontend.tempo-dev.svc.cluster.local:16685'
-      url: {{ .Values.kiali.jaeger.url }}
+      in_cluster_url: 'http://tempo-minio-dev-query-frontend.tempo-system.svc.cluster.local:16685'
+      url: {{ .Values.kiali.tempo.url }}
       use_grpc: true
       # auth:
       #   password: {{ .Values.htpasswd }}

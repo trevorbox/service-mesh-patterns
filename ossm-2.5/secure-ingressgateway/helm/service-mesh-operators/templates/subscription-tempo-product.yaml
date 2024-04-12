@@ -1,0 +1,11 @@
+﻿apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:  
+  name: tempo-product
+  namespace: openshift-tempo-operator
+spec:
+  channel: stable
+  installPlanApproval: {{ .Values.approval_strategy }}
+  name: tempo-product
+  source: redhat-operators
+  sourceNamespace: openshift-marketplace

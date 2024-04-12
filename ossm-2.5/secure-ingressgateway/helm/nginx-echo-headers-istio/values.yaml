@@ -1,0 +1,4 @@
+ingressgateway:
+  name: ingressgateway
+  namespace: istio-ingress
+  host: 

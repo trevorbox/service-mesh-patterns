@@ -1,0 +1,20 @@
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: nginx-echo-headers
+  namespace: {{ .Values.ingressgateway.namespace }}
+spec:
+  selector:
+    istio: {{ .Values.ingressgateway.name | trimPrefix "istio-" }}
+  servers:
+  - port:
+      number: 443
+      name: https
+      protocol: HTTPS
+    hosts:
+      - {{ .Values.ingressgateway.host }}
+    tls:
+      mode: SIMPLE
+      credentialName: nginx-echo-headers-cert
+...

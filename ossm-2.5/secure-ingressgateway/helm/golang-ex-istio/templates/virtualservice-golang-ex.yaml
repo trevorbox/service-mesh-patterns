@@ -1,0 +1,17 @@
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: golang-ex
+spec:
+  gateways:
+  - {{ .Values.ingressgateway.namespace }}/golang-ex
+  hosts:
+  - {{ .Values.ingressgateway.host }}
+  http:
+  - route:
+    - destination:
+        host: golang-ex.golang-ex.svc.cluster.local
+        port:
+          number: 8080
+...

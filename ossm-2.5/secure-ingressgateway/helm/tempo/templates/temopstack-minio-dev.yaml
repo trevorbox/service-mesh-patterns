@@ -1,0 +1,29 @@
+apiVersion: tempo.grafana.com/v1alpha1
+kind: TempoStack
+metadata:
+  name: minio-dev
+spec:
+  storageSize: 30Gi
+  storage: 
+    secret:
+      name: minio-dev
+      type: s3
+  resources:
+    total:
+      limits:
+        memory: 6Gi
+        cpu: 4000m
+  # observability:
+  #   metrics:
+  #     createServiceMonitors: true
+  # observability:
+  #   metrics:
+  #     createPrometheusRules: true
+  template:
+    queryFrontend:
+      jaegerQuery: 
+        enabled: true
+        ingress:
+          route:
+            termination: edge
+          type: route

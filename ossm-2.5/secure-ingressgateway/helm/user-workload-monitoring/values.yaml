@@ -1,0 +1,17 @@
+members:
+  # - bookinfo
+  # - nginx-echo-headers
+  - istio-ingress
+  - golang-ex
+  - bookinfo
+  - nginx-echo-headers
+smcp:
+  name: full-install
+  namespace: istio-system
+kiali:
+  grafana:
+    url: 
+  jaeger:
+    url: 
+  tempo:
+    url: 

@@ -1,5 +1,18 @@
+# Secure Ingress Gateway
+
+> new: https://www.redhat.com/en/blog/preparing-openshift-service-mesh-3?channel=/en/blog/channel/hybrid-cloud-infrastructure
+
+This example demonstrates:
+
+- An Openshift passthrough route to an ingress gateway that presents a cert-manager certificate using SDS.
+- Deploying an ingress gateway using gateway injection
+- ClusterWide OSSM 2.5 deployment
+- TempoStack
+- Service Mesh deployment configuration that uses openshift-monitoing to store metrics for use by Kiali and Grafana
+
 ```sh
-helm upgrade -i namespaces helm/namespaces
+oc apply -f configmap-cluster-monitoring-config.yaml -n openshift-monitoring
+helm upgrade -i namespaces helm/namespaces -n default
 
 oc new-project cert-manager-operator
 oc adm new-project openshift-tempo-operator
@@ -14,7 +27,6 @@ helm upgrade -i control-plane -n ${istio_system_namespace} helm/control-plane
 
 helm upgrade -i minio-dev helm/minio-dev -n minio-dev --create-namespace
 
-
 # https://min.io/docs/minio/linux/reference/minio-mc.html#mc-install
 oc port-forward deploy/minio-dev 9000 9001 -n minio-dev
 
@@ -22,14 +34,11 @@ mc alias set k8s-minio-dev http://localhost:9000 minioadmin minioadmin
 mc admin info k8s-minio-dev
 mc mb k8s-minio-dev/tempo 
 
-# problem with the route
-oc port-forward deploy/tempo-minio-dev-query-frontend 16686 -n tempo-system
-google-chrome http://localhost:16686
-
 # watch the bucket
 google-chrome http://localhost:9001
 
-helm upgrade -i tempo-system helm/tempo -n tempo-system
+
+helm upgrade -i tempo-system helm/tempo -n tempo-system --create-namespace
 
 helm upgrade -i istio-ingressgateway helm/gateway -n ${istio_ingress_namespace}
  
@@ -37,17 +46,14 @@ helm upgrade -i golang-ex-istio helm/golang-ex-istio -n golang-ex --set ingressg
 helm upgrade -i golang-ex helm/golang-ex -n golang-ex
 
 
+#TODO seems like grafana will no longer be supported (and istio's grafana dashboards)
 helm upgrade -i grafana-operator -n openshift-operators helm/grafana-operator
 
 helm upgrade -i grafana -n ${istio_system_namespace} helm/grafana
 
-oc apply -f configmap-cluster-monitoring-config.yaml -n openshift-monitoring
-
 helm upgrade -i user-workload-monitoring helm/user-workload-monitoring -n ${istio_system_namespace} \
   --set kiali.tempo.url=https://$(oc get route tempo-minio-dev-query-frontend -n tempo-system -o jsonpath={.spec.host}) \
   --set kiali.grafana.url=https://$(oc get route grafana-instance-route -n ${istio_system_namespace} -o jsonpath={.spec.host})
-
-NOTE: had to manually restart tempo pods for it to start working
 
 siege -c 10 -r 100 https://golang-ex-${istio_ingress_namespace}.$(oc get ingress.config.openshift.io cluster -o jsonpath={.spec.domain})
 ```
@@ -76,6 +82,7 @@ helm upgrade -i bookinfo-istio helm/bookinfo-istio -n bookinfo --set ingressgate
 helm upgrade -i bookinfo helm/bookinfo -n bookinfo
 ```
 
+## OCP install notes
 
 ```sh
 aws configure

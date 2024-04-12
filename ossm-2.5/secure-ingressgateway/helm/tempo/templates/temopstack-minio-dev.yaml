@@ -3,7 +3,7 @@ kind: TempoStack
 metadata:
   name: minio-dev
 spec:
-  storageSize: 1Gi
+  storageSize: 30Gi
   storage: 
     secret:
       name: minio-dev
@@ -11,8 +11,8 @@ spec:
   resources:
     total:
       limits:
-        memory: 2Gi
-        cpu: 2000m
+        memory: 6Gi
+        cpu: 4000m
   # observability:
   #   metrics:
   #     createServiceMonitors: true

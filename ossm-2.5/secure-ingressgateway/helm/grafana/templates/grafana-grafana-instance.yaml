@@ -7,6 +7,13 @@ metadata:
   labels:
     dashboards: "grafana"
 spec:
+  persistentVolumeClaim:
+    spec:
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 1Gi
   serviceAccount:
     metadata:
       annotations:
@@ -36,6 +43,9 @@ spec:
           - name: ocp-injected-certs
             configMap:
               name: ocp-injected-certs
+          - name: grafana-data
+            persistentVolumeClaim:
+              claimName: grafana-instance-pvc
           containers:
             - args:
                 - '-provider=openshift'

@@ -48,8 +48,6 @@ Selector labels
 {{- define "golang-ex.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "golang-ex.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
-app: {{ include "golang-ex.name" . }}
-version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 
 {{/*

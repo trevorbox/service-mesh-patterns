@@ -1,10 +1,12 @@
+{{- range $k, $v := .Values.features }}
 ---
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
-  name: golang-ex
-  namespace: {{ .Values.ingressgateway.namespace }}
+  name: {{ $.Values.context.name }}-{{ $k }}
+  namespace: {{ $.Values.ingressgateway.namespace }}
 spec:
+  host: {{ $v.host }}
   port:
     targetPort: https
   tls:
@@ -16,3 +18,4 @@ spec:
     weight: 100
   wildcardPolicy: None
 ...
+{{- end }}

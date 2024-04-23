@@ -4,6 +4,8 @@ metadata:
   name: {{ include "golang-ex.fullname" . }}
   labels:
     {{- include "golang-ex.labels" . | nindent 4 }}
+    app: golang-ex-{{ .Values.version }}
+    version: {{ .Values.version | quote }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
@@ -19,6 +21,8 @@ spec:
       {{- end }}
       labels:
         {{- include "golang-ex.selectorLabels" . | nindent 8 }}
+        app: golang-ex-{{ .Values.version }}
+        version: {{ .Values.version | quote }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -49,7 +53,7 @@ spec:
             {{- toYaml .Values.resources | nindent 12 }}
           envFrom:
             - configMapRef:
-                name: response-headers
+                name: {{ include "golang-ex.fullname" . }}-response-headers
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

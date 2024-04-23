@@ -1,0 +1,18 @@
+{{- range $k, $v := .Values.features }}
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: {{ $.Values.context.name }}-gateway-{{ $k }}
+  namespace: {{ $.Values.ingressgateway.namespace }}
+spec:
+  gateways:
+    - {{ $.Values.ingressgateway.namespace }}/{{ $.Values.context.name }}-{{ $k }}
+  hosts:
+    - {{ $v.host }}
+  http:
+  - route:
+    - destination:
+        host: {{ $v.svc }}.{{ $.Values.context.namespace }}.svc.cluster.local
+...
+{{- end }}

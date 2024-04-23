@@ -1,0 +1,20 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: {{ .Values.context.name }}-header-matcher
+spec:
+  hosts:
+    - {{ .Values.context.name }}.{{ .Values.context.namespace }}.svc.cluster.local
+  http:
+{{- range $k, $v := .Values.features }}
+  - match:
+    - headers:
+        x-feature:
+          regex: {{ printf ".*%s/%s.*" $.Values.context.name $k}}
+    route:
+    - destination:
+        host: {{ $v.svc }}.{{ $.Values.context.namespace }}.svc.cluster.local
+{{- end }}
+  - route:
+    - destination:
+        host: {{ .Values.features.stable.svc }}.{{ .Values.context.namespace }}.svc.cluster.local

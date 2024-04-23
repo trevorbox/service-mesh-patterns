@@ -1,15 +1,16 @@
+{{- range $k, $v := .Values.features }}
 ---
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: {{ include "golang-ex-istio.fullname" . }}-cert
-  namespace: {{ .Values.ingressgateway.namespace }}
+  name: {{ $.Values.context.name }}-{{ $k }}-cert
+  namespace: {{ $.Values.ingressgateway.namespace }}
 spec:
   # Secret names are always required.
-  secretName: {{ include "golang-ex-istio.fullname" . }}-cert
-  commonName: {{ include "golang-ex-istio.fullname" . }}
+  secretName: {{ $.Values.context.name }}-{{ $k }}-cert
+  commonName: {{ $.Values.context.name }}-{{ $k }}
   dnsNames:
-    - {{ .Values.ingressgateway.host }}
+    - {{ $v.host }}
   usages:
     - server auth
     - client auth  
@@ -22,3 +23,4 @@ spec:
     # if you are using an external issuer, change this to that issuer group.
     group: cert-manager.io
 ...
+{{- end }}

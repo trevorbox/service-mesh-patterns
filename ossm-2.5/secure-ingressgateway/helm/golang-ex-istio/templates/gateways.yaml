@@ -1,0 +1,22 @@
+{{- range $k, $v := .Values.features }}
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: {{ $.Values.context.name }}-{{ $k }}
+  namespace: {{ $.Values.ingressgateway.namespace }}
+spec:
+  selector:
+    istio: {{ $.Values.ingressgateway.name | trimPrefix "istio-" }}
+  servers:
+  - port:
+      number: 443
+      name: https
+      protocol: HTTPS
+    hosts:
+      - {{ $v.host }}
+    tls:
+      mode: SIMPLE
+      credentialName: {{ $.Values.context.name }}-{{ $k }}-cert
+...
+{{- end }}

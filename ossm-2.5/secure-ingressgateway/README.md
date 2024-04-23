@@ -42,9 +42,18 @@ helm upgrade -i tempo-system helm/tempo -n tempo-system --create-namespace
 
 helm upgrade -i istio-ingressgateway helm/gateway -n ${istio_ingress_namespace}
  
-helm upgrade -i golang-ex-istio helm/golang-ex-istio -n golang-ex --set ingressgateway.host=golang-ex-${istio_ingress_namespace}.$(oc get ingress.config.openshift.io cluster -o jsonpath={.spec.domain})
+helm upgrade -i golang-ex-istio helm/golang-ex-istio -n golang-ex --set ingressgateway.host=golang-ex-${istio_ingress_namespace}.$(oc get ingress.config.openshift.io cluster -o jsonpath={.spec.domain}) --set fullnameOverride=golang-ex
 helm upgrade -i golang-ex helm/golang-ex -n golang-ex
 
+helm upgrade -i golang-ex-istio-v2 helm/golang-ex-istio -n golang-ex --set ingressgateway.host=golang-ex-v2-${istio_ingress_namespace}.$(oc get ingress.config.openshift.io cluster -o jsonpath={.spec.domain}) --set fullnameOverride=golang-ex-v2 
+helm upgrade -i golang-ex-v2 helm/golang-ex -n golang-ex
+
+helm upgrade -i golang-ex-istio-common helm/golang-ex-istio-common -n golang-ex 
+
+curl -v http://golang-ex.golang-ex.svc.cluster.local
+
+oc exec -n bookinfo deploy/reviews-v1 -i -t -c reviews -- curl -v -H "x-feature: golang-ex/featurea" http://golang-ex.golang-ex.svc.cluster.local
+oc exec mypod -i -t -- ls -t /usr
 
 #TODO seems like grafana will no longer be supported (and istio's grafana dashboards)
 helm upgrade -i grafana-operator -n openshift-operators helm/grafana-operator

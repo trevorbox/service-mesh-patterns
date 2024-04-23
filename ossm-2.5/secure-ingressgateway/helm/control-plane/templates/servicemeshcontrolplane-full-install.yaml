@@ -25,11 +25,11 @@ spec:
     type: None
     {{- end }}
   security:
-    # dataPlane:
-    #   mtls: true
-    #   automtls: true
-    # controlPlane:
-    #   mtls: true
+    dataPlane:
+      mtls: true
+      automtls: true
+    controlPlane:
+      mtls: true
     {{- if .Values.isRosa }}
     identity:
       type: ThirdParty  #required setting for ROSA

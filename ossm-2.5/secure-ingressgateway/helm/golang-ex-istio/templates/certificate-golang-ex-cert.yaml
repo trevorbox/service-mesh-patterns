@@ -2,12 +2,12 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: golang-ex-cert
+  name: {{ include "golang-ex-istio.fullname" . }}-cert
   namespace: {{ .Values.ingressgateway.namespace }}
 spec:
   # Secret names are always required.
-  secretName: golang-ex-cert
-  commonName: golang-ex
+  secretName: {{ include "golang-ex-istio.fullname" . }}-cert
+  commonName: {{ include "golang-ex-istio.fullname" . }}
   dnsNames:
     - {{ .Values.ingressgateway.host }}
   usages:

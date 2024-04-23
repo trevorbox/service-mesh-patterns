@@ -1,0 +1,19 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: golang-ex-v2
+spec:
+  gateways:
+    - istio-ingress/golang-ex-v2
+  hosts:
+    - golang-ex-v2-istio-ingress.apps-crc.testing
+  http:
+    - headers:
+        request:
+          add:
+            x-feature: "golang-ex/featureb"
+      route:
+        - destination:
+            host: golang-ex.golang-ex.svc.cluster.local
+            port:
+              number: 8080

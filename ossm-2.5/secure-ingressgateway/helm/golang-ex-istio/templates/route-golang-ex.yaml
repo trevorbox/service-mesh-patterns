@@ -2,7 +2,7 @@
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
-  name: golang-ex
+  name: {{ include "golang-ex-istio.fullname" . }}
   namespace: {{ .Values.ingressgateway.namespace }}
 spec:
   port:

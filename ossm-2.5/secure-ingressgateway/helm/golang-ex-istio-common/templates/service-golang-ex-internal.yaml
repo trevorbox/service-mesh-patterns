@@ -1,0 +1,16 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: golang-ex
+  labels:
+    app: golang-ex
+    service: golang-ex
+spec:
+  ports:
+    - name: http
+      protocol: TCP
+      port: 8080
+      targetPort: http 
+  type: ClusterIP
+  selector:
+    app: golang-ex

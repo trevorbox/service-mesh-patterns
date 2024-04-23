@@ -1,0 +1,34 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: golang-ex-internal
+spec:
+  gateways: 
+    - mesh
+  hosts:
+    - golang-ex.golang-ex.svc.cluster.local
+  exportTo:
+    - '*'
+  http:
+  # - match:
+  #   - headers:
+  #       x-feature:
+  #         # regex: '.*golang-ex/featurea.*'
+  #         exact: golang-ex/featurea
+  #   route:
+  #   - destination:
+  #       host: golang-ex.golang-ex.svc.cluster.local
+  #       subset: v1
+  # - match:
+  #   - headers:
+  #       x-feature:
+  #         # regex: '.*golang-ex/featureb.*'
+  #         exact: golang-ex/featureb
+  #   route:
+  #   - destination:
+  #       host: golang-ex.golang-ex.svc.cluster.local
+  #       subset: v2
+  - route:
+    - destination:
+        host: golang-ex.golang-ex.svc.cluster.local
+        subset: v2

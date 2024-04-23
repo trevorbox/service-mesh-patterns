@@ -2,7 +2,7 @@
 apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
-  name: golang-ex
+  name: {{ include "golang-ex-istio.fullname" . }}
   namespace: {{ .Values.ingressgateway.namespace }}
 spec:
   selector:
@@ -16,5 +16,5 @@ spec:
       - {{ .Values.ingressgateway.host }}
     tls:
       mode: SIMPLE
-      credentialName: golang-ex-cert
+      credentialName: {{ include "golang-ex-istio.fullname" . }}-cert
 ...

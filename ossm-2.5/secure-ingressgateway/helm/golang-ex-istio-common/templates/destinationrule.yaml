@@ -1,4 +1,3 @@
----
 apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:
@@ -6,11 +5,12 @@ metadata:
 spec:
   host: golang-ex.golang-ex.svc.cluster.local
   subsets:
-  - labels:
-      version: v1
-    name: v1
+  - name: v1
+    labels:
+      app.kubernetes.io/instance: golang-ex
+  - name: v2
+    labels:
+      app.kubernetes.io/instance: golang-ex-v2
   trafficPolicy:
     tls:
       mode: ISTIO_MUTUAL
-      sni: golang-ex.golang-ex.svc.cluster.local
-...

@@ -97,7 +97,10 @@ oc exec -n bookinfo deploy/reviews-v1  -c reviews -- bash -c "for i in {1..500};
 oc exec -n bookinfo deploy/reviews-v1  -c reviews -- bash -c "for i in {1..500}; do curl -v http://golang-ex.golang-ex.svc.cluster.local:8080; done"
 
 # test ocp routes
-siege -c 10 -r 100 https://golang-ex-stable-${istio_ingress_namespace}.$(oc get ingress.config.openshift.io cluster -o jsonpath={.spec.domain})
+siege -c 10 -r 100 https://golang-ex-${istio_ingress_namespace}.$(oc get ingress.config.openshift.io cluster -o jsonpath={.spec.domain})
+# test header matching on stable route
+siege -c 10 -r 100 -H "x-feature: golang-ex/featurea" https://golang-ex-${istio_ingress_namespace}.$(oc get ingress.config.openshift.io cluster -o jsonpath={.spec.domain})
+# other routes
 siege -c 10 -r 100 https://golang-ex-high-${istio_ingress_namespace}.$(oc get ingress.config.openshift.io cluster -o jsonpath={.spec.domain})
 siege -c 10 -r 100 https://golang-ex-featurea-${istio_ingress_namespace}.$(oc get ingress.config.openshift.io cluster -o jsonpath={.spec.domain})
 ```

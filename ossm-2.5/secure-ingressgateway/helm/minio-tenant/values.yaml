@@ -1,0 +1,18 @@
+tenant:
+  secrets:
+    name: loki-env-configuration
+    accessKey: loki 
+    secretKey: lokiloki
+  tenant:
+    configuration:
+      name: loki-env-configuration
+    name: loki  
+    pools:
+      - name: pool-0
+        servers: 1
+        storageClassName: gp3-csi
+    buckets:
+      - name: loki
+        objectLock: false
+    certificate:    
+      requestAutoCert: false   

@@ -10,7 +10,7 @@ spec:
     istio: {{ $.Values.ingressgateway.name | trimPrefix "istio-" }}
   servers:
   - port:
-      number: 443
+      number: 8443
       name: https
       protocol: HTTPS
     hosts:

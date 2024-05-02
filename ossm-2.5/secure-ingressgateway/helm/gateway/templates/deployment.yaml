@@ -88,12 +88,6 @@ spec:
           - containerPort: 15090
             protocol: TCP
             name: http-envoy-prom
-          - name: http2
-            containerPort: 8080
-            protocol: TCP
-          - name: https
-            containerPort: 8443
-            protocol: TCP
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}

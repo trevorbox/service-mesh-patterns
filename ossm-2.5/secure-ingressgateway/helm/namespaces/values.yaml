@@ -3,7 +3,7 @@ namespaces:
   - bookinfo
   - istio-system
   - istio-ingress
-  # - tempo-system
+  # - tempo-system #do not add tempo to the mesh
   - nginx-echo-headers
 labels:
   istio.io/rev: ossm-2.5

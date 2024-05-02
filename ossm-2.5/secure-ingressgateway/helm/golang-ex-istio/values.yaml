@@ -7,11 +7,11 @@ context:
 features:
   stable:
     svc: golang-ex-stable
-    host: golang-ex-istio-ingress.apps-crc.testing
+    host: golang-ex-istio-ingress.apps.ossm25.sandbox225.opentlc.com
   high:
     svc: golang-ex-high
-    host: golang-ex-high-istio-ingress.apps-crc.testing
+    host: golang-ex-high-istio-ingress.apps.ossm25.sandbox225.opentlc.com
   featurea:
     svc: golang-ex-featurea
-    host: golang-ex-featurea-istio-ingress.apps-crc.testing
+    host: golang-ex-featurea-istio-ingress.apps.ossm25.sandbox225.opentlc.com
   

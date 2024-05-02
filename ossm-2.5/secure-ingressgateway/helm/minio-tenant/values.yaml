@@ -19,6 +19,15 @@ tenant:
             resources:
               requests:
                 storage: 2Gi
+        securityContext: 
+          runAsNonRoot: true
+          seccompProfile:
+            type: RuntimeDefault
+        containerSecurityContext: 
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+              - ALL
     buckets:
       - name: tempo
         objectLock: false

@@ -6,9 +6,12 @@ metadata:
 spec:
   version: v2.5
   mode: ClusterWide
+  meshConfig:
+    discoverySelectors:
+      - matchLabels:
+          istio.io/rev: ossm-2.5
   {{- if not .Values.jaeger.enabled }}
   # Configuring the distributed tracing platform (Tempo)
-  meshConfig:
     extensionProviders:
       # - name: prometheus
       #   prometheus: {}

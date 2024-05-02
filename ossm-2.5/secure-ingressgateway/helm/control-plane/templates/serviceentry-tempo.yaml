@@ -1,0 +1,13 @@
+apiVersion: networking.istio.io/v1beta1
+kind: ServiceEntry
+metadata:
+  name: tempo-oltp-http
+spec:
+  hosts:
+  - tempo-minio-dev-distributor.tempo-system.svc.cluster.local
+  location: MESH_EXTERNAL
+  ports:
+  - number: 9411
+    name: http
+    protocol: HTTP
+  resolution: DNS

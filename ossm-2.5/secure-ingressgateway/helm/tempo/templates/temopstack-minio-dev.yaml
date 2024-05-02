@@ -23,7 +23,7 @@ spec:
     queryFrontend:
       jaegerQuery: 
         enabled: true
-        ingress:
-          route:
-            termination: edge
-          type: route
+        # ingress:
+        #   route:
+        #     termination: edge
+        #   type: route

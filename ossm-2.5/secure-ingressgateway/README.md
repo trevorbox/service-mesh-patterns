@@ -32,6 +32,9 @@ helm upgrade -i minio-tenant helm/minio-tenant/ -n minio-tenant --create-namespa
 
 helm upgrade -i tempo-system helm/tempo -n tempo-system --create-namespace
 
+# use a proxy for authenticating using openshift to the tempo-frontend
+helm upgrade -i tempo-proxy helm/oauth-proxy/ -n tempo-system
+
 helm upgrade -i istio-ingressgateway helm/gateway -n ${istio_ingress_namespace}
 
 # create istio configs for many feature deployments for golang-ex

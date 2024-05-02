@@ -15,10 +15,14 @@ spec:
     extensionProviders:
       # - name: prometheus
       #   prometheus: {}
+      # - name: tempo
+      #   zipkin:
+      #     service: tempo-minio-dev-distributor.tempo-system.svc.cluster.local
+      #     port: 9411
       - name: tempo
-        zipkin:
+        opentelemetry:
           service: tempo-minio-dev-distributor.tempo-system.svc.cluster.local
-          port: 9411
+          port: 4317
   {{- end }}
   tracing:
     sampling: 10000

@@ -1,18 +1,26 @@
 tenant:
   secrets:
-    name: loki-env-configuration
-    accessKey: loki 
-    secretKey: lokiloki
+    name: tempo-env-configuration
+    accessKey: tempo 
+    secretKey: tempotempo
   tenant:
     configuration:
-      name: loki-env-configuration
-    name: loki  
+      name: tempo-env-configuration
+    name: tempo  
     pools:
       - name: pool-0
         servers: 1
-        storageClassName: gp3-csi
+        volumeClaimTemplate:
+          metadata:
+            name: data
+          spec:
+            accessModes:
+              - ReadWriteOnce
+            resources:
+              requests:
+                storage: 2Gi
     buckets:
-      - name: loki
+      - name: tempo
         objectLock: false
     certificate:    
-      requestAutoCert: false   
+      requestAutoCert: false

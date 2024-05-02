@@ -26,14 +26,16 @@ helm upgrade -i -n ${istio_ingress_namespace} cert-manager-certs helm/cert-manag
 
 helm upgrade -i control-plane -n ${istio_system_namespace} helm/control-plane
 
-helm upgrade -i minio-dev helm/minio-dev -n minio-dev --create-namespace
+helm upgrade -i minio-tenant helm/minio-tenant/ -n minio-tenant --create-namespace
+
+# helm upgrade -i minio-dev helm/minio-dev -n minio-dev --create-namespace
 
 # https://min.io/docs/minio/linux/reference/minio-mc.html#mc-install
-oc port-forward deploy/minio-dev 9000 9001 -n minio-dev
+# oc port-forward deploy/minio-dev 9000 9001 -n minio-dev
 
-mc alias set k8s-minio-dev http://localhost:9000 minioadmin minioadmin
-mc admin info k8s-minio-dev
-mc mb k8s-minio-dev/tempo 
+# mc alias set k8s-minio-dev http://localhost:9000 minioadmin minioadmin
+# mc admin info k8s-minio-dev
+# mc mb k8s-minio-dev/tempo 
 
 # watch the bucket
 google-chrome http://localhost:9001

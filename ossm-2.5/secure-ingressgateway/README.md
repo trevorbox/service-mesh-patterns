@@ -45,10 +45,8 @@ helm upgrade -i golang-ex-stable helm/golang-ex -n golang-ex --set version=stabl
 helm upgrade -i golang-ex-high helm/golang-ex -n golang-ex --set version=high --set fullnameOverride=golang-ex-high
 helm upgrade -i golang-ex-featurea helm/golang-ex -n golang-ex --set version=featurea --set fullnameOverride=golang-ex-featurea
 
-# TODO seems like grafana will no longer be supported (and istio's grafana dashboards)
 helm upgrade -i grafana-operator -n openshift-operators helm/grafana-operator
-
-helm upgrade -i grafana -n ${istio_system_namespace} helm/grafana
+helm upgrade -i grafana -n ${istio_system_namespace} helm/grafana --set cookieSecret=$(openssl rand -base64 32 | tr -- '+/' '-_')
 
 helm upgrade -i user-workload-monitoring helm/user-workload-monitoring -n ${istio_system_namespace} \
   --set kiali.tempo.url=https://$(oc get route tempo-minio-dev-query-frontend -n tempo-system -o jsonpath={.spec.host}) \

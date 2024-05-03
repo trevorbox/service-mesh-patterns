@@ -1,7 +1,7 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "oauth-proxy.name" -}}
+{{- define "openshift-oauth-proxy.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
@@ -10,7 +10,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
 */}}
-{{- define "oauth-proxy.fullname" -}}
+{{- define "openshift-oauth-proxy.fullname" -}}
 {{- if .Values.fullnameOverride }}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
 {{- else }}
@@ -26,16 +26,16 @@ If release name contains chart name it will be used as a full name.
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "oauth-proxy.chart" -}}
+{{- define "openshift-oauth-proxy.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Common labels
 */}}
-{{- define "oauth-proxy.labels" -}}
-helm.sh/chart: {{ include "oauth-proxy.chart" . }}
-{{ include "oauth-proxy.selectorLabels" . }}
+{{- define "openshift-oauth-proxy.labels" -}}
+helm.sh/chart: {{ include "openshift-oauth-proxy.chart" . }}
+{{ include "openshift-oauth-proxy.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -45,17 +45,17 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{/*
 Selector labels
 */}}
-{{- define "oauth-proxy.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "oauth-proxy.name" . }}
+{{- define "openshift-oauth-proxy.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "openshift-oauth-proxy.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
 Create the name of the service account to use
 */}}
-{{- define "oauth-proxy.serviceAccountName" -}}
+{{- define "openshift-oauth-proxy.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create }}
-{{- default (include "oauth-proxy.fullname" .) .Values.serviceAccount.name }}
+{{- default (include "openshift-oauth-proxy.fullname" .) .Values.serviceAccount.name }}
 {{- else }}
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}

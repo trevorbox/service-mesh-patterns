@@ -1,4 +1,4 @@
-# Default values for oauth-proxy.
+# Default values for openshift-oauth-proxy.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
@@ -38,7 +38,7 @@ securityContext: {}
 
 service:
   type: ClusterIP
-  port: 9091
+  port: 8443
 
 ingress:
   enabled: false
@@ -80,3 +80,7 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+upstream: 
+
+cookieSecret: 

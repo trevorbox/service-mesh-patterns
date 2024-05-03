@@ -3,4 +3,4 @@ kind: ConfigMap
 metadata:
   labels:
     config.openshift.io/inject-trusted-cabundle: "true"
-  name: {{ include "oauth-proxy.fullname" . }}-ocp-injected-certs
+  name: {{ include "openshift-oauth-proxy.fullname" . }}-ocp-injected-certs

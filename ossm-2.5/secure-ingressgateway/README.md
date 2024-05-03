@@ -33,7 +33,7 @@ helm upgrade -i minio-tenant helm/minio-tenant/ -n minio-tenant --create-namespa
 helm upgrade -i tempo-system helm/tempo -n tempo-system --create-namespace
 
 # use a proxy for authenticating using openshift to the tempo-frontend
-helm upgrade -i tempo-proxy helm/oauth-proxy/ -n tempo-system
+helm upgrade -i jaeger-ui-proxy helm/openshift-oauth-proxy/ -n tempo-system --set upstream=http://tempo-minio-dev-query-frontend.tempo-system.svc.cluster.local:16686 --set cookieSecret=$(openssl rand -base64 32 | tr -- '+/' '-_') --set fullnameOverride=jaeger-ui-proxy
 
 helm upgrade -i istio-ingressgateway helm/gateway -n ${istio_ingress_namespace}
 

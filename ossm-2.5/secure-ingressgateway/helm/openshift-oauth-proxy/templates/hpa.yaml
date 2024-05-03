@@ -2,14 +2,14 @@
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ include "oauth-proxy.fullname" . }}
+  name: {{ include "openshift-oauth-proxy.fullname" . }}
   labels:
-    {{- include "oauth-proxy.labels" . | nindent 4 }}
+    {{- include "openshift-oauth-proxy.labels" . | nindent 4 }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: {{ include "oauth-proxy.fullname" . }}
+    name: {{ include "openshift-oauth-proxy.fullname" . }}
   minReplicas: {{ .Values.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.autoscaling.maxReplicas }}
   metrics:

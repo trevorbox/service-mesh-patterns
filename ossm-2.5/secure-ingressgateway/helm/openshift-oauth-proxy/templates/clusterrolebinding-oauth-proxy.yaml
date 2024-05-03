@@ -1,0 +1,11 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ include "openshift-oauth-proxy.fullname" . }}
+roleRef:
+  kind: ClusterRole
+  name: {{ include "openshift-oauth-proxy.fullname" . }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "openshift-oauth-proxy.serviceAccountName" . }}
+    namespace: {{ .Release.Namespace }}

@@ -1,0 +1,14 @@
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: {{ include "openshift-oauth-proxy.fullname" . }}
+spec:
+  to:
+    kind: Service
+    name: {{ include "openshift-oauth-proxy.fullname" . }}
+    weight: 100
+  port:
+    targetPort: https
+  tls:
+    termination: reencrypt
+  wildcardPolicy: None

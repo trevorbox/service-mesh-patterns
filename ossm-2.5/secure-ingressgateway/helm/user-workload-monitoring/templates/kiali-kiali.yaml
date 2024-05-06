@@ -6,22 +6,23 @@ metadata:
   labels:
     app.kubernetes.io/part-of: istio
     app.kubernetes.io/instance: istio-system
-    # maistra.io/owner-name: full-install
     app.kubernetes.io/version: 2.4.1-1-7
     app.kubernetes.io/component: kiali
-    # maistra-version: 2.4.1
-    # app.kubernetes.io/managed-by: maistra-istio-operator
-    # maistra.io/owner: istio-system
     app.kubernetes.io/name: kiali
 spec:
   api:
     namespaces:
-      exclude: []
+      exclude:
+      - "^istio-operator"
+      - "^kube-.*"
+      - "^openshift.*"
+      - "^ibm.*"
+      - "^kiali-operator"
+      label_selector_include: "istio.io/rev=ossm-2.5"
   auth:
     strategy: openshift
   deployment:
-    accessible_namespaces:
-      {{- .Values.members | toYaml | nindent 6}}
+    cluster_wide_access: true
     image_pull_policy: ''
     ingress:
       enabled: true
@@ -65,17 +66,6 @@ spec:
       in_cluster_url: 'http://tempo-minio-dev-query-frontend.tempo-system.svc.cluster.local:16685'
       url: {{ .Values.kiali.tempo.url }}
       use_grpc: true
-      # auth:
-      #   password: {{ .Values.htpasswd }}
-      #   type: basic
-      #   use_kiali_token: false
-      #   username: internal
-      # enabled: true
-      # in_cluster_url: http://jaeger-query-internal.istio-system.svc.cluster.local
-      # namespace: istio-system
-      # service: ''
-      # url: {{ .Values.kiali.jaeger.url }}
-      # use_grpc: false
   installation_tag: 'Kiali [istio-system]'
   istio_namespace: istio-system
-  version: v1.65
+  version: default

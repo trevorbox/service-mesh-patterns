@@ -2,6 +2,9 @@ apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:
   name: disable-mtls-for-tempo
+  annotations:
+    helm.sh/hook: post-install
+    helm.sh/hook-weight: "-5"
 spec:
   host: tempo-minio-dev-distributor.tempo-system.svc.cluster.local
   trafficPolicy:

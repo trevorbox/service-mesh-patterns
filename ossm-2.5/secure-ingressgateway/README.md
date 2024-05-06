@@ -24,6 +24,7 @@ export istio_ingress_namespace=istio-ingress
 
 helm upgrade -i -n ${istio_ingress_namespace} cert-manager-certs helm/cert-manager 
 
+# Note: might need to run this a couple times since the Istio CRs arent created until an SMCP is created
 helm upgrade -i control-plane -n ${istio_system_namespace} helm/control-plane
 
 helm upgrade -i minio-operator helm/minio-operator/ -n minio-operator --create-namespace
@@ -49,7 +50,7 @@ helm upgrade -i grafana-operator -n openshift-operators helm/grafana-operator
 helm upgrade -i grafana -n ${istio_system_namespace} helm/grafana --set cookieSecret=$(openssl rand -base64 32 | tr -- '+/' '-_')
 
 helm upgrade -i user-workload-monitoring helm/user-workload-monitoring -n ${istio_system_namespace} \
-  --set kiali.tempo.url=https://$(oc get route tempo-minio-dev-query-frontend -n tempo-system -o jsonpath={.spec.host}) \
+  --set kiali.tempo.url=https://$(oc get route jaeger-ui-proxy -n tempo-system -o jsonpath={.spec.host}) \
   --set kiali.grafana.url=https://$(oc get route grafana-instance-route -n ${istio_system_namespace} -o jsonpath={.spec.host})
 ```
 

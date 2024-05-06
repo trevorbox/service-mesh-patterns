@@ -3,6 +3,9 @@ apiVersion: maistra.io/v2
 kind: ServiceMeshControlPlane
 metadata:
   name: full-install
+  annotations:
+    helm.sh/hook: pre-install
+    helm.sh/hook-weight: "5"
 spec:
   version: v2.5
   mode: ClusterWide
@@ -129,7 +132,6 @@ spec:
       enabled: false
   addons:
     jaeger:
-      enabled: {{ .Values.jaeger.enabled }}
       name: jaeger
       install:
         storage:

@@ -28,7 +28,8 @@ spec:
       enabled: true
     namespace: istio-system
     pod_labels:
-      sidecar.istio.io/inject: 'false'
+      sidecar.istio.io/inject: "false"
+      maistra.io/expose-route: "true"
     resources:
       requests:
         cpu: 100m

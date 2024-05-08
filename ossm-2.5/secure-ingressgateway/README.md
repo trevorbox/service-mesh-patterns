@@ -39,7 +39,11 @@ helm upgrade -i jaeger-ui-proxy helm/openshift-oauth-proxy/ -n tempo-system --se
 helm upgrade -i istio-ingressgateway helm/gateway -n ${istio_ingress_namespace}
 
 # create istio configs for many feature deployments for golang-ex
-helm upgrade -i golang-ex-istio helm/golang-ex-istio -n golang-ex
+helm upgrade -i golang-ex-istio helm/golang-ex-istio -n golang-ex \
+  --set features.stable.host=golang-ex-${istio_ingress_namespace}.$(oc get ingress.config.openshift.io cluster -o jsonpath={.spec.domain}) \
+  --set features.high.host=golang-ex-high-${istio_ingress_namespace}.$(oc get ingress.config.openshift.io cluster -o jsonpath={.spec.domain}) \
+  --set features.featurea.host=golang-ex-featurea-${istio_ingress_namespace}.$(oc get ingress.config.openshift.io cluster -o jsonpath={.spec.domain})
+
 
 # deploy golang-ex three different times to emulate feature deplyoments
 helm upgrade -i golang-ex-stable helm/golang-ex -n golang-ex --set version=stable --set fullnameOverride=golang-ex-stable

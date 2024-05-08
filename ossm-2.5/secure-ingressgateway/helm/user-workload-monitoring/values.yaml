@@ -1,6 +1,5 @@
 members:
-  # - bookinfo
-  # - nginx-echo-headers
+  - istio-system
   - istio-ingress
   - golang-ex
   - bookinfo

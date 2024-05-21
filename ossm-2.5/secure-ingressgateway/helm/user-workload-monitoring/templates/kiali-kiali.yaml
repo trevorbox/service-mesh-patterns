@@ -47,6 +47,16 @@ spec:
       istio_sidecar_injector_config_map_name: istio-sidecar-injector-full-install
       istiod_deployment_name: istiod-full-install
       url_service_version: 'http://istiod-full-install.istio-system:15014/version'
+      root_namespace: istio-system
+      component_status:
+        enabled: true
+        components:
+        - app_label: istiod
+          is_core: true
+        - app_label: istio-ingressgateway
+          is_core: true
+          is_proxy: true
+          namespace: istio-ingress
     prometheus:
       auth:
         insecure_skip_verify: true

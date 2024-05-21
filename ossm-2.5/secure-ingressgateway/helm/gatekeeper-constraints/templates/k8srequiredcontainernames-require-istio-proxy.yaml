@@ -1,0 +1,20 @@
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: K8sRequiredContainerNames
+metadata:
+  name: require-istio-proxy
+spec:
+  match:
+    kinds:
+      - apiGroups: [""]
+        kinds: ["Pod"]
+    namespaceSelector:
+      matchExpressions:
+        - key: maistra.io/member-of
+          operator: Exists
+    excludedNamespaces:
+      - istio-system
+  parameters:
+    message: "The pod should have an istio-proxy sidecar container injected"
+    containers:
+      - name: istio-proxy
+

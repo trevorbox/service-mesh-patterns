@@ -1,0 +1,54 @@
+apiVersion: templates.gatekeeper.sh/v1beta1
+kind: ConstraintTemplate
+metadata:
+  name: k8srequiredcontainernames
+  annotations:
+    metadata.gatekeeper.sh/title: "Required Container"
+    metadata.gatekeeper.sh/version: 1.0.0
+    description: >-
+      Requires pod to contain specified container name, with values matching
+      provided regular expressions.
+spec:
+  crd:
+    spec:
+      names:
+        kind: K8sRequiredContainerNames
+      validation:
+        openAPIV3Schema:
+          type: object
+          properties:
+            message:
+              type: string
+            containers:
+              type: array
+              description: >-
+                A list of container names the pod must specify.
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    description: >-
+                      The required container name.
+  targets:
+    - target: admission.k8s.gatekeeper.sh
+      rego: |
+        package k8srequiredcontainernames
+
+        import future.keywords.in
+        import future.keywords.if
+        
+        import future.keywords.contains
+
+        violation[{"msg": msg, "details": {"missing_container_names": expected}}] {
+          input.request.kind.kind == "Pod"
+
+          expected := {containers | containers := input.parameters.containers[_].name}
+          provided := {containers | containers := input.request.object.spec.containers[_].name}
+          matches := {containers | containers := input.request.object.spec.containers[_]; containers.name in expected}
+          match_count := count(matches)
+          match_count != count(expected)
+
+          msg := sprintf("Expected container(s) with name(s) '%v' in pod, %v matches found in provided container names '%v'", [expected, match_count, provided])
+        }
+

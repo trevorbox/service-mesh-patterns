@@ -127,28 +127,6 @@ spec:
             VALUE = {{` {{ $value }} `}}
             LABELS = {{` {{ $labels }} `}}
     - alert: {{ . }}-REDIstioLatency99Percentile
-      expr: (histogram_quantile(0.99, sum(irate(istio_request_duration_milliseconds_bucket[1m])) by (destination_canonical_service, destination_workload_namespace, source_canonical_service, source_workload_namespace, le))/ 1000) > 1
-      for: 1m
-      labels:
-        severity: warning
-      annotations:
-        summary: Istio latency 99 percentile (instance {{` {{ $labels.instance }} `}})
-        description: |-
-          Istio 1% slowest requests are longer than 1s.
-            VALUE = {{` {{ $value }} `}}
-            LABELS = {{` {{ $labels }} `}}
-    - alert: {{ . }}-REDIstioLatency99PercentileSuccessful
-      expr: (histogram_quantile(0.99, sum(irate(istio_request_duration_milliseconds_bucket{response_code!~"5.*"}[1m])) by (destination_canonical_service, destination_workload_namespace, source_canonical_service, source_workload_namespace, le))/ 1000) > 1
-      for: 1m
-      labels:
-        severity: warning
-      annotations:
-        summary: Istio latency 99 percentile (instance {{` {{ $labels.instance }} `}})
-        description: |-
-          Istio 1% slowest successful requests are longer than 1s.
-            VALUE = {{` {{ $value }} `}}
-            LABELS = {{` {{ $labels }} `}}
-    - alert: {{ . }}-REDFederatedIstioLatency99Percentile
       expr: (istio:istio_request_duration_milliseconds_bucket:p99:rate1m / 1000) > 1
       for: 1m
       labels:
@@ -159,7 +137,7 @@ spec:
           Istio 1% slowest requests are longer than 1s.
             VALUE = {{` {{ $value }} `}}
             LABELS = {{` {{ $labels }} `}}
-    - alert: {{ . }}-REDFederatedIstioLatency99PercentileSuccessful
+    - alert: {{ . }}-REDIstioLatency99PercentileSuccessful
       expr: (istio:istio_request_duration_milliseconds_bucket:successful:p99:rate1m / 1000) > 1
       for: 1m
       labels:

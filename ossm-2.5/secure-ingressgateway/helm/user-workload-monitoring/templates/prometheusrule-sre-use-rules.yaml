@@ -1,0 +1,158 @@
+{{- range .Values.members }}
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: sre-use-rules
+  namespace: {{ . }}
+spec:
+  groups:
+  - name: kube.workload.container_cpu_usage_seconds_total
+    interval: 10s
+    rules:
+    - record: workload:container_cpu_usage_seconds_total:rate1m
+      expr: |
+        sum(rate(container_cpu_usage_seconds_total{image!="", container!="POD"}[1m]))
+        by (pod, container, namespace)
+  - name: "use-utilization-saturation-errors"
+    interval: 10s
+    rules:
+    - alert: {{ . }}-USEContainerCPUThrottled
+      labels:
+        severity: critical
+      annotations:
+        summary: Container CPU throttled (namespace {{` {{ $labels.namespace }} `}} pod {{` {{ $labels.pod }} `}} container {{` {{ $labels.container }} `}})
+        container: {{` "{{ $labels.container }}" `}}
+        pod: {{` "{{ $labels.pod }}" `}}
+        namespace: {{` "{{ $labels.namespace }}" `}}
+        description: |-
+          Container CPU throttled (> 250ms).
+            VALUE = {{` {{ $value }} `}}
+            LABELS = {{` {{ $labels }} `}}   
+      expr: sum(rate(container_cpu_cfs_throttled_seconds_total{container!=""}[5m])) by (container,pod,namespace) > .25
+      for: 1m
+    - alert: {{ . }}-USEContainerCPURequestSaturation
+      labels:
+        severity: warning
+      annotations:
+        summary: High Container CPU Request Used (namespace {{` {{ $labels.namespace }} `}} pod {{` {{ $labels.pod }} `}} container {{` {{ $labels.container }} `}})
+        container: {{` "{{ $labels.container }}" `}}
+        pod: {{` "{{ $labels.pod }}" `}}
+        namespace: {{` "{{ $labels.namespace }}" `}}
+        description: |-
+          Container CPU request usage (> 75%).
+            VALUE = {{` {{ $value }} `}}
+            LABELS = {{` {{ $labels }} `}}   
+      expr: |-
+        round(
+          100 *
+            workload:container_cpu_usage_seconds_total:rate1m
+              /
+            sum(
+              kube_pod_container_resource_requests{resource="cpu"}
+            ) by (pod, container, namespace)
+        ) > 75
+      for: 1m
+    - alert: {{ . }}-USEContainerCPULimitSaturation
+      labels:
+        severity: warning
+      annotations:
+        summary: High Container CPU Limit Used (namespace {{` {{ $labels.namespace }} `}} pod {{` {{ $labels.pod }} `}} container {{` {{ $labels.container }} `}})
+        container: {{` "{{ $labels.container }}" `}}
+        pod: {{` "{{ $labels.pod }}" `}}
+        namespace: {{` "{{ $labels.namespace }}" `}}
+        description: |-
+          Container CPU limit usage (> 75%).
+            VALUE = {{` {{ $value }} `}}
+            LABELS = {{` {{ $labels }} `}}   
+      expr: |-
+        round(
+          100 *
+            workload:container_cpu_usage_seconds_total:rate1m
+              /
+            sum(
+              kube_pod_container_resource_limits{resource="cpu"}
+            ) by (pod, container, namespace)
+        ) > 75
+      for: 1m
+    - alert: {{ . }}-USEContainerMemoryRequestSaturation
+      labels:
+        severity: warning
+      annotations:
+        summary: High Container Memory Request Used (namespace {{` {{ $labels.namespace }} `}} pod {{` {{ $labels.pod }} `}} container {{` {{ $labels.container }} `}})
+        container: {{` "{{ $labels.container }}" `}}
+        pod: {{` "{{ $labels.pod }}" `}}
+        namespace: {{` "{{ $labels.namespace }}" `}}
+        description: |-
+          Memory request usage (> 75%).
+            VALUE = {{` {{ $value }} `}}
+            LABELS = {{` {{ $labels }} `}}
+      expr: |-
+        round(
+          100 *
+            sum(container_memory_working_set_bytes{image!=""}) by (pod, container, namespace)
+              /
+            sum(kube_pod_container_resource_requests{resource="memory"} > 0) by (pod, container, namespace)
+        ) > 75
+      for: 1m
+    - alert: {{ . }}-USEContainerMemoryLimitSaturation
+      labels:
+        severity: warning
+      annotations:
+        summary: High Container Memory Limit Used (namespace {{` {{ $labels.namespace }} `}} pod {{` {{ $labels.pod }} `}} container {{` {{ $labels.container }} `}})
+        container: {{` "{{ $labels.container }}" `}}
+        pod: {{` "{{ $labels.pod }}" `}}
+        namespace: {{` "{{ $labels.namespace }}" `}}
+        description: |-
+          Memory limit usage (> 75%).
+            VALUE = {{` {{ $value }} `}}
+            LABELS = {{` {{ $labels }} `}}
+      expr: |-
+        round(
+          100 *
+            sum(container_memory_working_set_bytes{image!=""}) by (pod, container, namespace)
+              /
+            sum(kube_pod_container_resource_limits{resource="memory"} > 0) by (pod, container, namespace)
+        ) > 75
+      for: 1m
+    - alert: {{ . }}-USEStorageSaturation
+      labels:
+        severity: critical
+      annotations:
+        summary: High Storage Saturation (namespace {{` {{ $labels.namespace }} `}} persistentvolumeclaim {{` {{ $labels.persistentvolumeclaim }} `}})
+        persistentvolumeclaim: {{` "{{ $labels.persistentvolumeclaim }}" `}}
+        namespace: {{` "{{ $labels.namespace }}" `}}
+        description: |-
+          Storage usage over (> 75%).
+            VALUE = {{` {{ $value }} `}}
+            LABELS = {{` {{ $labels }} `}}        
+      expr: kubelet_volume_stats_used_bytes / kubelet_volume_stats_capacity_bytes > .75
+      for: 1m
+    - alert: {{ . }}-USENetworkErrors
+      labels:
+        severity: warning
+      annotations:
+        summary: Network errors found (namespace {{` {{ $labels.namespace }} `}} pod {{` {{ $labels.pod }} `}})
+        pod: {{` "{{ $labels.pod }}" `}}
+        namespace: {{` "{{ $labels.namespace }}" `}}
+        description: |-
+          Network errors found (> 0).
+            VALUE = {{` {{ $value }} `}}
+            LABELS = {{` {{ $labels }} `}}
+      expr: sum by (pod,namespace) (rate(container_network_receive_errors_total[5m])) + sum by (pod,namespace) (rate(container_network_transmit_errors_total[5m])) + sum by (pod,namespace) (rate(container_network_receive_packets_dropped_total[5m])) + sum by (pod,namespace) (rate(container_network_transmit_packets_dropped_total[5m])) > 0
+      for: 1m
+    - alert: {{ . }}-USENamespaceQuota
+      labels:
+        severity: warning
+      annotations:
+        summary: Approaching namespace quota limits (namespace {{` {{ $labels.namespace }} `}} resource {{` {{ $labels.resource }} `}})
+        resource: {{` "{{ $labels.resource }}" `}}
+        namespace: {{` "{{ $labels.namespace }}" `}}
+        description: |-
+          Approaching namespace quota limits (> 85%).
+            VALUE = {{` {{ $value }} `}}
+            LABELS = {{` {{ $labels }} `}}
+      expr: sum(kube_resourcequota{type="used"}) by (resource, namespace) / sum(kube_resourcequota{type="hard"}) by (resource,namespace) > 0.85
+      for: 1m     
+...
+{{- end }}
